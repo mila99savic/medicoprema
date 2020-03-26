@@ -1,8 +1,22 @@
-import Vue from 'vue'
-import App from './App.vue'
+import Vue from "vue";
+//import App from "./App.vue";
+import router from './routes/route'
+import ElementUI from "element-ui";
+import HeaderBar from './components/appBar/HeaderBar';
+import "element-ui/lib/theme-chalk/index.css";
+import BootstrapVue from "bootstrap-vue";
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import locale from 'element-ui/lib/locale/lang/en'
 
-Vue.config.productionTip = false
+Vue.use(ElementUI, { locale });
+Vue.config.productionTip = false;
+Vue.use(BootstrapVue);
 
-new Vue({
-  render: h => h(App),
-}).$mount('#app')
+export const vue = new Vue({
+        router,
+        render:
+                h => h(HeaderBar)
+});
+
+vue.$mount("#app");
