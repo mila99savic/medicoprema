@@ -2,7 +2,7 @@ import Vue from "vue";
 //import App from "./App.vue";
 import router from './routes/route'
 import ElementUI from "element-ui";
-import HeaderBar from './components/appBar/HeaderBar';
+import FormLogin from './components/forme/FormLogin';
 import "element-ui/lib/theme-chalk/index.css";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
@@ -16,7 +16,7 @@ Vue.use(BootstrapVue);
 export const vue = new Vue({
         router,
         render:
-                h => h(HeaderBar)
+                h => h(FormLogin)
 });
 
 vue.$mount("#app");
