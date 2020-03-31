@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const mongoConnect = require('./util/database').mongoConnect;
+const User = require('./models/user');
 
 const app = express();
 
@@ -19,13 +20,13 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
 app.use((req, res, next) => {
-    // User.findById(1)
-    //   .then(user => {
-    //     req.user = user;
-    //     next();
-    //   })
-    //   .catch(err => console.log(err));
-    next();
+    User.findById('5e80e9b9faae031178087396')
+      .then(user => {
+        req.user = new User(user.name, user.email, user.cart, user._id);
+        //ovo nam omogucava da pozivamo metode user.js(controllers)
+        next();
+      })
+      .catch(err => console.log(err));
   }); 
 
 app.use('/admin', adminRoutes);

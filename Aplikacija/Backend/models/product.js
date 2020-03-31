@@ -2,12 +2,13 @@ const mongodb = require('mongodb');//da bismo mogli da pristupamo objektima tipa
 const getDb = require('../util/database').getDb; 
 
 class Product {
-    constructor (title, price, description, imageURL, id) {
+    constructor (title, price, description, imageURL, id, userid) {
         this.title=title;
         this.price=price;
         this.description=description;
         this.imageURL=imageURL;
-        this._id-id;
+        this._id = id ? new mongodb.ObjectId(id) : null;
+        this.userid = userid;
     }
 
     save() { //da bismo cuvali u bazi
@@ -17,7 +18,7 @@ class Product {
             //apdejtuj proizvod gde je _id jednak onome sto posle sledi (this za sve ili samo ime onda this.title)
             dbOp = db
             .collection('proizvodi')
-            .updateOne({_id: new mongodb.ObjectID(this._id)}, {$set: this});
+            .updateOne({_id: this._id}, {$set: this});
         } else {
         dbOp = db
         .collection('proizvodi')//ako ne postoji kreira se
@@ -53,7 +54,7 @@ class Product {
         const db=getDb();
         return db
         .collection('proizvodi')
-        .find({_id: new mongodb.ObjectID(prodId) })
+        .find({_id: new mongodb.ObjectId(prodId) })
         //u mongo se id pamti kao bson(binarni json zato je id takav)
         .next()
         .then(product => {
@@ -63,6 +64,19 @@ class Product {
         .catch(err => {
             console.log(err)
         });
+    }
+
+    static deleteById(prodId) {
+        const db = getDb();
+        return db
+        .collection('proizvodi')
+        .deleteOne({ _id: new mongodb.ObjectId(prodId) })
+        .then(result => {
+            console.log('Obrisano');
+        })
+        .catch(err => {
+            console.log(err)
+        })
     }
 }
 
