@@ -2,7 +2,7 @@ import Vue from "vue";
 //import App from "./App.vue";
 import router from './routes/route'
 import ElementUI from "element-ui";
-import FormLogin from './components/forme/FormPromeniLozinku';
+import FormLogin from './components/forme/FormSignup';
 import "element-ui/lib/theme-chalk/index.css";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
