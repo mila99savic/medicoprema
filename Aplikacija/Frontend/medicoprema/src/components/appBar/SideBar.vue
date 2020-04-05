@@ -42,12 +42,13 @@ export default {
 }
 .el-menu{
     width: 250px;
-    height: 625px;
+    height: 657px;
 }
 @media screen and (max-width: 700px){
-    /* .el-menu{
+    .el-menu{
         width: 100%;
-    } */
+        /* height: 100%; */
+    }
 }
 </style>
 
