@@ -61,7 +61,6 @@ export default {
     //             const formData = new FormData();
     //             formData.append("UserId", getUserInfo().userID);
     //             formData.append("CartItems[" + 0 + "].ProductType", this.proizvodi[this.indeksIzabranogProizvoda].ProductType);
-    //             formData.append("CartItems[" + 0 + "].Format", this.proizvodi[this.indeksIzabranogProizvoda].Size);
     //             formData.append("CartItems[" + 0 + "].Quantity", 1);
     //             formData.append("CartItems[" + 0 + "].Title", this.proizvodi[this.indeksIzabranogProizvoda].Title);
     //             formData.append("CartItems[" + 0 + "].Price", this.proizvodi[this.indeksIzabranogProizvoda].Price);

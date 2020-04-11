@@ -1,6 +1,6 @@
 <template>
     <div class="signup-container">
-        <el-dialog visible width="30%" @close="$emit('zavrsiRegistraciju')">
+        <el-dialog visible width="30%" @close="$emit('closeSignupForm')">
             <div class="forma">
                 <el-form>
                     <el-popover>

@@ -5,7 +5,7 @@
                 <p>MEDICOprema © 2020. All Rights Reserverd</p>
                 <p>Designed by Group-mRS Team</p>
                 <p>Kontakt telefon: 018/548-156</p>
-                <p>Rajićeva 36M, 18000 Niš Srbija</p>
+                <p>Rajićeva 36, 18000 Niš Srbija</p>
             </div>
         </div>
     </div>
