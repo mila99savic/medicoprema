@@ -37,17 +37,19 @@ export default {
 
 <style scoped>
 .side-bar-profil{
+    display: flex;
     position: relative;
     justify-content: flex-start;
 }
 .el-menu{
     width: 250px;
-    height: 625px;
+    /* height: 657px; */
 }
 @media screen and (max-width: 700px){
-    /* .el-menu{
+    .el-menu{
         width: 100%;
-    } */
+        /* height: 100%; */
+    }
 }
 </style>
 

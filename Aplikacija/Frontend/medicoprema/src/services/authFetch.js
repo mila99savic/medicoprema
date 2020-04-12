@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-export const destinationUrl = 'http://localhost:3030'
+export const destinationUrl = 'https://localhost:5001/api'
 
 export function getCredentials() {
     return {
@@ -43,6 +43,6 @@ export const EMPLOYED_USER_TYPE = 1;
 export const ADMIN_USER_TYPE = 2;
 export const ANONYMOUS_USER_TYPE = 3;
 
-export const ALBUM_PASSWORD = "home";
+// export const ALBUM_PASSWORD = "home";
 
 export const UserTypes = ["Korisnik", "Zaposleni", "Uprava", "Anonimni"];

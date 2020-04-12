@@ -5,7 +5,7 @@ import Uprava from '../pages/Uprava.vue';
 import Zaposleni from '../pages/Zaposleni.vue';
 import Korisnik from '../pages/Korisnik.vue';
 import {getUserInfo} from '../services/contextManagement';
-import { UserTypes, ANONYMOUS_USER_TYPE, STUFF_USER_TYPE, ADMIN_USER_TYPE } from '../services/authFetch';
+import { UserTypes, ANONYMOUS_USER_TYPE, EMPLOYED_USER_TYPE, ADMIN_USER_TYPE } from '../services/authFetch';
 
 Vue.use(VueRouter)
 
@@ -42,7 +42,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if (getUserInfo().userType == ANONYMOUS_USER_TYPE && (to.path != '/pocetna' || to.path == '/'))
         next("/pocetna");
-    else if (getUserInfo().userType == STUFF_USER_TYPE || getUserInfo().userType == ADMIN_USER_TYPE) {
+    else if (getUserInfo().userType == EMPLOYED_USER_TYPE || getUserInfo().userType == ADMIN_USER_TYPE) {
         let userType = getUserInfo().userType;
         console.log(userType);
         if (userType != null && to.path != ("/" + UserTypes[userType]))
