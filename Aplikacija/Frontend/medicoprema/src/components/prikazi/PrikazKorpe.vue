@@ -1,8 +1,8 @@
 <template>
     <div class="korpa-container">
         <h3>Sadržaj narudžbine</h3>
-        <el-table :data="this.korpa" max-height="1000" style="width:80%; border:1p solid black;">
-            <el-table-column prop="Title" label="Naziv" class="table-column" min-width="100"></el-table-column>
+        <el-table :data="this.korpa" height="250" style="width:80%; border:1p solid black;">
+            <el-table-column prop="Title" label="Naziv" class="table-column" min-width="100" sortable></el-table-column>
             <el-table-column prop="ProductType" label="Tip" class="table-column" min-width="100"></el-table-column>
             <el-table-column prop="Quantity" label="Količina" class="table-column" min-width="100"></el-table-column>
             <el-table-column prop="Price" label="Cena" class="table-column" min-width="100"></el-table-column>

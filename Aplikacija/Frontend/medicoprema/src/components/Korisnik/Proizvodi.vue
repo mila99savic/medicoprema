@@ -17,7 +17,7 @@
                         </div>
                         <div class="part3">
                             <h6 id="cena">Cena: {{item.Price}}din</h6>
-                            <el-button id="dugmeDodaj" type="success" size="medium" @click="onClickDodajUKorpu(index)">Dodaj u korpu</el-button>
+                            <el-button id="dugmeDodaj" type="success" round size="medium" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" @click="onClickDodajUKorpu(index)">Dodaj u korpu</el-button>
                         </div>
                     </div>
                 </div>

@@ -7,13 +7,15 @@
             <h5>Dodaj utisak o korisniku</h5>
             <div>
                 <label>Korisnik:</label>
-                <el-input v-model="naslov"></el-input>
+                <el-input v-model="naslov">
+                    <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                </el-input>
             </div>
             <label class="form-line">Tekst:</label>
             <el-input type="textarea" v-model="utisakText" :rows="10"></el-input>
             <div class="dugme">
-                <el-button @click="potvrdiUnos" type="success" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Sačuvaj</el-button>
-                <el-button @click="ponisti" type="danger" style="color:rgba(24, 102, 89, 0.925); background-color: white; border-color:white">Poništi</el-button>
+                <el-button @click="potvrdiUnos" type="success" round style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Sačuvaj</el-button>
+                <el-button @click="ponisti" type="danger" round style="color:rgba(24, 102, 89, 0.925); background-color: white; border-color:white">Poništi</el-button>
             </div>
         </el-dialog>
     </div>

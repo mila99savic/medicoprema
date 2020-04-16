@@ -7,11 +7,15 @@
                 </el-popover>
                 <div class="stavka">
                     <label>Naziv:</label>
-                    <el-input class="input" v-model="proizvod.Name" placeholder="Naziv proizvoda" size="small"></el-input>
+                    <el-input class="input" v-model="proizvod.Name" placeholder="Naziv proizvoda" size="small">
+                        <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                    </el-input>
                 </div>
                 <div class="stavka">
                     <label>Cena:</label>
-                    <el-input class="input" v-model="proizvod.Price" placeholder="Cena proizvoda" size="small"></el-input>
+                    <el-input class="input" v-model="proizvod.Price" placeholder="Cena proizvoda" size="small">
+                        <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                    </el-input>
                 </div>
                 <div class="stavka">
                     <label>Opis:</label>
@@ -22,7 +26,7 @@
                     <input type="file" accept="image/*" @change="uploadImages($event)" id="file-input">
                 </div>
                 <div class="dugme">
-                    <el-button type="primary" size="mini" @click="addProduct()" style="margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Dodaj proizvod</el-button>
+                    <el-button round size="mini" @click="addProduct()" style="color:white; margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Dodaj proizvod</el-button>
                 </div>
             </el-form>
         </el-dialog>

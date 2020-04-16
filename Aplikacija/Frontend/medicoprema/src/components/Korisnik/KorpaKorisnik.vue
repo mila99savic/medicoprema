@@ -5,9 +5,9 @@
                 <h4>Ukupna cena: {{izracunajCenu()}} RSD</h4>
             </div>
             <el-table :data="cartItems" max-height="1000" style="border-radius: 3px;">
-                <el-table-column prop="Title" label="Naziv" min-width="100" class="table-column"></el-table-column>
+                <el-table-column prop="Title" label="Naziv" sortable min-width="100" class="table-column"></el-table-column>
                 <el-table-column prop="ProductType" label="Tip" min-width="100" class="table-column"></el-table-column>
-                <el-table-column prop="Quantity" label="Količina" min-width="100" class="table-column"></el-table-column>
+                <el-table-column prop="Quantity" label="Količina"  min-width="100" class="table-column"></el-table-column>
                 <el-table-column prop="Price" label="Cena" min-width="100" class="table-column"></el-table-column>
                 <el-table-column align="center" prop="Image" min-width="100">
                     <template slot-scope="cartItem">
@@ -17,7 +17,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-button :disabled="cartItems.length == 0 ? true : false" style="margin-top: 10px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);" @click="Naruci()" type="primary">Naruči</el-button>
+            <el-button round :disabled="cartItems.length == 0 ? true : false" style="margin-top: 10px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);" @click="Naruci()" type="primary">Naruči</el-button>
         </div>
     </div>
 </template>

@@ -15,7 +15,7 @@
             </div>
         </div>
         <proizvodi v-if="this.showComp == 'proizvodi'"></proizvodi>
-     <!-- <korpa-korisnik v-if="this.showComp == 'korpa'"></korpa-korisnik> -->
+        <korpa-korisnik v-if="this.showComp == 'korpa'"></korpa-korisnik>
         <zakazivanja-korisnik v-if="this.showComp == 'zakazivanja'" ></zakazivanja-korisnik>
         <user-sidebar v-if="this.showComp == 'profil'" ></user-sidebar>
         <footer-bar class="footer"></footer-bar>
@@ -28,11 +28,11 @@ import FooterBar from '../components/appBar/FooterBar.vue'
 import Proizvodi from "../components/Korisnik/Proizvodi.vue"
 import { setPageShown, getUserInfo, setUserInfo } from '../services/contextManagement';
 import UserSidebar from "../components/Korisnik/sidebar/UserSidebar.vue";
-// import KorpaKorisnik from "../components/Korisnik/KorpaKorisnik.vue";
+ import KorpaKorisnik from "../components/Korisnik/KorpaKorisnik.vue";
 import ZakazivanjaKorisnik from "../components/Korisnik/ZakazivanjaKorisnik.vue";
 import { ANONYMOUS_USER_TYPE } from '../services/authFetch';
 export default {
-    components: {HeaderBar, FooterBar, Proizvodi, UserSidebar, ZakazivanjaKorisnik},
+    components: {HeaderBar, FooterBar, KorpaKorisnik, Proizvodi, UserSidebar, ZakazivanjaKorisnik},
     data() {
         return{
             count: 0,

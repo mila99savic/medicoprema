@@ -1,7 +1,7 @@
 <template>
     <div class="profil-card">
         <div class="profile">
-            <img :src="profileUrl"/>
+            <el-avatar :size="70" :src="profileUrl"></el-avatar>
         </div>
         <div class="profile-info">
             <label>Ime:</label>
@@ -28,7 +28,7 @@
             <label>{{user.PhoneNumber}}</label>
         </div>
         <div class="dugme">
-            <el-button class="dugme-lozinka" type="primary" @click="() => $emit('openChangePasswordForm')" style="margin-right:5px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);">Promeni lozinku</el-button>
+            <el-button class="dugme-lozinka" round @click="() => $emit('openChangePasswordForm')" style="color:white; margin-right:5px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);">Promeni lozinku</el-button>
         </div>
     </div>
 </template>

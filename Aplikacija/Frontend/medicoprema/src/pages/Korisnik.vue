@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import CustomBar from "../components/CustomBar.vue"
+import CustomBar from "../components/CustomBar.vue";
 import HeaderBar from "../components/appBar/HeaderBar.vue"
 import FooterBar from "../components/appBar/FooterBar.vue"
 import ZakazivanjaKorisnik  from "../components/Korisnik/ZakazivanjaKorisnik.vue"
-import UserSidebar from "../components/Korisnik/sidebar/UserSidebar.vue"
+import UserSidebar from "../components/Korisnik/sidebar/UserSidebar.vue";
 import KorpaKorisnik from "../components/Korisnik/KorpaKorisnik.vue"
 import Proizvodi from "../components/Korisnik/Proizvodi.vue"
 import { setPageShown, getPageToShow, getUserInfo } from '../services/contextManagement';

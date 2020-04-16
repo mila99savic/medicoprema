@@ -9,7 +9,7 @@
                 :row-class-name="tableRowClassName"
                 highlight-current-row
                 @row-click="handleCurrentChange">
-                <el-table-column min-width="20%" prop="Order.Date" label="Datum"></el-table-column>
+                <el-table-column min-width="20%" prop="Order.Date" label="Datum" sortable></el-table-column>
                 <el-table-column min-width="20%" prop="Address" label="Adresa"></el-table-column>
                 <el-table-column min-width="20%" prop="Order.Price" label="Ukupna cena"></el-table-column>
                 <el-table-column min-width="20%" prop="PhoneNumber" label="Telefon"></el-table-column>

@@ -7,26 +7,34 @@
                 </el-popover>
                 <div class="stavka">
                     <label>Ime:</label>
-                    <el-input class="input" v-model="zaposleni.FirstName" placeholder="Ime" size="small"></el-input>
+                    <el-input class="input" v-model="zaposleni.FirstName" size="small">
+                        <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                    </el-input>
                 </div>
                 <div class="stavka">
                     <label>Prezime:</label>
-                    <el-input class="input" v-model="zaposleni.LastName" placeholder="Prezime" size="small"></el-input>
+                    <el-input class="input" v-model="zaposleni.LastName" size="small">
+                        <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                    </el-input>
                 </div>
                 <div class="stavka">
                     <label>E-mail:</label>
-                    <el-input class="input" v-model="zaposleni.Email" placeholder="korisnik@gmail.com" size="small"></el-input>
+                    <el-input class="input" v-model="zaposleni.Email" size="small">
+                        <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                    </el-input>
                 </div>
                 <div class="stavka">
                     <label>Korisničko ime:</label>
-                    <el-input class="input" v-model="zaposleni.Username" placeholder="Korisničko ime" size="small"></el-input>
+                    <el-input class="input" v-model="zaposleni.Username" size="small">
+                        <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                    </el-input>
                 </div>
                 <div class="stavka">
                     <label>Šifra:</label>
-                    <el-input class="input" v-model="zaposleni.Password" placeholder="******" size="small"></el-input>
+                    <el-input class="input" v-model="zaposleni.Password" size="small" show-password></el-input>
                 </div>
                 <div class="dugme">
-                        <el-button type="primary" size="mini" @click="prihvatiUnosForme()" style="margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Dodaj zaposlenog</el-button>
+                        <el-button round size="mini" @click="prihvatiUnosForme()" style="color:white; margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Dodaj zaposlenog</el-button>
                         
                     </div>
             </el-form>

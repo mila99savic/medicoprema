@@ -8,34 +8,46 @@
                     </el-popover>
                     <div class="stavka">
                         <label>Ime:</label>
-                        <el-input class="input" v-model="signupData.FirstName" placeholder="Sanja"></el-input>
+                        <el-input class="input" v-model="signupData.FirstName" >
+                            <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                        </el-input>
                     </div>
                     <div class="stavka">
                         <label>Prezime:</label>
-                        <el-input class="input" v-model="signupData.LastName" placeholder="Stankovic"></el-input>
+                        <el-input class="input" v-model="signupData.LastName">
+                             <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                        </el-input>
                     </div>
                     <div class="stavka">
                         <label>Adresa:</label>
-                        <el-input class="input" v-model="signupData.Address" placeholder="Aleksandra Medvedeva bb"></el-input>
+                        <el-input class="input" v-model="signupData.Address">
+                             <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                        </el-input>
                     </div>
                     <div class="stavka">
                         <label>Broj telefona:</label>
-                        <el-input class="input" v-model="signupData.PhoneNumber" placeholder="06X XXX XXX"></el-input>
+                        <el-input class="input" v-model="signupData.PhoneNumber">
+                             <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                        </el-input>
                     </div>
                     <div class="stavka">
                         <label>E-mail:</label>
-                        <el-input class="input" v-model="signupData.Email" placeholder="korisnik@gmail.com"></el-input>
+                        <el-input class="input" v-model="signupData.Email">
+                             <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                        </el-input>
                     </div>
                     <div class="stavka">
                         <label>Korisničko ime:</label>
-                        <el-input class="input" v-model="signupData.Username" placeholder="Korisničko ime"></el-input>
+                        <el-input class="input" v-model="signupData.Username">
+                             <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                        </el-input>
                     </div>
                     <div class="stavka">
                         <label>Lozinka:</label>
-                        <el-input class="input" v-model="signupData.Password" placeholder="******"></el-input>
+                        <el-input class="input" v-model="signupData.Password" show-password></el-input>
                     </div>
                     <div class="dugme">
-                        <el-button @click="onSignUpClick()" type="primary" style="margin-right:5px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);">Registruj se</el-button>
+                        <el-button @click="onSignUpClick()" round style="margin-right:5px; color: white; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);">Registruj se</el-button>
                     </div>
                 </el-form>
             </div>
