@@ -6,15 +6,15 @@
         </div>
         <div class="stavka">
             <label>Unesite novu lozinku:</label>
-            <el-input class="input" type="password" v-model="newPass" size="small"></el-input>
+            <el-input class="input" type="password" v-model="newPass" size="small" show-password></el-input>
         </div>
         <div class="stavka">
             <label>Ponovite lozinku:</label>
-            <el-input class="input" type="password" v-model="newPassRepeat" size="small"></el-input>
+            <el-input class="input" type="password" v-model="newPassRepeat" size="small" show-password></el-input>
         </div>
         <div class="dugme">
-            <el-button @click="potvrdiUnos" size="small" style="color:rgba(24, 102, 89, 0.925);">Potvrdi</el-button>
-            <el-button @click="ponistiUnos" size="small" type="danger" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Poništi</el-button>
+            <el-button @click="potvrdiUnos" round size="small" style="color:rgba(24, 102, 89, 0.925);">Potvrdi</el-button>
+            <el-button @click="ponistiUnos" round size="small" type="danger" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Poništi</el-button>
         </div>
     </div>
 </template>

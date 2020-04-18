@@ -1,7 +1,7 @@
 <template>
     <div class="menu-container">
         <div class="header-bar" text-color="white">
-            <div class="naslov"><h3 style="color:rgba(173, 226, 222, 0.938); margin-top:5px; font-family:Arial Black, Gadget, sans-serif; font-size:30px;"> MEDICOprema </h3> </div>
+            <div class="naslov"><h3 style="color:rgba(173, 226, 222, 0.938); margin-top:5px; font-family:Georgia, 'Times New Roman', Times, serif; font-size:30px;"> MEDICOprema </h3> </div>
             <div class="top-menu-button-container">
                 <el-button class="top-menu-button" @click="zatvoriMeni">
                     <el-icon class="el-icon-menu"></el-icon>
@@ -92,6 +92,7 @@ export default {
     position: relative;
     /*background-color: rgba(26, 104, 168, 0.904);*/
     background: linear-gradient(0deg, rgba(22, 177, 164, 0.979),rgba(173, 226, 222, 0.938) );
+    /* font-family: Georgia, 'Times New Roman', Times, serif; */
 }
 .top-menu-button-container{
     display: flex;

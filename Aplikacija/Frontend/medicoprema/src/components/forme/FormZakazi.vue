@@ -3,7 +3,9 @@
         <el-form class="zakazi-forma">
             <div class="stavka">
                 <label>Lokacija:</label>
-                <el-input type="text" v-model="podaciZakazi.Location"></el-input>
+                <el-input type="text" v-model="podaciZakazi.Location">
+                    <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                </el-input>
             </div>
             <div class="stavka">
                 <label>Datum:</label>
@@ -14,7 +16,8 @@
             <div class="stavka">
                 <label>Dodatni zahtevi:</label>
                 <el-input type="textarea"
-                    :autosize="{minRows: 4, maxRows: 4}" v-model="podaciZakazi.Description"></el-input>
+                    :autosize="{minRows: 4, maxRows: 4}" v-model="podaciZakazi.Description">
+                </el-input>
             </div>
             <div class="stavka">
                 <label>Tip:</label>
@@ -27,7 +30,7 @@
                 <el-time-select  v-model="podaciZakazi.Time" :picker-options="{ start: '08:00', step: '2:00', end: '18:00' }" placeholder="Select time"></el-time-select>
             </div>
             <div class="dugme">
-                <el-button id="dugmeZakazi" type="primary" @click="proslediZahtev" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
+                <el-button id="dugmeZakazi" round @click="proslediZahtev" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
             </div>
         </el-form>
     </div>

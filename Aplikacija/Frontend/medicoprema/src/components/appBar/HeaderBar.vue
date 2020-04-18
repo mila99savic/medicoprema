@@ -16,7 +16,7 @@
                         <a style="text-decoration:none; color:white;">{{item.label}}</a>
                     </li>
                     <li v-if="this.type == ANONYMOUS_USER_TYPE">
-                        <el-button type="primary" @click="logovanje()" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);"> Prijavi se 
+                        <el-button type="primary" @click="logovanje()" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" round> Prijavi se 
                     </el-button> </li>
                     <li v-if="this.type == REGULAR_USER_TYPE">
                         <el-button type="primary" @click="signOut()">Odjava

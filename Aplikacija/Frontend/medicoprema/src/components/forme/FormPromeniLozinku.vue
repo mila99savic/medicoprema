@@ -14,15 +14,15 @@
                 </div>
                 <div class="stavka">
                     <label>Unesite novu lozinku:</label>
-                    <el-input type="password" v-model="newPass" size="small"></el-input>
+                    <el-input type="password" v-model="newPass" size="small" show-password></el-input>
                 </div>
                 <div class="stavka">
                     <label>Ponovite lozinku:</label>
-                    <el-input type="password" v-model="newPassRepeat" size="small"></el-input>
+                    <el-input type="password" v-model="newPassRepeat" size="small" show-password></el-input>
                 </div>
                 <div class="dugme">
-                    <el-button @click="potvrdiUnos" size="small" style="color:rgba(24, 102, 89, 0.925);">Potvrdi</el-button>
-                    <el-button @click="ponistiUnos" size="small" type="danger" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Poništi</el-button>
+                    <el-button @click="potvrdiUnos" size="small" type="success" icon="el-icon-check" circle style=" background-color:rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);"></el-button>
+                    <el-button @click="ponistiUnos" size="small" type="danger" style="background-color:white; border-color:white; color:rgba(24, 102, 89, 0.925);">Poništi</el-button>
                 </div>
             </el-form>
         </el-dialog>

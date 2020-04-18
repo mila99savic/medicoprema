@@ -8,14 +8,16 @@
                     </el-popover>
                     <div class="stavka">
                         <label>E-mail:</label>
-                        <el-input class="input" v-model="loginData.Email" placeholder="korisnik@gmail.com"></el-input>
+                        <el-input class="input" v-model="loginData.Email">
+                             <i class="el-icon-edit el-input__icon" slot="suffix"></i>
+                        </el-input>
                     </div>
                     <div class="stavka">
                         <label>Lozinka:</label>
-                        <el-input class="input" v-model="loginData.Password" placeholder="******"></el-input>
+                        <el-input class="input" v-model="loginData.Password" show-password></el-input>
                     </div>
                     <div class="dugme">
-                        <el-button @click="onLoginSubmit()" type="primary" style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Prijavi se</el-button>
+                        <el-button @click="onLoginSubmit()" round style="color:white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Prijavi se</el-button>
                         <el-button type="text" @click="signUpForm()" style="color:rgba(24, 102, 89, 0.925);">Registruj se</el-button>
                     </div>
                 </el-form>

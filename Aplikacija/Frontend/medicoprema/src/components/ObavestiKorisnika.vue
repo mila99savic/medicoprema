@@ -6,7 +6,7 @@
             </el-popover>
             <h5 style="text-align:left; font-family:sans-serif; font-size:15px;"> Obaveštenje korisniku </h5>
             <el-input v-model="obavestenje" type="textarea" :rows="2" style="height:200px" size="small" :autosize="{minRows:9, maxRows:9}"></el-input>
-            <el-button type="primary" style="position:right; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);" size="small" @click="proslediPoruku">Pošalji</el-button>
+            <el-button round style="color: white; position:right; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);" size="small" @click="proslediPoruku">Pošalji</el-button>
         </el-dialog>
     </div>
 </template>

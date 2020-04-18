@@ -1,7 +1,7 @@
 <template>
     <div class="kalendar-container">
         <div class="kalendar">
-            <el-calendar v-model="value" class="kalendar">
+            <el-calendar v-model="value" class="kalendar" style="background-color:rgba(173, 226, 222, 0.938);">
                 <template slot="dateCell" slot-scope="{date, data}">
                     <p v-if="vratiZahteve(data)"></p>
                     <div class="element" @click="radi(data.day)">

@@ -3,7 +3,7 @@
         <el-table :data="this.listaZahteva"
             :default-sort="{prop: 'Date', order: 'descending'}"
                 style="font-size: 17px;" height="70%" width="70%">
-            <el-table-column prop="Date" label="Datum" class="table-column"></el-table-column>
+            <el-table-column prop="Date" label="Datum" sortable class="table-column"></el-table-column>
             <el-table-column prop="Time" label="Vreme" class="table-column"></el-table-column>
             <el-table-column prop="Location" label="Lokacija" class="table-column"></el-table-column>
             <el-table-column prop="EventType" label="Tip" class="table-column"></el-table-column>
