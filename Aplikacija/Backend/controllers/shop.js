@@ -9,7 +9,6 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: 'Svi proizvodi',
         path: '/products',
-        isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch(err => {
@@ -40,7 +39,7 @@ exports.getIndex = (req, res, next) => {
         prods: products,
         pageTitle: 'Prodavnica',
         path: '/',
-        isAuthenticated: req.session.isLoggedIn
+        //isAuthenticated: req.session.isLoggedIn
       });
     })
     .catch(err => {

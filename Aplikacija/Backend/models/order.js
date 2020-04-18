@@ -17,9 +17,9 @@ const orderSchema = new Schema({
         userId: {
             type: Schema.Types.ObjectId,
             required:true,
-            ref: 'Korisnik'
+            ref: 'User'
         }
     }
 });
 
-module.exports = mongoose.model('Narudzbina', orderSchema);
+module.exports = mongoose.model('Order', orderSchema);

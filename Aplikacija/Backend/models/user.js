@@ -4,19 +4,30 @@ const Schema = mongoose.Schema;
 
 const userSchema = new Schema ({
     name: {
-        type: String,
-        required: true
+        type:String,
+        required:true,
+        min: 6
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        min: 6
     },
+    password: {
+        type:String,
+        required: true,
+        min: 6
+    },
+    // usertype: {
+    //     type: String,
+    //     required: true
+    // },
     cart: {
         items: [
             {
                 productId: { 
                     type: Schema.Types.ObjectId, 
-                    ref: 'Proizvod',
+                    ref: 'Product',
                     required: true},
                 quantity: {
                     type: Number,
@@ -66,7 +77,7 @@ userSchema.methods.clearCart = function() {
     return this.save();
 }
 
-module.exports = mongoose.model('Korisnik', userSchema);
+module.exports = mongoose.model('User', userSchema);
 
 // const mongodb = require('mongodb');
 // const getDb = require('../util/database').getDb; 

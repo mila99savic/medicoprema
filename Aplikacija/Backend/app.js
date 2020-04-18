@@ -2,89 +2,37 @@ const path = require('path');
 
 const express = require('express');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv');
+const auth = require('./routes/auth');
 //const cors = require('cors');
 const mongoose = require('mongoose');
-const session = require('express-session')
-const MongoDBMedico = require('connect-mongodb-session')(session);
 
 const User = require('./models/user');
 
-const MONGODB_URI = 'mongodb://localhost/medicoprema';
-//'mongodb+srv://mima:26012611@cluster0-i5m5d.mongodb.net/medico?retryWrites=true&w=majority';
+dotenv.config();
 
 const app = express();
-const medico = new MongoDBMedico({
-  uri: MONGODB_URI,
-  collection: 'sessions'
-});
-
 app.set('view engine', 'ejs');
 app.set('views', 'views');
 
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
-const authRoutes = require('./routes/auth');
+//const authRoutes = require('./routes/auth');
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
 //app.use(cors());
-app.use(
-  session({
-    secret: 'my secret',
-    resave: false,
-    saveUninitialized: false,
-    medico: medico
-  })
-);
-
-app.use((req, res, next) => {
-  if(!req.session.user) {
-    return next();
-  }
-  User.findById(req.session.user._id)
-    .then(user => {
-      req.user = user;
-        next();
-    })
-    .catch(err => console.log(err));
-})
-
-app.use((req, res, next) => {
-  if (!req.session.user) {
-    return next();
-  }
-  User.findById(req.session.user._id)
-    .then(user => {
-      req.user = user;
-      next();
-    })
-    .catch(err => console.log(err));
-});
 
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);//req koji se ne nadje u shop ide u auth
-app.use(authRoutes);
+//app.use(authRoutes);
 
+
+app.use('/auth', auth);
 mongoose
-  .connect(
-    MONGODB_URI
-    , {
-      useUnifiedTopology: true,
-      useNewUrlParser: true
-    })
+  .connect(process.env.DB_CONNECT, {useUnifiedTopology: true, useNewUrlParser: true})
   .then(result => {
-    User.findOne().then(user => {
-      if (!user) {
-        const user = new User({
-          name: 'Mima',
-          email: '98mima@jok.com',
-          cart: {
-            items: []
-          }
-        });
-        user.save();
-      }
-    })
     app.listen(3000);
   })
   .catch(err => {

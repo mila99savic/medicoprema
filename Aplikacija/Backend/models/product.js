@@ -21,14 +21,14 @@ const productSchema = new Schema({
     }, 
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'Korisnik', 
+        ref: 'User', 
         required: true
         //ide ime modela (exports..)
         //ovo je relacija 
     }
 });
 
-module.exports = mongoose.model('Proizvod', productSchema);
+module.exports = mongoose.model('Product', productSchema);
 //model je fja koju mongoose izvrsava da konektuje schemu sa modelom
 //zadajemo ime modela
 //'Proizvod' => mongoose je od ovog napravio kolekciju => proizvods

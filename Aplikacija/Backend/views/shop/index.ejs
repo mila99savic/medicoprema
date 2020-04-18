@@ -1,4 +1,4 @@
-<%- include('../includes/head.ejs') %>
+<!-- <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/product.css">
 </head>
 
@@ -23,8 +23,10 @@
                         </div>
                         <div class="card__actions">
                                 <a href="/products/<%= product._id %>" class="btn">Detalji</a>
-                                <!-- ovde je _id a ne samo id zbog rada sa mongodb-->
-                            <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                                ovde je _id a ne samo id zbog rada sa mongodb
+                                <% if (isAuthenticated) { %>
+                                    <%- include('../includes/add-to-cart.ejs', {product: product}) %>
+                                <% } %>
                         </div>
                     </article>
                 <% } %>
@@ -33,4 +35,4 @@
             <h1>Nema proizvoda!</h1>
         <% } %>
     </main>
-<%- include('../includes/end.ejs') %>
+<%- include('../includes/end.ejs') %> -->
