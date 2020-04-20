@@ -2,18 +2,22 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const commentSchema = new Schema ({
+const commentSchema = new Schema({
     content: {
-        type:String,
-        required:true
+        type: String,
+        required: true
     },
     productid: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'Product'
+        // ,
+        // required: true
     },
     korisnikid: {
-        type: String,
-        required: true
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+        // ,
+        // required: true
     },
     date: {
         type: Date,

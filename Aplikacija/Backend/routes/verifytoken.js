@@ -7,14 +7,14 @@ const jwt = require('jsonwebtoken');
 //router.get('/', verify, (req, res))
 function verification (req, res, next)  {
     const token = req.header('auth-token');
-    if(!token) return res.status(401).send('Access Denied');
+    if(!token) return res.status(401).send('Pristup odbijen');
 
     try{
-        const verified = jwt.verify(token, 'tokencic');
+        const verified = jwt.verify(token, 'ovojetajna');
         req.user = verified;
         next();
     }catch(err){
-        res.status(400).send('Invalid Token');
+        res.status(400).send('Nevazeci Token');
     }
 }
 

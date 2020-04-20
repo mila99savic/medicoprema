@@ -18,15 +18,37 @@ const productSchema = new Schema({
     imageUrl: {
         type: String,
         required: true
-    }, 
-    userId: {
-        type: Schema.Types.ObjectId,
-        ref: 'User', 
-        required: true
-        //ide ime modela (exports..)
-        //ovo je relacija 
+    },
+    listofcomments: {
+        comments: [ 
+            {
+                content:{
+                    type: String,
+                    required: true
+                }
+            }
+        ]
     }
+    //, 
+    // userId: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'User', 
+    //     required: true
+    //ide ime modela (exports..)
+    //ovo je relacija 
+    // }
 });
+
+productSchema.methods.addComment = function(comment) {
+    const updatedcommlist = [...this.listofcomments.comments];
+    updatedcommlist.push({content: comment.content});
+
+    updatedlist = {
+        comments: updatedcommlist
+    };
+    this.listofcomments = updatedlist
+    return this.save();
+}
 
 module.exports = mongoose.model('Product', productSchema);
 //model je fja koju mongoose izvrsava da konektuje schemu sa modelom
@@ -60,7 +82,7 @@ module.exports = mongoose.model('Product', productSchema);
 //         .collection('proizvodi')//ako ne postoji kreira se
 //         .insertOne(this)
 //         }
-        
+
 //         return dbOp
 //         .then(result => {
 //             console.log(result);

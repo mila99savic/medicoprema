@@ -1,13 +1,13 @@
 const Product = require('../models/product');
 
-exports.getAddProduct = (req, res, next) => {
-  res.render('admin/edit-product', {
-    pageTitle: 'Add Product',
-    path: '/admin/add-product',
-    editing: false,
-    isAuthenticated: req.session.isLoggedIn
-  });
-};
+// exports.getAddProduct = (req, res, next) => {
+//   res.render('admin/edit-product', {
+//     pageTitle: 'Add Product',
+//     path: '/admin/add-product',
+//     editing: false,
+//     isAuthenticated: req.session.isLoggedIn
+//   });
+// };
 
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
@@ -19,7 +19,7 @@ exports.postAddProduct = (req, res, next) => {
     price: price, 
     imageUrl: imageUrl, 
     description: description,
-    userId: req.user //nama treba samo _id, mongoose to automatksi izvlaci
+    //userId: req.user //nama treba samo _id, mongoose to automatksi izvlaci
     //a moze i _id
   });
   //ovde red nije bitan
@@ -28,38 +28,37 @@ exports.postAddProduct = (req, res, next) => {
     .save()//metod od mongoos-a
     .then(result => {
       // console.log(result);
-      console.log('Created Product');
-      res.redirect('/admin/products');
+      res.send('Kreirano')
     })
     .catch(err => {
       console.log(err);
     });
 };
 
-exports.getEditProduct = (req, res, next) => {
-  const editMode = req.query.edit;
-  if (!editMode) {
-    return res.redirect('/');
-  }
-  const prodId = req.params.productId;
-  Product.findById(prodId)
-    // Product.findById(prodId)
-    .then(product => {
-      if (!product) {
-        return res.redirect('/');
-      }
-      res.render('admin/edit-product', {
-        pageTitle: 'Edit Product',
-        path: '/admin/edit-product',
-        editing: editMode,
-        product: product,
-        isAuthenticated: req.session.isLoggedIn
-      });
-    })
-    .catch(err => console.log(err));
-};
+// exports.getEditProduct = (req, res, next) => {
+//   const editMode = req.query.edit;
+//   if (!editMode) {
+//     return res.redirect('/');
+//   }
+//   const prodId = req.params.productId;
+//   Product.findById(prodId)
+//     // Product.findById(prodId)
+//     .then(product => {
+//       if (!product) {
+//         return res.redirect('/');
+//       }
+//       res.render('admin/edit-product', {
+//         pageTitle: 'Edit Product',
+//         path: '/admin/edit-product',
+//         editing: editMode,
+//         product: product,
+//         isAuthenticated: req.session.isLoggedIn
+//       });
+//     })
+//     .catch(err => console.log(err));
+// };
 
-exports.postEditProduct = (req, res, next) => {
+exports.editProduct = (req, res, next) => {
   const prodId = req.body.productId;
   const updatedTitle = req.body.title;
   const updatedPrice = req.body.price;
@@ -75,34 +74,33 @@ exports.postEditProduct = (req, res, next) => {
       .save()//radi i apdejt
   })
     .then(result => {
-      console.log('Apdejtovan proizvod!');
-      res.redirect('/admin/products');
+      res.send('Apdejtovano')
     })
     .catch(err => console.log(err));
 };
 
-exports.getProducts = (req, res, next) => {
-  Product.find()
-  //select('title price -_id) to se na stranici prikazuje
-  //.populate('userId', 'name') - izvlaci ne samo id vec sve informacije
-  //svi podaci u jednom koraku a ne preko querija
-    .then(products => {
-      res.render('admin/products', {
-        prods: products,
-        pageTitle: 'Admin Products',
-        path: '/admin/products',
-        isAuthenticated: req.session.isLoggedIn
-      });
-    })
-    .catch(err => console.log(err));
-};
+// exports.getProducts = (req, res, next) => {
+//   Product.find()
+//   //select('title price -_id) to se na stranici prikazuje
+//   //.populate('userId', 'name') - izvlaci ne samo id vec sve informacije
+//   //svi podaci u jednom koraku a ne preko querija
+//     .then(products => {
+//       res.render('admin/products', {
+//         prods: products,
+//         pageTitle: 'Admin Products',
+//         path: '/admin/products',
+//         //isAuthenticated: req.session.isLoggedIn
+//       });
+//     })
+//     .catch(err => console.log(err));
+// };
 
-exports.postDeleteProduct = (req, res, next) => {
+exports.deleteProduct = (req, res, next) => {
   const prodId = req.body.productId;
   Product.findByIdAndRemove(prodId)//fja mongoosa
     .then(() => {
-      console.log('Obrisan proizvod');
-      res.redirect('/admin/products');
+      res.send('Obrisano');
     })
     .catch(err => console.log(err));
 };
+

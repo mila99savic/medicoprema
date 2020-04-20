@@ -1,81 +1,77 @@
-//const bcrypt = require('bcryptjs');
+const User = require('../models/user');
+const jwt = require('jsonwebtoken');
+const bcryptjs = require('bcryptjs');
+const { registerValidation, loginValidation } = require('../validation');
 
-//const User = require('../models/user');
+exports.register = (req, res, next) => {
+    const { error } = registerValidation(req.body);
+    if (error)
+        return res.status(400).send(error.details[0].message);
 
+    User.findOne({ email: req.body.email }).then(userDoc => {
+        if (userDoc) {
+            return res.json({ Status: 'Korisnik sa takvim mejlom vec postoji' });
+        }
+    })
+    
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
 
+    bcryptjs
+        .hash(password, 12)
+        .then(hashedPw => {
+            const user = new User({
+                name: name,
+                email: email,
+                password: hashedPw,
+            });
+            return user.save();
+        })
+        .then(result => {
+            res.status(201).json({ message: 'Korisnik kreiran', userId: result._id });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        });
+}
 
-// // exports.getSignup = (req, res, next) => {
-// //   res.render('auth/signup', {
-// //     path: '/signup',
-// //     pageTitle: 'Signup',
-// //     isAuthenticated: false
-// //   });
-// // };
+exports.login = (req, res, next) => {
+  const { error } = loginValidation(req.body);
+  if (error)
+      return res.status(400).send(error.details[0].message);
 
-// exports.postLogin = (req, res, next) => {
-//   const email = req.body.email;
-//   const password = req.body.password;
-//   User.findOne({ email: email })
-//     .then(user => {
-//       if (!user) {
-//         return res.redirect('/login');
-//       }
-//       bcrypt
-//         .compare(password, user.password)
-//         .then(doMatch => {
-//           console.log(doMatch)
-//           if (doMatch) {
-            
-//             req.session.isLoggedIn = true;
-//             req.session.user = user;
-//             return req.session.save(err => {
-//               console.log(err);
-//               res.redirect('/');
-//             });
-//           }
-//           res.redirect('/login');
-//         })
-//         .catch(err => {
-//           console.log(err);
-//           res.redirect('/login');
-//         });
-//     })
-//     .catch(err => console.log(err));
-// };
-
-// exports.postSignup = (req, res, next) => {
-//   const email = req.body.email;
-//   //body.nesto => nesto je iz .ejs name="nesto"
-//   const password = req.body.password;
-//   const confirmpassword = req.body.confirmPassword;
-//   User.findOne({ email: email })
-//     .then(userDoc => {
-//       if (userDoc) {
-//         return res.redirect('/signup');
-//       }
-//       return bcrypt
-//         .hash(password, 12)
-//         .then(hashedPassword => {
-//           const user = new User({
-//             email: email,
-//             password: hashedPassword,
-//             cart: { items: [] }
-//           });
-//           return user.save();
-//         })
-//         .then(result => {
-//           res.redirect('/login');
-//         });
-//     })
-//     .catch(err => {
-//       console.log(err);
-//     })
-// };
-
-// // exports.postLogout = (req, res, next) => {
-// //   req.session.destroy(err => {
-// //     console.log(err);
-// //     res.redirect('/');
-// //   });
-// // };
+  const email = req.body.email;
+  const password = req.body.password;
+  let loadedUser;
+  User.findOne({ email: email })
+    .then(user => {
+      if (!user) 
+        return res.json({ Status: error.details[0].message });
+      loadedUser = user;
+      return bcryptjs.compare(password, user.password);
+    })
+    .then(isEqual => {
+      if (!isEqual)
+        return res.json('Poresan password')
+      const token = jwt.sign(
+        {
+          email: loadedUser.email,
+          userId: loadedUser._id.toString()
+        },
+        process.env.TOKEN,
+        { expiresIn: '1h' }
+      );
+      res.status(200).json({ token: token, userId: loadedUser._id.toString() });
+    })
+    .catch(err => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      next(err);
+    });
+}
 
