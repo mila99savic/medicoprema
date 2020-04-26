@@ -28,9 +28,33 @@ const userSchema = new Schema ({
                 productId: { 
                     type: Schema.Types.ObjectId, 
                     ref: 'Product',
-                    required: true},
+                    required: true
+                },
+                productTitle: {
+                    type: String
+                },
                 quantity: {
                     type: Number,
+                    required: true
+                }
+            }
+        ]
+    },
+    listofimpressions: {
+        impressions: [ 
+            {
+                content:{
+                    type: String,
+                    required: true
+                }
+            }
+        ]
+    },
+    listoftasks: {
+        tasks: [ 
+            {
+                location:{
+                    type: String,
                     required: true
                 }
             }
@@ -51,6 +75,7 @@ userSchema.methods.addToCart = function(product) {
     } else {
         updatedCartItems.push({ 
             productId: product._id, //imena levo mora da se poklapaju sa schemom
+            productTitle: product.title,
             quantity: newQuantity})
         //ovde cuvamo referencu na te podatke (proizvode) koji su korpi
     }
@@ -74,6 +99,28 @@ userSchema.methods.removeFromCart = function(productId) {
 
 userSchema.methods.clearCart = function() {
     this.cart = {items: []};
+    return this.save();
+}
+
+userSchema.methods.addImpression = function(impression) {
+    const updatedImprlist = [...this.listofimpressions.impressions];
+    updatedImprlist.push({content: impression.content});
+
+    updatedlist = {
+        impressions: updatedImprlist
+    };
+    this.listofimpressions = updatedlist
+    return this.save();
+}
+
+userSchema.methods.addTask = function(task) {
+    const updatedTasklist = [...this.listoftasks.tasks];
+    updatedTasklist.push({location: task.location});
+
+    updatedlist = {
+        tasks: updatedTasklist
+    };
+    this.listoftasks = updatedlist
     return this.save();
 }
 

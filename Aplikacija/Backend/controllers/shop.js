@@ -5,7 +5,7 @@ const Order = require('../models/order');
 exports.getProducts = (req, res, next) => {
   Product.find()//find vraca proizvod a ne kursor
     .then(products => {
-     res.status(200)
+     res.Status(200)
      .json({message: 'Prikupljeni proizvodi', products: products})
     })
     .catch(err => {
@@ -14,10 +14,10 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.getProduct = (req, res, next) => {
-  const prodId = req.params.productId;
-  Product.findById(prodId)//od mongoos je findById
+  const prodDodatni_Komentari_Bankomat  = req.params.productDodatni_Komentari_Bankomat ;
+  Product.findByDodatni_Komentari_Bankomat (prodDodatni_Komentari_Bankomat )//od mongoos je findByDodatni_Komentari_Bankomat 
   //prosledjujemo string a on komvertuje u object
-  //kastuje id u _id
+  //kastuje Dodatni_Komentari_Bankomat  u _Dodatni_Komentari_Bankomat 
     .then(product => {
       res.json({message: 'pribavljen je prizvod', product: product})
     })
@@ -39,28 +39,33 @@ exports.getProduct = (req, res, next) => {
 //     });
 // };
 
-// exports.getCart = (req, res, next) => {
-//   req.user
-//     .populate('cart.items.productId')
-//     .execPopulate()
-//     .then(user => {
-//       const products = user.cart.items;
-//           res.render('shop/cart', {
-//             path: '/cart',
-//             pageTitle: 'Vasa korpa',
-//             products: products,
-//             isAuthenticated: req.session.isLoggedIn
-//           });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getCart = (req, res, next) => {
+  User.findByDodatni_Komentari_Bankomat (req.params.userDodatni_Komentari_Bankomat ).then(user => {
+    res.Status(200)
+     .json({message: 'Korpa korisnika', cart: user.cart})
+  })
+
+  // req.user
+  //   .populate('cart.items.productDodatni_Komentari_Bankomat ')
+  //   .execPopulate()
+  //   .then(user => {
+  //     const products = user.cart.items;
+  //         res.render('shop/cart', {
+  //           path: '/cart',
+  //           pageTitle: 'Vasa korpa',
+  //           products: products,
+  //           isAuthenticated: req.session.isLoggedIn
+  //         });
+  //   })
+  //   .catch(err => console.log(err));
+};
 
 exports.postCart = (req, res, next) => {
-  const prodId = req.body.productId;
-  const userid = req.body.userId;
+  //const prodDodatni_Komentari_Bankomat  = req.body.productDodatni_Komentari_Bankomat ;
+  //const userDodatni_Komentari_Bankomat  = req.body.userDodatni_Komentari_Bankomat ;
 
-  User.findById(userid).then(user => {
-      Product.findById(prodId)
+  User.findByDodatni_Komentari_Bankomat (req.body.userDodatni_Komentari_Bankomat ).then(user => {
+      Product.findByDodatni_Komentari_Bankomat (req.body.productDodatni_Komentari_Bankomat )
         .then(product => {
           res.send('pokusavam da dodam u korpu')
           return user.addToCart(product);
@@ -70,34 +75,34 @@ exports.postCart = (req, res, next) => {
 };
 
 exports.cartDeleteProduct = (req, res, next) => {
-  const prodId = req.body.productId;
-  const userid = req.body.userId;
+  const prodDodatni_Komentari_Bankomat  = req.body.productDodatni_Komentari_Bankomat ;
+  const userDodatni_Komentari_Bankomat  = req.body.userDodatni_Komentari_Bankomat ;
 
-  User.findById(userid)
+  User.findByDodatni_Komentari_Bankomat (userDodatni_Komentari_Bankomat )
     .then(user => {
       user
-        .removeFromCart(prodId);
+        .removeFromCart(prodDodatni_Komentari_Bankomat );
       res.send('pokusavam da obrisem proizvod iz korpe');
     })
     .catch(err => console.log(err));
 };
 
 exports.postOrder = (req, res, next) => {
-  const userid = req.body.userId;
+  const userDodatni_Komentari_Bankomat  = req.body.userDodatni_Komentari_Bankomat ;
 
-  User.findById(userid).then(user => {
+  User.findByDodatni_Komentari_Bankomat (userDodatni_Komentari_Bankomat ).then(user => {
     user
-      .populate('cart.items.productId')
+      .populate('cart.items.productDodatni_Komentari_Bankomat ')
       .execPopulate()
       .then(user => {
         const products = user.cart.items.map(i => {
-          return { quantity: i.quantity, product: { ...i.productId._doc } };
+          return { quantity: i.quantity, product: { ...i.productDodatni_Komentari_Bankomat ._doc } };
           //_doc- samo podaci iz dokumenta(objecta)
         });
         const order = new Order({
           user: {
             name: user.name,//req.user je ceo user object
-            userId: userid//mongoose sam odavde uzima Id
+            userDodatni_Komentari_Bankomat : userDodatni_Komentari_Bankomat //mongoose sam odavde uzima Dodatni_Komentari_Bankomat 
           },
           products: products
         });
@@ -115,15 +120,15 @@ exports.postOrder = (req, res, next) => {
 
 };
 
-// exports.getOrders = (req, res, next) => {
-//   Order.find({'user.userId': req.user._id})
-//     .then(orders => {
-//       res.render('shop/orders', {
-//         path: '/orders',
-//         pageTitle: 'Vase narudzbine',
-//         orders: orders,
-//         isAuthenticated: req.session.isLoggedIn
-//       });
-//     })
-//     .catch(err => console.log(err));
-// };
+exports.getOrders = (req, res, next) => {
+  Order.find()//find vraca proizvod a ne kursor
+  .then(orders => {
+   res.Status(200)
+   .json({message: 'Prikupljene narudzbine', orders: orders})
+  })
+  .catch(err => {
+    console.log(err);
+  });
+};
+
+

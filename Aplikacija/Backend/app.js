@@ -7,6 +7,9 @@ const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 const auth = require('./routes/auth');
 const commRoutes = require('./routes/comment');
+const userRoutes = require('./routes/user');
+const impRoutes = require('./routes/impression');
+const taskRoutes = require('./routes/task');
 //const cors = require('cors');
 const mongoose = require('mongoose');
 
@@ -29,6 +32,9 @@ app.use('/admin', adminRoutes);
 app.use('/shop', shopRoutes);//req koji se ne nadje u shop ide u auth
 app.use('/auth', auth);
 app.use('/comment', commRoutes);
+app.use('/user', userRoutes);
+app.use('/impression', impRoutes);
+app.use('/task', taskRoutes);
 
 mongoose
   .connect(process.env.DB_CONNECT, {useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false})

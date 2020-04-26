@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
-const scheduleSchema = new Schema ({
+const taskSchema = new Schema ({
     location: {
         type:String,
         required:true
     },
     date: {
-        type: Date,
-        default: Date.now
+        type: Date
+        //default: Date.now
     },
     comment: {
         //dodatni zahtev
@@ -20,9 +20,12 @@ const scheduleSchema = new Schema ({
         required: true
     },
     korisnikid: {
-        type: String,
+        type: String, 
         required: true
+    },
+    zaposleniId: {
+        type: String
     }
 });
 
-module.exports = mongoose.model('Schedule', scheduleSchema);
+module.exports = mongoose.model('Task', taskSchema);

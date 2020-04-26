@@ -9,6 +9,16 @@ const Product = require('../models/product');
 //   });
 // };
 
+exports.getProducts = (req, res, next) => {
+  Product.find()//find vraca proizvod a ne kursor
+    .then(products => {
+     res.json({message: 'Prikupljeni proizvodi', products: products})
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
 exports.postAddProduct = (req, res, next) => {
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
@@ -28,7 +38,7 @@ exports.postAddProduct = (req, res, next) => {
     .save()//metod od mongoos-a
     .then(result => {
       // console.log(result);
-      res.send('Kreirano')
+      res.send('Kreiran proizvod')
     })
     .catch(err => {
       console.log(err);
