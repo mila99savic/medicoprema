@@ -5,6 +5,7 @@
                 <el-popover>
                     <img :src="Logo" style="height:70px; width: 200px; margin: 0 auto; display:flex; justify-self: center;" slot="reference"/> 
                 </el-popover>
+                <div><h5>Dodavanje zaposlenog</h5></div>
                 <div class="stavka">
                     <label>Ime:</label>
                     <el-input class="input" v-model="zaposleni.FirstName" size="small">
