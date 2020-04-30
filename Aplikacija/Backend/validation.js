@@ -65,11 +65,17 @@ const productValidation = (data) => {
         title: Joi.string().min(3).required(),
         price: Joi.number().required(),
         description: Joi.string().required(),
-        imageUrl: Joi.string().required().uri()
+        imageUrl: Joi.string().required()
     });
     return schema.validate(data);
 }
 
+const orderValidation = (data) => {
+    const schema = Joi.object({
+        userId: Joi.string().required()
+    });
+    return schema.validate(data);
+}
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.commentValidation = commentValidation;
@@ -77,3 +83,4 @@ module.exports.impressionValidation = impressionValidation;
 module.exports.requestValidation = requestValidation;
 module.exports.taskValidation = taskValidation;
 module.exports.productValidation = productValidation;
+module.exports.orderValidation = orderValidation;

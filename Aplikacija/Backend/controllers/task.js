@@ -3,33 +3,38 @@ const User = require('../models/user');
 
 const { taskValidation } = require('../validation');
 
-exports.getTasks = (req, res, next) => {
-    Task.find()//find vraca proizvod a ne kursor
-        .then(tasks => {
-            res.status(200)
-                .json({ message: 'Prikupljene obaveze', tasks: tasks })
-        })
-        .catch(err => {
-            console.log(err);
-        });
-}
-
-exports.getTasksByUserId = (req, res, next) => {
-    User.findById(req.params.zaposleniId).then(user => {
+exports.getTasks = async (req, res, next) => {
+    try {
+        const tasks = await Task.find()//find vraca proizvod a ne kursor
         res.status(200)
-            .json({ 
-                message: 'Prikupljene obaveze za korisnika', 
-                tasks: user.listoftasks })
-    }).catch(err => {
+            .json({ message: 'Prikupljene obaveze', tasks: tasks })
+    }
+    catch (err) {
+        res.json({ success: false });
         console.log(err);
-    })
+    }
 }
 
-exports.addTask = (req, res, next) => {
+exports.getTasksByUserId = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.zaposleniId)
+        res.status(200)
+            .json({
+                message: 'Prikupljene obaveze za korisnika',
+                tasks: user.listoftasks
+            })
+    }
+    catch (err) {
+        res.json({ success: false });
+        console.log(err);
+    }
+}
+
+exports.addTask = async (req, res, next) => {
     const { error } = taskValidation(req.body);
     if (error)
         return res.status(400).send(error.details[0].message);
-    
+
     const task = new Task({
         location: req.body.location,
         date: req.body.date,
@@ -37,14 +42,17 @@ exports.addTask = (req, res, next) => {
         type: req.body.type,
         korisnikid: req.body.korisnikid
     });
-    task.save().then(resut => {
-        res.send('Kreirana je obaveza(zakazivanje)')
-    }).catch(err => {
+    try {
+        const savedTask = await task.save();
+        res.json({ Success: true, savedTask });
+    }
+    catch (err) {
+        res.json({ success: false });
         console.log(err);
-    });
+    }
 }
 
-exports.assignTask = (req, res, next) => {
+exports.assignTask = async (req, res, next) => {
     const task = new Task({
         location: req.body.location,
         date: req.body.date,
@@ -53,19 +61,17 @@ exports.assignTask = (req, res, next) => {
         korisnikid: req.body.korisnikid,
         zaposleniId: req.params.zaposleniId
     });
-    task.save().then(
-        task => {
-            res.status(201).json({
-                message: 'Kreirana je obaveza(zakazivanje) i dodeljena zaposlenom',
-                task: task
-            });
-            User.findById(req.params.zaposleniId).then(zaposlen => {
-                return zaposlen.addTask(task)
-            })
-        }).catch(err => {
-            if (!err.statusCode) {
-                err.statusCode = 500;
-            }
-            next(err);
+    try {
+        res.status(201).json({
+            message: 'Dodeljena je obaveza(zakazivanje) i dodeljena zaposlenom',
+            task: task
         });
+        User.findById(req.params.zaposleniId).then(zaposlen => {
+            return zaposlen.addTask(task)
+        })
+    }
+    catch (err) {
+        res.json({ success: false });
+        console.log(err);
+    }
 }

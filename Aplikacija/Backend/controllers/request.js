@@ -3,18 +3,17 @@ const User = require('../models/user');
 
 const { requestValidation } = require('../validation');
 
-exports.getRequests = (req, res, next) => {
-    Request.find()//find vraca proizvod a ne kursor
-    .then(requests => {
-     res.status(200)
-     .json({message: 'Prikupljeni komentari', requests: requests})
-    })
-    .catch(err => {
-      console.log(err);
-    });
+exports.getRequests = async (req, res, next) => {
+  try{
+    const req = await Request.find();//find vraca proizvod a ne kursor
+    res.json(req);
+    }
+    catch(err){
+      res.json({success: false});
+    }
 }
 
-exports.addRequest = (req, res, next) => {
+exports.addRequest = async (req, res, next) => {
   const { error } = requestValidation(req.body);
   if (error)
       return res.status(400).send(error.details[0].message);
@@ -27,17 +26,21 @@ exports.addRequest = (req, res, next) => {
             status: req.body.status,
             korisnikid: req.body.korisnikid
         });
-        request.save().then(resut => {
-            res.send('Kreirana je zahtev(za zakazivanje)')
-        }).catch(err => {
-            console.log(err);
-        })
+        try{
+          const savedReq = await request.save()
+          res.json({Success: true,  savedReq});
+        }
+        catch(err){
+          res.json({success: false});
+        }
 }
 
-exports.deleteRequest = (req, res, next) => {
-    Request.findByIdAndRemove(req.params.reqId)//fja mongoosa
-    .then(() => {
-      res.send('Obrisano');
-    })
-    .catch(err => console.log(err));
+exports.deleteRequest = async (req, res, next) => {
+  const request = await Request.findByIdAndRemove(req.params.reqId)//fja mongoosa
+  try{
+    res.json({Success: true,  message:"Obrisano!"});
+  } 
+  catch(err){
+    res.json({success: false});
+  }
   } 
