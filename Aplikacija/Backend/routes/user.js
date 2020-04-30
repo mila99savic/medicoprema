@@ -10,7 +10,7 @@ router.get('/users', userController.getUsers);
 
 router.get('/find/:userEmail', userController.findByEmail)
 
-router.put('/edit/:userId', userController.editUser);
+router.put('/edit/:userId', userController.updateUser);
 
 router.delete('/delete/:userId', userController.deleteUser);
 

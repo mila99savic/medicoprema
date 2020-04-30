@@ -1,5 +1,7 @@
 const Product = require('../models/product');
 
+const { productValidation } = require('../validation');
+
 // exports.getAddProduct = (req, res, next) => {
 //   res.render('admin/edit-product', {
 //     pageTitle: 'Add Product',
@@ -20,6 +22,10 @@ exports.getProducts = (req, res, next) => {
 };
 
 exports.postAddProduct = (req, res, next) => {
+  const { error } = productValidation(req.body);
+  if (error)
+      return res.status(400).send(error.details[0].message);
+
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;

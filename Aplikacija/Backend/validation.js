@@ -1,7 +1,4 @@
 const Joi = require('@hapi/joi');
-const register_user = require('./validation/userSchema');
-const added_post = require('./validation/impressionSchema');
-const added_comment = require('./validation/commentSchema');
 
 const registerValidation = (data) => {
     const schema = Joi.object({
@@ -18,21 +15,65 @@ const loginValidation = (data) => {
         password: Joi.string().min(6).required()
     });
     return schema.validate(data);
+};
+
+const commentValidation = (data) => {
+    const schema = Joi.object({
+        content: Joi.string().min(2).required(),
+        productid: Joi.string().required(),
+        korisnikid: Joi.string().required()
+    });
+    return schema.validate(data);
+};
+
+const impressionValidation = (data) => {
+    const schema = Joi.object({
+        content: Joi.string().min(2).required(),
+        korisnikid: Joi.string().required(),
+        zaposlenid: Joi.string().required()
+    });
+    return schema.validate(data);
+};
+
+const requestValidation = (data) => {
+    const schema = Joi.object({
+        location: Joi.string().min(3).required(),
+        date: Joi.string().required(),
+        comment: Joi.string(),
+        type: Joi.string().required(),
+        status: Joi.string(),
+        korisnikid: Joi.string().required()
+    });
+    return schema.validate(data);
+};
+
+const taskValidation = (data) => {
+    const schema = Joi.object({
+        location: Joi.string().min(3).required(),
+        date: Joi.string().required(),
+        comment: Joi.string(),
+        type: Joi.string().required(),
+        status: Joi.string(),
+        korisnikid: Joi.string().required(),
+        zaposleniId: Joi.string()
+    });
+    return schema.validate(data);
 }
 
-// const impressionValidation = (data) => {
-//     return added_post.validate(data);
-// }
-// const commentValidation = (data) => {
-//     const added_comment = Joi.object({
-//         content: Joi.string().required(),
-//         productid: Joi.required(),
-//         korisnikid: Joi.required()
-//     });
-//     return added_comment.validate(data);
-// }
+const productValidation = (data) => {
+    const schema = Joi.object({
+        title: Joi.string().min(3).required(),
+        price: Joi.number().required(),
+        description: Joi.string().required(),
+        imageUrl: Joi.string().required().uri()
+    });
+    return schema.validate(data);
+}
 
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
-//module.exports.commentValidation = commentValidation;
-//module.exports.impressionValidation = impressionValidation;
+module.exports.commentValidation = commentValidation;
+module.exports.impressionValidation = impressionValidation;
+module.exports.requestValidation = requestValidation;
+module.exports.taskValidation = taskValidation;
+module.exports.productValidation = productValidation;

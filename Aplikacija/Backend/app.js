@@ -10,10 +10,9 @@ const commRoutes = require('./routes/comment');
 const userRoutes = require('./routes/user');
 const impRoutes = require('./routes/impression');
 const taskRoutes = require('./routes/task');
+const reqRoutes = require('./routes/request');
 //const cors = require('cors');
 const mongoose = require('mongoose');
-
-const User = require('./models/user');
 
 dotenv.config();
 
@@ -35,6 +34,7 @@ app.use('/comment', commRoutes);
 app.use('/user', userRoutes);
 app.use('/impression', impRoutes);
 app.use('/task', taskRoutes);
+app.use('/request', reqRoutes);
 
 mongoose
   .connect(process.env.DB_CONNECT, {useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false})

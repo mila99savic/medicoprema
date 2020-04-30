@@ -18,12 +18,12 @@ exports.findByEmail = (req, res, next) => {
     User.findOne({email: userEmail
     })
       .then(user => {
-        res.json({message: 'pribavljen je korisnik', user: user})
+        res.json({message: 'pribavljen je korisnik', user: user.name})
       })
       .catch(err => console.log(err));
 }
 
-exports.editUser = (req, res, next) => {
+exports.updateUser = (req, res, next) => {
   const userId = req.params.userId;
   const updatedName = req.body.name;
   const updatedEmail = req.body.email;

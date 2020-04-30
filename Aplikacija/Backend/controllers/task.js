@@ -1,5 +1,7 @@
 const Task = require('../models/task');
-const User = require('../models/user')
+const User = require('../models/user');
+
+const { taskValidation } = require('../validation');
 
 exports.getTasks = (req, res, next) => {
     Task.find()//find vraca proizvod a ne kursor
@@ -24,10 +26,14 @@ exports.getTasksByUserId = (req, res, next) => {
 }
 
 exports.addTask = (req, res, next) => {
+    const { error } = taskValidation(req.body);
+    if (error)
+        return res.status(400).send(error.details[0].message);
+    
     const task = new Task({
         location: req.body.location,
         date: req.body.date,
-        task: req.body.task,
+        comment: req.body.comm,
         type: req.body.type,
         korisnikid: req.body.korisnikid
     });

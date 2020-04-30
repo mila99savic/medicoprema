@@ -1,6 +1,8 @@
 const Impression = require('../models/impression');
 const User =require('../models/user');
 
+const { impressionValidation } = require('../validation');
+
 exports.getImpressions = (req, res, next) => {
     Impression.find()//find vraca proizvod a ne kursor
     .then(impressions => {
@@ -13,6 +15,10 @@ exports.getImpressions = (req, res, next) => {
 }
 
 exports.createImpression = (req, res, next) => {
+  const { error } = impressionValidation(req.body);
+  if (error)
+      return res.status(400).send(error.details[0].message);
+
     const impression = new Impression({
         content: req.body.content,
         korisnikid: req.body.korisnikid,
