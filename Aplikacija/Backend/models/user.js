@@ -33,6 +33,9 @@ const userSchema = new Schema ({
                 productTitle: {
                     type: String
                 },
+                productPrice: {
+                    type: Number
+                },
                 quantity: {
                     type: Number,
                     required: true
@@ -76,6 +79,7 @@ userSchema.methods.addToCart = function(product) {
         updatedCartItems.push({ 
             productId: product._id, //imena levo mora da se poklapaju sa schemom
             productTitle: product.title,
+            productPrice: product.price,
             quantity: newQuantity})
         //ovde cuvamo referencu na te podatke (proizvode) koji su korpi
     }

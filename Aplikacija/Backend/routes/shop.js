@@ -18,6 +18,8 @@ router.delete('/cart-delete-item', shopController.cartDeleteProduct);
 
 router.post('/create-order', shopController.postOrder);
 
+router.get('/sum/:userId', shopController.sum)
+
 router.get('/orders', shopController.getOrders);
 
 module.exports = router;
