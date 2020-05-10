@@ -31,7 +31,7 @@
                 </el-table-column>
             </el-table>
             <div class="dugme-dodaj">
-                <el-button round size="mini" style="height:50px; width:130px; color:white; margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" @click="dodajClana">Dodaj zaposlenog</el-button>
+                <el-button round size="mini" style="height:50px; width:130px; color:white; margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" @click="dodajClana"> Dodaj zaposlenog </el-button>
             </div>
         </div>
         <form-dodaj-zaposlenog v-if="this.showComp == 'zaposleni'" @zatvoriDodavanjeClana="zavrsiDodavanje"></form-dodaj-zaposlenog>
@@ -58,7 +58,7 @@ export default {
     },
     methods:{
         dodajClana:function(){
-            this.showComp=='zaposleni';
+            this.showComp='zaposleni';
             setPageShown('zaposleni');
         },
         deleteUser(id){
