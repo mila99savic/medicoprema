@@ -11,7 +11,7 @@ const userRoutes = require('./routes/user');
 const impRoutes = require('./routes/impression');
 const taskRoutes = require('./routes/task');
 const reqRoutes = require('./routes/request');
-//const cors = require('cors');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 dotenv.config();
@@ -25,7 +25,7 @@ app.set('views', 'views');
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-//app.use(cors());
+app.use(cors());
 
 app.use('/admin', adminRoutes);
 app.use('/shop', shopRoutes);//req koji se ne nadje u shop ide u auth

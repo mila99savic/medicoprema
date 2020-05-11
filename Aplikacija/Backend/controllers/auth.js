@@ -6,7 +6,7 @@ const { registerValidation, loginValidation } = require('../validation');
 exports.register = async (req, res, next) => {
   const { error } = registerValidation(req.body);
   if (error)
-    return res.status(400).send(error.details[0].message);
+    return res.status(400).send(res.json({Message: error.details[0].message}));
 
   const emailExist = await User.findOne({ email: req.body.email });
   if (emailExist) {
@@ -20,7 +20,11 @@ exports.register = async (req, res, next) => {
 
   const user = new User({
     name: req.body.name,
+    lastname: req.body.lastname,
+    address: req.body.address,
+    number: req.body.number,
     email: req.body.email,
+    username: req.body.username,
     password: hashPassword,
   });
 
@@ -28,7 +32,8 @@ exports.register = async (req, res, next) => {
 
   try {
     const savedUser = await user.save();
-    res.json({ Success: true, AuthToken: token, savedUser });
+    const Data = { id: savedUser.id, name: savedUser.name, email: savedUser.email }
+    res.json({ Success: true, AuthToken: token, Data});
   } catch (err) {
     res.json({ Success: false, Message: err });
   }

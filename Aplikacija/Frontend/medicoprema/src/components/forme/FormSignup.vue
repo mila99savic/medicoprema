@@ -8,43 +8,43 @@
                     </el-popover>
                     <div class="stavka">
                         <label>Ime:</label>
-                        <el-input class="input" v-model="signupData.FirstName" >
+                        <el-input class="input" v-model="signupData.name" >
                             <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                         </el-input>
                     </div>
                     <div class="stavka">
                         <label>Prezime:</label>
-                        <el-input class="input" v-model="signupData.LastName">
+                        <el-input class="input" v-model="signupData.lastname">
                              <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                         </el-input>
                     </div>
                     <div class="stavka">
                         <label>Adresa:</label>
-                        <el-input class="input" v-model="signupData.Address">
+                        <el-input class="input" v-model="signupData.address">
                              <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                         </el-input>
                     </div>
                     <div class="stavka">
                         <label>Broj telefona:</label>
-                        <el-input class="input" v-model="signupData.PhoneNumber">
+                        <el-input class="input" v-model="signupData.number">
                              <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                         </el-input>
                     </div>
                     <div class="stavka">
                         <label>E-mail:</label>
-                        <el-input class="input" v-model="signupData.Email">
+                        <el-input class="input" v-model="signupData.email">
                              <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                         </el-input>
                     </div>
                     <div class="stavka">
                         <label>Korisničko ime:</label>
-                        <el-input class="input" v-model="signupData.Username">
+                        <el-input class="input" v-model="signupData.username">
                              <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                         </el-input>
                     </div>
                     <div class="stavka">
                         <label>Lozinka:</label>
-                        <el-input class="input" v-model="signupData.Password" show-password></el-input>
+                        <el-input class="input" v-model="signupData.password" show-password></el-input>
                     </div>
                     <div class="dugme">
                         <el-button @click="onSignUpClick()" round style="margin-right:5px; color: white; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);">Registruj se</el-button>
@@ -59,49 +59,54 @@
 import logofirme2 from '../../assets/logofirme2.png';
 import {setUserInfo} from "../../services/contextManagement";
 import { apiFetch, destinationUrl, UserTypes, REGULAR_USER_TYPE } from '../../services/authFetch';
-import { ERRORS } from '../../data/errorsCode';
+//import { destinationUrl } from '../../services/authFetch';
+//import { ERRORS } from '../../data/errorsCode';
 export default {
     data() {
         return {
             Logo: logofirme2,
             signupData: {
-                FirstName: '',
-                LastName: '',
-                Address: '',
-                PhoneNumber: '',
-                Email: '',
-                Username: '',
-                Password: ''
+                name: '',
+                lastname: '',
+                address: '',
+                number: '',
+                email: '',
+                username: '',
+                password: ''
             }
         }
     },
     methods: {
-        onSignUpClick() {
+        onSignUpClick: async function() {
             if(!this.isDataValid())
                 this.$message({message: "Morate popuniti sva polja", type: "warning"});
             else if(!this.isPhoneNumberValid())
                 this.$message({message: "Broj telefona nije validan", type: "warning"});
             else{
-                apiFetch('POST', destinationUrl + "/User/CreateUserAsync", this.signupData)
+                console.log(this.signupData);
+                 apiFetch('POST', destinationUrl + "/auth/register", this.signupData)
                         .then(result => {
                             if(result.Success) {
-                                setUserInfo(result.Data, REGULAR_USER_TYPE);
+                                console.log(result);
+                                setUserInfo(result.Data.id, REGULAR_USER_TYPE);
                                 window.location.href = "/" + UserTypes[REGULAR_USER_TYPE];
                             }
-                            else if(result.Errors != null && result.Errors.length != 0) {
-                                this.$message({message: ERRORS[result.Errors[0].Code], type: "error"});
+                            else{
+                                this.$message('doslo je do greske!');
                             }
                         });
             }
-        },
+        },  
         isDataValid() {
-            const {FirstName, LastName, Address, PhoneNumber, Email, Username, Password} = this.signupData;
-            return !FirstName || !LastName || !Address || !PhoneNumber || !Email || !Username || !Password ? 
-                false : true;
+           // const {FirstName, LastName, Address, PhoneNumber, Email, Username, Password} = this.signupData;
+            // const signup = [...this.signupData];
+            // return !FirstName || !LastName || !Address || !PhoneNumber || !Email || !Username || !Password ? 
+            //     false : true;
+            return true;
         },
         isPhoneNumberValid() {
-            if(isNaN(parseInt(this.signupData.PhoneNumber)) || this.signupData.PhoneNumber == "")
-                return false;
+            // if(isNaN(parseInt(this.signupData.number)) || this.signupData.number == "")
+            //     return false;
             return true;
         }
     }

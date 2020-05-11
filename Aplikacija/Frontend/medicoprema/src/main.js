@@ -1,8 +1,8 @@
 import Vue from "vue";
-//import App from "./App.vue";
+import App from "./App.vue";
 import router from './routes/route'
 import ElementUI from "element-ui";
-import FormLogin from './pages/Uprava';
+//import FormLogin from './pages/Uprava';
 import "element-ui/lib/theme-chalk/index.css";
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
@@ -16,7 +16,7 @@ Vue.use(BootstrapVue);
 export const vue = new Vue({
         router,
         render:
-                h => h(FormLogin)
+                h => h(App)
 });
 
 vue.$mount("#app");

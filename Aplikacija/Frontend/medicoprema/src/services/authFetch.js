@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-export const destinationUrl = 'https://localhost:5001/api'
+export const destinationUrl = 'http://localhost:3000'
 
 export function getCredentials() {
     return {
@@ -15,28 +15,61 @@ export function setCredentials(accessToken) {
     localStorage.setItem('accessToken', accessToken)
 }
 
-export function apiFetchFactory() {
-    return async function apiFetch(method, url, body) {
-        const formData = new FormData();
-        for (let key in body) {
-            formData.append(key,body[key]);
-        }
-        let result = null;
-        if (body == null) {
-            result = await fetch(url, {
-                method: method
-            });
-        } else {
-            result = await fetch(url, {
+// // export function apiFetchFactory() {
+// //     return async function apiFetch(method, url, body) {
+// //         console.log(method);
+// //         console.log(url);
+// //         console.log(body);
+// //         const formData = new FormData();
+// //         for (let key in body) {
+// //             formData.append(key,body[key]);
+// //         }
+// //         console.log(formData);
+// //         let result = null;
+// //         if (body == null) {
+// //             result = await fetch(url, {
+// //                 method: method,
+// //                 body: JSON.stringify(formData),
+// //                 headers: {
+// //                     'Content-Type': 'application/json'
+// //                 }
+// //             });
+// //         } else {
+// //             result = await fetch(url, {
+// //                 method: method,      
+// //                 body: JSON.stringify(formData),
+// //                 headers: {
+// //                     'Content-Type': 'application/json'
+// //                 }
+// //             });
+// //         }
+// //         return result.json();
+// //     }
+// // }
+export function apiFetchFactory({fetch}){
+    return async function apiFetch(method, url, body){
+        let res = null;
+        if(body != null){
+             res = await fetch(url, {
                 method: method,
-                body: formData
+                body: JSON.stringify(body),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+        }else{
+            res = await fetch(url, {
+                   method: method,
+                   headers: {
+                    'Content-Type': 'application/json'
+                    }
             });
         }
-        return result.json();
+        return res.json();
     }
 }
 
-export const apiFetch = apiFetchFactory();
+export const apiFetch = apiFetchFactory({fetch});
 
 export const REGULAR_USER_TYPE = 0;
 export const EMPLOYED_USER_TYPE = 1;
