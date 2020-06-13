@@ -34,3 +34,12 @@ export function getFormMode(){
 export function clearFormMode(){
   sessionStorage.removeItem('formMode')
 }
+export function setAccessToken(token){
+  localStorage.setItem('token',token)
+}
+export function getAccessToken(){
+ return localStorage.getItem('token')
+}
+export function clearAccessToken(){
+localStorage.removeItem('token')
+}

@@ -57,8 +57,9 @@
 
 <script>
 import logofirme2 from '../../assets/logofirme2.png';
-import {setUserInfo} from "../../services/contextManagement";
-import { apiFetch, destinationUrl, UserTypes, REGULAR_USER_TYPE } from '../../services/authFetch';
+// import router from '../../routes/route.js';
+import {setUserInfo } from "../../services/contextManagement";
+import { apiFetch, destinationUrl,UserTypes, REGULAR_USER_TYPE } from '../../services/authFetch';
 //import { destinationUrl } from '../../services/authFetch';
 //import { ERRORS } from '../../data/errorsCode';
 export default {
@@ -78,8 +79,12 @@ export default {
     },
     methods: {
         onSignUpClick: async function() {
-            if(!this.isDataValid())
-                this.$message({message: "Morate popuniti sva polja", type: "warning"});
+            // if(!this.isDataValid())
+            //     this.$message({message: "Morate popuniti sva polja", type: "warning"});
+            if (this.signupData.name==="" || this.signupData.lastname==="" || this.signupData.address===""
+                || this.signupData.number==="" || this.signupData.email==="" || this.signupData.username==="" || this.signupData.password===""){
+                    this.$message({message: "Morate popuniti sva polja", type: "warning"});
+                }
             else if(!this.isPhoneNumberValid())
                 this.$message({message: "Broj telefona nije validan", type: "warning"});
             else{
@@ -97,18 +102,42 @@ export default {
                         });
             }
         },  
-        isDataValid() {
-           // const {FirstName, LastName, Address, PhoneNumber, Email, Username, Password} = this.signupData;
-            // const signup = [...this.signupData];
-            // return !FirstName || !LastName || !Address || !PhoneNumber || !Email || !Username || !Password ? 
-            //     false : true;
-            return true;
-        },
+        // isDataValid() {
+        //    const {FirstName, LastName, Address, PhoneNumber, Email, Username, Password} = this.signupData;
+        //     // const signup = [...this.signupData];
+        //     return !FirstName || !LastName || !Address || !PhoneNumber || !Email || !Username || !Password ? 
+        //         false : true;
+        //     // return true;
+        // },
         isPhoneNumberValid() {
             // if(isNaN(parseInt(this.signupData.number)) || this.signupData.number == "")
             //     return false;
             return true;
         }
+
+
+    //     async onSignUpClick(){
+    //         const response = await apiFetch('POST', destinationUrl + '/auth/register', this.signupData);
+    //         if(response.ok){
+    //             const responseBody = await response.json();
+    //             console.log(responseBody);
+    //             if(responseBody.Success){
+    //                 this.Notification('Successfuly registration', 'is-success');
+    //                 setAccessToken(responseBody.AuthToken);
+    //                 setUserInfo(responseBody.savedUser);
+    //                 router.push('home');
+                   
+    //             }else  this.Notification(responseBody.Status, 'is-warning');
+    //         }else alert('Connection error with DB');
+    //     },
+    //      Notification:  function(message, type){
+    //          this.$buefy.notification.open({
+    //             duration: 2000,
+    //             message: message,
+    //             position: 'is-top-left',
+    //             type: type,
+    //         });
+    //    }
     }
 }
 </script>

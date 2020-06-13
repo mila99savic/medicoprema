@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get('/users', userController.getUsers);
 
+router.get('/findById/:userId', userController.getUserById);
+
 router.get('/find/:userEmail', userController.findByEmail)
 
 router.put('/edit/:userId', userController.updateUser);

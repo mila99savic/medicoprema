@@ -31,10 +31,10 @@ const userSchema = new Schema ({
         type:String,
         required: true
     },
-    // usertype: {
-    //     type: String,
-    //     required: true
-    // },
+    usertype: {
+        type: Number,
+        required: true
+    },
     cart: {
         items: [
             {
@@ -237,7 +237,7 @@ module.exports = mongoose.model('User', userSchema);
 //                 items: products,//iako se ovde promeni cena proizvda
 //                 //nas to ne zanima jer smo vec narucili hehe
 //                 user: {
-//                     _id: new ObjectId(this._id),
+//                     _id: new ObjectId(this.),
 //                     name: this.name,
 //                     email: this.email//ako se email menja onda on ne treba ovde da stoji
 //                 }

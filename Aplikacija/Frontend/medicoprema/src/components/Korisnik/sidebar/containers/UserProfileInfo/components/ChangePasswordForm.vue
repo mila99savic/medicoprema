@@ -54,7 +54,7 @@ import { ERRORS} from "../../../../../../data/errorsCode.js";
             },
             potvrdiUnos: function(){
                 if(this.validacijaPassworda()){
-                    apiFetch('POST', destinationUrl + "/User/ResetPassword", {
+                    apiFetch('PUT', destinationUrl + "/user/edit", {
                         UserId: getUserInfo().userID,
                         OldPassword: this.oldPass,
                         NewPassword: this.newPass

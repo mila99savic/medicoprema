@@ -7,7 +7,7 @@ exports.getProducts = async (req, res, next) => {
   try {
     const prod = await Product.find()//find vraca proizvod a ne kursor
     res.status(200)
-      .json({ message: 'Prikupljeni proizvodi', prod: prod })
+      .json({ message: 'Prikupljeni proizvodi', Data: prod })
   }
   catch (err) {
     res.json({ success: false });
@@ -29,10 +29,10 @@ exports.getCart = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId)
     res.status(200)
-      .json({ message: 'Korpa korisnika', cart: user.cart })
+      .json({ message: 'Korpa korisnika'  , Data: user.cart, Success: true })
   }
   catch (err) {
-    res.json({ success: false });
+    res.json({ Success: false });
     console.log(err);
   }
   // req.user

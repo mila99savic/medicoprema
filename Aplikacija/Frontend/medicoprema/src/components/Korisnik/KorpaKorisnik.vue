@@ -4,11 +4,10 @@
             <div class="cena">
                 <h4>Ukupna cena: {{izracunajCenu()}} RSD</h4>
             </div>
-            <el-table :data="cartItems" max-height="1000" style="border-radius: 3px;">
-                <el-table-column prop="Title" label="Naziv" sortable min-width="100" class="table-column"></el-table-column>
-                <el-table-column prop="ProductType" label="Tip" min-width="100" class="table-column"></el-table-column>
-                <el-table-column prop="Quantity" label="Količina"  min-width="100" class="table-column"></el-table-column>
-                <el-table-column prop="Price" label="Cena" min-width="100" class="table-column"></el-table-column>
+            <el-table :data="items" max-height="1000" style="border-radius: 3px;">
+                <el-table-column prop="productTitle" label="Naziv" sortable min-width="100" class="table-column"></el-table-column>
+                <el-table-column prop="quantity" label="Količina"  min-width="100" class="table-column"></el-table-column>
+                <el-table-column prop="productPrice" label="Cena" min-width="100" class="table-column"></el-table-column>
                 <el-table-column align="center" prop="Image" min-width="100">
                     <template slot-scope="cartItem">
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
@@ -17,7 +16,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-button round :disabled="cartItems.length == 0 ? true : false" style="margin-top: 10px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);" @click="Naruci()" type="primary">Naruči</el-button>
+            <el-button round :disabled="items.length == 0 ? true : false" style="margin-top: 10px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);" @click="Naruci()" type="primary">Naruči</el-button>
         </div>
     </div>
 </template>
@@ -31,8 +30,8 @@ export default {
     components: {FooterBar},
     data(){
         return{
-            cartItems:[],
-            cartId: "",
+            items:[],
+            productId: "",
         }
     },
     methods:{
@@ -48,21 +47,21 @@ export default {
             formData.append('DeliveryAddress', '');
             formData.append('UserId', getUserInfo().userID);
             formData.append('Date', today);
-            formData.append('Price', this.izracunajCenu());
-            this.cartItems.forEach((item, index)=> {
-                formData.append("CartItems[" + index + "].ProductType",item.ProductType);
-                formData.append("CartItems[" + index + "].Quantity", item.Quantity);
-                formData.append("CartItems[" + index + "].Title", item.Title);
-                formData.append("CartItems[" + index + "].Price", item.Price);
+            formData.append('productPrice', this.izracunajCenu());
+            this.items.forEach((item, index)=> {
+                formData.append("items[" + index + "].productId",item.productId);
+                formData.append("items[" + index + "].quantity", item.quantity);
+                formData.append("items[" + index + "].productTitle", item.productTitle);
+                formData.append("items[" + index + "].productPrice", item.productPrice);
             });
-            fetch(destinationUrl + "/Order/PerformOrder", {
+            fetch(destinationUrl + "/shop/create-order", {
                 method: 'POST', body: formData
             }).then(response => response.ok ? response.json() : new Error())
             .then(result=>{
                 if(result.Success)
                 {
                     this.$message({message: "Uspešno odrađena narudžbina", type: "success"});
-                     this.cartItems = [];
+                     this.items = [];
                 }
                 else
                     this.$message({message: "Neuspešno odrađena narudžbina", type: "error"});
@@ -70,30 +69,30 @@ export default {
         },
         izracunajCenu(){
             let result = 0;
-            this.cartItems.forEach(el =>{
-                result += el.Price;
+            this.items.forEach(el =>{
+                result += el.productPrice;
             });
             return result.toFixed(2); 
         },
         deleteCartItem(cartItem) {
-            this.cartItems = this.cartItems.filter(item => item.Id != cartItem.Id);
+            this.items = this.items.filter(item => item.productId != cartItem.productId);
             const formData = new FormData();
-            formData.append("CartId", this.cartId);
-            formData.append("CartItemId", cartItem.Id);
-            fetch(destinationUrl + "/Cart/DeleteItem", {method: 'POST', body: formData});
+            formData.append("ProductId", this.productId);
+            formData.append("CartItemId", cartItem.productId);
+            fetch(destinationUrl + "/shop/cart-delete-item", {method: 'DELETE', body: formData});   
         }
     },
     mounted() {
-        fetch(destinationUrl + "/Cart/GetCartByUserId/?userId=" + getUserInfo().userID, {method: 'GET'})
+        fetch(destinationUrl + "/shop/cart/" + getUserInfo().userID, {method: 'GET'})
             .then(response => response.ok ? response.json() : new Error())
             .then(result => {
                 if(result.Success) {
-                    this.cartItems = result.Data.CartItems;
-                    this.cartId = result.Data.Id;
+                    this.items = result.Data.items;
+                    this.productId = result.Data.Id;
                 }
-                this.preloadImages();
+                // this.preloadImages();
             }).catch(error => console.log(error));
-        console.log(this.cartItems);
+        console.log(this.items);
     }
 }
 </script>

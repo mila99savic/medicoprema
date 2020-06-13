@@ -76,6 +76,4 @@ export const EMPLOYED_USER_TYPE = 1;
 export const ADMIN_USER_TYPE = 2;
 export const ANONYMOUS_USER_TYPE = 3;
 
-// export const ALBUM_PASSWORD = "home";
-
 export const UserTypes = ["Korisnik", "Zaposleni", "Uprava", "Anonimni"];

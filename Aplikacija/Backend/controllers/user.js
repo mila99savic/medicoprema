@@ -14,6 +14,18 @@ exports.getUsers = async (req, res, next) => {
   }
 };
 
+exports.getUserById = async (req, res) => {
+  try{
+    const user = await User.findById(req.params.userId);
+    Data = {name: user.name, lastname: user.lastname, address: user.address, email: user.email, password: user.password, number: user.number}
+    res.json({ message: 'pribavljen je korisnik', user: user, Data })
+  }
+  catch(err){
+    res.json({ success: false });
+    console.log(err);
+  }
+}
+
 exports.findByEmail = async (req, res, next) => {
   const userEmail = req.params.userEmail;
 
