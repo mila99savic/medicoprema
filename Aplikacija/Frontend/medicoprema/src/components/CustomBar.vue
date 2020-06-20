@@ -36,8 +36,8 @@
 // eslint-disable-next-line no-unused-vars
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 import {Button,Menu, MenuItem,Icon} from 'element-ui'
-import { apiFetch, destinationUrl, ANONYMOUS_USER_TYPE } from '../services/authFetch';
-import { clearLocalStorage, clearSessionStorage, setUserInfo } from '../services/contextManagement';
+import { deleteCredentials } from '../services/authFetch';
+import {clearUserInfo, clearFormMode, clearPageShown} from "../services/contextManagement";
 export default {
     // eslint-disable-next-line vue/no-unused-components
     components: {Icon,Button,Menu,MenuItem},
@@ -58,15 +58,20 @@ export default {
             this.$emit('changeView', event)
         },
         logout(){
-            apiFetch('POST', destinationUrl + "/User/SignOut")
-                .then(result => {
-                    if(result.Success) {
-                        clearLocalStorage();
-                        clearSessionStorage();
-                        setUserInfo(null, ANONYMOUS_USER_TYPE);
-                        window.location.href = "/";
-                    }
-                });
+            deleteCredentials()
+            clearUserInfo()
+            clearFormMode()
+            clearPageShown()
+            window.location.href = '/login'
+            // apiFetch('POST', destinationUrl + "/User/SignOut")
+            //     .then(result => {
+            //         if(result.Success) {
+            //             clearLocalStorage();
+            //             clearSessionStorage();
+            //             setUserInfo(null, ANONYMOUS_USER_TYPE);
+            //             window.location.href = "/";
+            //         }
+            //     });
         }
     },
     props: ['list']

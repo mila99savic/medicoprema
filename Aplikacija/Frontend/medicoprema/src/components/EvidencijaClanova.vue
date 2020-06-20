@@ -13,19 +13,20 @@
                     </el-select>
                 </div>
             </div>
-            <el-table style="width:100%" :data="tableData.filter(data => !search || data.FirstName.toLowerCase().includes(search.toLowerCase()))">
-                <el-table-column prop="FirstName" label="Ime" class="table-column"></el-table-column>
-                <el-table-column prop="LastName" label="Prezime" class="table-column"></el-table-column>
-                <el-table-column prop="UserType" label="Tip" class="table-column"></el-table-column>
-                <el-table-column prop="UserName" label="Korisničko ime" class="table-column"></el-table-column>
+            <el-table style="width:100%" :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
+                <el-table-column prop="name" label="Ime" class="table-column"></el-table-column>
+                <el-table-column prop="lastname" label="Prezime" class="table-column"></el-table-column>
+                <el-table-column prop="usertype" label="Tip" class="table-column"></el-table-column>
+                <el-table-column prop="username" label="Korisničko ime" class="table-column"></el-table-column>
                 <el-table-column align="right">
                     <template slot="header" slot-scope="scope">
                         <el-input v-model="search" style="margin:0" size="big" placeholder="Ime za pretragu" :focus="scope.search">
                         </el-input>
                     </template>
                     <template slot-scope="scope">
-                        <el-button v-if="scope.row.UserType == userTypes[employedUserType]" size="mini" type="danger" @click="deleteUser(scope.row.Id)">
+                        <el-button  size="mini" type="danger" @click="deleteUser(scope.row._id)">
                             Obriši
+                            <!-- v-if="scope.row.usertype == userTypes[employedUserType]" -->
                         </el-button>
                     </template>
                 </el-table-column>
@@ -62,7 +63,8 @@ export default {
             setPageShown('zaposleni');
         },
         deleteUser(id){
-            apiFetch('POST', destinationUrl+"/User/DeleteUserById?id=" + id)
+            console.log(id);
+            apiFetch('DELETE', destinationUrl+"/user/delete/" + id)
                 .then(result=>{
                     if(result.Success){
                         this.$message("Korisnik je uspešno obrisan!");
@@ -75,11 +77,11 @@ export default {
             this.loadDataTable();
         },
         loadDataTable(){
-            apiFetch('GET',destinationUrl+"/User/GetAllUsers")
+            apiFetch('GET',destinationUrl+"/user/users")
                 .then(result=>{
                     this.tableData=result.Data;
                     this.tableData.forEach((data,index)=>{
-                        data.UserType = UserTypes[result.Data[index].UserType];
+                        data.usertype = UserTypes[result.Data[index].usertype];
                     });
                 });
         },

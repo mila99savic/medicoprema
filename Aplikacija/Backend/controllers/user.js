@@ -5,8 +5,9 @@ const { updateUserValidation } = require('../validation')
 exports.getUsers = async (req, res, next) => {
   try {
     const users = await User.find()
+    Data = {name: users.name, lastname: users.lastname, usertype: users.usertype, username: users.username}
     res.status(200)
-      .json({ message: 'Prikupljeni korisnici', users: users })
+      .json({ message: 'Prikupljeni korisnici', Data: users })
   }
   catch (err) {
     res.json({ success: false });

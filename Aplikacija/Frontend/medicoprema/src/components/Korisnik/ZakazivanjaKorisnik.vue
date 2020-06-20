@@ -57,17 +57,19 @@ export default {
             });
         },
         pribaviListuZahteva: async function(){
-            apiFetch('GET', destinationUrl + "Request/GetAllRequests")
+            apiFetch('GET', destinationUrl + "/request/all")
             .then(result=>{
-                if(result.Success)
-                {
-                    this.listaZahteva=result.Data;
-                    this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
-                    this.pribaviDatum(this.listaZahteva);
-                }
-                else
-                    this.$message({message:"Došlo je do greske prilikom učitavanja zahteva!", type:'error'})
-            }).catch(error=>{console.log(error)});
+                this.listaZahteva=result.Data;
+            });
+            //     if(result.Success)
+            //     {
+            //         this.listaZahteva=result.Data;
+            //         this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
+            //         this.pribaviDatum(this.listaZahteva);
+            //     }
+            //     else
+            //         this.$message({message:"Došlo je do greske prilikom učitavanja zahteva!", type:'error'})
+            // }).catch(error=>{console.log(error)});
         },
         pribaviDatum(datumi) {
             this.datumi=[];

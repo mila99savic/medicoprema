@@ -3,7 +3,7 @@
         <el-form class="zakazi-forma">
             <div class="stavka">
                 <label>Lokacija:</label>
-                <el-input type="text" v-model="podaciZakazi.Location">
+                <el-input type="text" v-model="podaciZakazi.location">
                     <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                 </el-input>
             </div>
@@ -16,21 +16,23 @@
             <div class="stavka">
                 <label>Dodatni zahtevi:</label>
                 <el-input type="textarea"
-                    :autosize="{minRows: 4, maxRows: 4}" v-model="podaciZakazi.Description">
+                    :autosize="{minRows: 4, maxRows: 4}" v-model="podaciZakazi.comment">
                 </el-input>
             </div>
             <div class="stavka">
                 <label>Tip:</label>
-                <el-select  v-model="podaciZakazi.EventType" placeholder="Izaberite tip usluge">
+                <el-select  v-model="podaciZakazi.type" placeholder="Izaberite tip usluge">
                     <el-option v-for="item in options" :key="item.tip" :label="item.label" :value="item.tip"></el-option>
                 </el-select>
             </div>
-            <div class="stavka">
+            <!-- <div class="stavka">
                 <label>Vreme:</label>
-                <el-time-select  v-model="podaciZakazi.Time" :picker-options="{ start: '08:00', step: '2:00', end: '18:00' }" placeholder="Select time"></el-time-select>
-            </div>
+                <el-select  v-model="podaciZakazi.vreme" placeholder="Select time">
+                    <el-option v-for="item in optionstime" :key="item.vreme" :label="item.label" :value="item.vreme"></el-option>
+                </el-select>
+            </div> -->
             <div class="dugme">
-                <el-button id="dugmeZakazi" round @click="proslediZahtev" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
+                <el-button id="dugmeZakazi" round @click="proslediZahtev()" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
             </div>
         </el-form>
     </div>
@@ -39,19 +41,19 @@
 <script>
 import { getUserInfo } from '../../services/contextManagement';
 import { apiFetch, destinationUrl } from '../../services/authFetch';
-import { ERRORS } from '../../data/errorsCode';
+// import { ERRORS } from '../../data/errorsCode';
 export default {
     data(){
         return{
             podaciZakazi: {
-                Location: '',
-                Date: '',
-                Description: '',
-                EventType: '',
-                Time: '',
-                UserId: ''
+                location: '',
+                date: '',
+                comment: '',
+                type: '',
+                // vreme: '',
+                korisnikid: ''
             },
-            user: {FirstName:'', LastName:''},
+            // user: {name:'', lastname:''},
             options: [{
                 tip:'Obuka',
                 label:'Obuka'
@@ -62,17 +64,28 @@ export default {
                 tip:'Preventivni godišnji pregled',
                 label:'Preventivni godišnji pregled'
             }],
+            // optionstime: [{
+            //     vreme:'08h',
+            //     label:'08h'
+            //     },{
+            //     vreme:'10h',
+            //     label:'10h'
+            //     },{
+            //     vreme:'12h',
+            //     label:'12h'
+            //     }
+            // ],
         }
     },
     props: {date:String},
     watch: {
         date: function(pom){
-            this.podaciZakazi.Date=pom;
+            this.podaciZakazi.date=pom;
         }
     },
     methods: {
         validacija() {
-            if(this.podaciZakazi.Location == '' || this.podaciZakazi.Date == '' || this.podaciZakazi.EventType == '' || this.podaciZakazi.Time == ''){
+            if(this.podaciZakazi.location == '' || this.podaciZakazi.date == '' || this.podaciZakazi.type == '' || this.podaciZakazi.vreme == ''){
                 this.$message({message: "Morate popuniti sva polja!", type: 'warning'})
                 return false
             }
@@ -81,44 +94,48 @@ export default {
         proslediZahtev() {
              if(!this.validacija())
                  return
-
-            this.podaciZakazi.Date = this.date;
-            this.podaciZakazi.FirstName = this.user.FirstName;
-            this.podaciZakazi.LastName = this.user.LastName;
-            this.podaciZakazi.UserId = getUserInfo().userID;
-            apiFetch('POST', destinationUrl + "/Request/CreateRequest", this.podaciZakazi)
-            .then(result => {
-                if(result.Success){
+            // this.podaciZakazi.time=this.time;
+            // console.log(this.podaciZakazi.time);
+            this.podaciZakazi.date = this.date;
+            // this.podaciZakazi.name = this.user.name;
+            // this.podaciZakazi.lastname = this.user.lastname;
+            this.podaciZakazi.korisnikid = getUserInfo().userID;
+            console.log(this.podaciZakazi);
+            apiFetch('POST', destinationUrl + "/request/add", this.podaciZakazi)
+            // .then(response => response.ok ? response.json() : new Error())
+            .then(response => {
+                if(response.Success){
                     this.$message({message: "Uspesno ste zakazali termin.", type: 'success'});
                     this.$emit("zakazano",this.podaciZakazi);
                     this.clearForm();
                 }
-                else if(result.Errors != null) {
-                    result.Errors.forEach(error => {
-                        this.$message({message: ERRORS[error.Code], type: "warning"});
-                    })
+                else {
+                     this.$message({message: "Doslo je do greske!", type: 'error'});
+                    // result.Errors.forEach(error => {
+                    //     this.$message({message: ERRORS[error.Code], type: "warning"});
+                    // })
                 }
-            }).catch(error => {
-                console.log(error);
+            }).catch(err => {
+                console.log(err);
             });
 
 
         },
         pribaviKorisnika(){
-            let userId = getUserInfo().userID;
-            fetch(destinationUrl + '/User/GetUserById/?id=' + userId, {method: "GET"})
+            let korisnikid = getUserInfo().userID;
+            fetch(destinationUrl + '/user/findById/' + korisnikid, {method: "GET"})
                 .then(response => response.ok ? response.json() : new Error())
                 .then(result => {
-                    this.user.FirstName = result.Data.FirstName;
-                    this.user.LastName = result.Data.LastName;
-                })
+                    this.user.name = result.Data.name;
+                    this.user.lastname = result.Data.lastname;
+                }).catch(error => console.log(error));
         },
         clearForm() {
-            this.podaciZakazi.Date = "";
-            this.podaciZakazi.AdditionalRequests = "";
-            this.podaciZakazi.EventType = "";
-            this.podaciZakazi.Time = "";
-            this.podaciZakazi.Location = "";
+            this.podaciZakazi.date = "";
+            this.podaciZakazi.comment = "";
+            this.podaciZakazi.type = "";
+            this.podaciZakazi.vreme = "";
+            this.podaciZakazi.location = "";
         }
     },
     beforeMount(){
