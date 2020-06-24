@@ -56,19 +56,29 @@ export default {
                     data.isSelected=true
             });
         },
-        pribaviListuZahteva: async function(){
-            apiFetch('GET', destinationUrl + "Request/GetAllRequests")
-            .then(result=>{
-                if(result.Success)
-                {
-                    this.listaZahteva=result.Data;
-                    this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
-                    this.pribaviDatum(this.listaZahteva);
-                }
-                else
-                    this.$message({message:"Došlo je do greske prilikom učitavanja zahteva!", type:'error'})
-            }).catch(error=>{console.log(error)});
-        },
+        // pribaviListuZahteva: async function(){
+        //     apiFetch('GET', destinationUrl + "/request/getByUserId/" + getUserInfo().userID)
+        //     // .then(result=>{
+        //     //     if(result.Success)
+        //     //     {
+        //     //         console.log(result.Data)
+        //     //         this.listaZahteva=result.Data;
+        //     //         this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
+        //     //         this.pribaviDatum(this.listaZahteva);
+        //     //     }
+        //     //     else
+        //     //         this.$message({message:"Došlo je do greske prilikom učitavanja zahteva!", type:'error'})
+        //     // }).catch(error=>{console.log(error)});
+        //      .then(result => {
+        //         if(result.Success) {
+        //             console.log(result.Data)
+        //             this.listaZahteva=result.Data;
+        //             this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
+        //             this.pribaviDatum(this.listaZahteva);
+        //         }
+        //         // this.preloadImages();
+        //     }).catch(error => console.log(error));
+        // },
         pribaviDatum(datumi) {
             this.datumi=[];
             datumi.forEach(el=>{
@@ -90,9 +100,35 @@ export default {
             this.countDate();
         }
     },
-    beforeMount(){
-        this.pribaviListuZahteva();
-        this.userId=getUserInfo().userID;
+    // beforeMount(){
+    //     this.pribaviListuZahteva();
+    //     this.userId=getUserInfo().userID;
+    // }
+
+    //ovu klasu nije trebalo menjati, vrati je
+    mounted: function() {
+            apiFetch('GET', destinationUrl + "/request/getByUserId/" + getUserInfo().userID)
+            // .then(result=>{
+            //     if(result.Success)
+            //     {
+            //         console.log(result.Data)
+            //         this.listaZahteva=result.Data;
+            //         this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
+            //         this.pribaviDatum(this.listaZahteva);
+            //     }
+            //     else
+            //         this.$message({message:"Došlo je do greske prilikom učitavanja zahteva!", type:'error'})
+            // }).catch(error=>{console.log(error)});
+             .then(result => {
+                    console.log(result.Data)
+                if(result.Success) {
+                    this.listaZahteva=result.Data;
+                    this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
+                    this.pribaviDatum(this.listaZahteva);
+                }
+                // this.preloadImages();
+            }).catch(error => console.log(error));
+        
     }
 }
 </script>

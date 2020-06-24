@@ -24,7 +24,7 @@
 <script>
 import FooterBar from "../appBar/FooterBar.vue"
 import { getUserInfo } from '../../services/contextManagement';
-import { destinationUrl } from '../../services/authFetch';
+import { destinationUrl, apiFetch } from '../../services/authFetch';
 export default {
     // eslint-disable-next-line vue/no-unused-components
     components: {FooterBar},
@@ -35,54 +35,63 @@ export default {
         }
     },
     methods:{
-        Naruci(){
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth()).padStart(2,'0');
-            var yyyy = today.getFullYear();
+            Naruci(){
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth()).padStart(2,'0');
+                var yyyy = today.getFullYear();
 
-            today = yyyy + '-' + mm + '-' + dd;
+                today = yyyy + '-' + mm + '-' + dd;
 
-            const formData = new FormData();
-            formData.append('DeliveryAddress', '');
-            formData.append('UserId', getUserInfo().userID);
-            formData.append('Date', today);
-            formData.append('productPrice', this.izracunajCenu());
-            this.items.forEach((item, index)=> {
-                formData.append("items[" + index + "].productId",item.productId);
-                formData.append("items[" + index + "].quantity", item.quantity);
-                formData.append("items[" + index + "].productTitle", item.productTitle);
-                formData.append("items[" + index + "].productPrice", item.productPrice);
-            });
-            fetch(destinationUrl + "/shop/create-order", {
-                method: 'POST', body: formData
-            }).then(response => response.ok ? response.json() : new Error())
-            .then(result=>{
-                if(result.Success)
-                {
-                    this.$message({message: "Uspešno odrađena narudžbina", type: "success"});
-                     this.items = [];
-                }
-                else
-                    this.$message({message: "Neuspešno odrađena narudžbina", type: "error"});
-            }).catch(error => console.log(error));
-        },
-        izracunajCenu(){
-            let result = 0;
-            this.items.forEach(el =>{
-                result += el.productPrice;
-            });
-            return result.toFixed(2); 
-        },
-        deleteCartItem(cartItem) {
-            this.items = this.items.filter(item => item.productId != cartItem.productId);
-            const formData = new FormData();
-            formData.append("ProductId", this.productId);
-            formData.append("CartItemId", cartItem.productId);
-            fetch(destinationUrl + "/shop/cart-delete-item", {method: 'DELETE', body: formData});   
+                const formData = new FormData();
+                formData.append('DeliveryAddress', '');
+                formData.append('userId', getUserInfo().userID);
+                formData.append('Date', today);
+                formData.append('productPrice', this.izracunajCenu());
+                this.items.forEach((item, index)=> {
+                    formData.append("items[" + index + "].productId",item.productId);
+                    formData.append("items[" + index + "].quantity", item.quantity);
+                    formData.append("items[" + index + "].title", item.productTitle);
+                    formData.append("items[" + index + "].productPrice", item.productPrice);
+                });
+                fetch(destinationUrl + "/shop/create-order", {
+                    method: 'POST', body: formData
+                }).then(response => response.ok ? response.json() : new Error())
+                .then(result=>{
+                    if(result.Success)
+                    {
+                        this.$message({message: "Uspešno odrađena narudžbina", type: "success"});
+                        this.items = [];
+                    }
+                    else
+                        this.$message({message: "Neuspešno odrađena narudžbina", type: "error"});
+                }).catch(error => console.log(error));
+            },
+            izracunajCenu(){
+                let result = 0;
+                this.items.forEach(el =>{
+                    result += el.productPrice * el.quantity;
+                });
+                return result.toFixed(2); 
+            },
+            deleteCartItem(cartItem) {
+                this.items = this.items.filter(item => item.productId != cartItem.productId);
+                const formData = new FormData();
+                console.log(getUserInfo().userID);
+                console.log(cartItem.productId);
+                formData.append("productId", this.productId);
+                formData.append("userId", getUserInfo().userID);
+
+                var body = {
+                        productId: cartItem.productId,
+                        userId: getUserInfo().userID
+                    }
+                apiFetch('DELETE', destinationUrl + "/shop/cart-delete-item", body);
+              //  fetch(destinationUrl + "/shop/cart-delete-item", {responseType: 'text'}, {method: "DELETE", formData});           
+            
         }
     },
-    mounted() {
+    mounted: function() {
         fetch(destinationUrl + "/shop/cart/" + getUserInfo().userID, {method: 'GET'})
             .then(response => response.ok ? response.json() : new Error())
             .then(result => {

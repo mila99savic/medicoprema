@@ -4,6 +4,8 @@ const router = express.Router();
 
 router.get('/all', requestController.getRequests)
 
+router.get('/getByUserId/:userId', requestController.getByUserId)
+
 router.post('/add', requestController.addRequest);
 
 router.delete('/delete/:reqId', requestController.deleteRequest);

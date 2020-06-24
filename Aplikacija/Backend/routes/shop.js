@@ -22,4 +22,6 @@ router.get('/sum/:userId', shopController.sum)
 
 router.get('/orders', shopController.getOrders);
 
+router.get('/orderdByUserId/:userId', shopController.getOrdersByUserId);
+
 module.exports = router;

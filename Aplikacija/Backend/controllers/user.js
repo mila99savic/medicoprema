@@ -2,11 +2,11 @@ const User = require('../models/user');
 const bcryptjs = require('bcryptjs');
 const { updateUserValidation } = require('../validation')
 
-exports.getUsers = async (req, res, next) => {
+exports.getUsers = async (req, res) => {
   try {
     const users = await User.find()
-    res.status(200)
-      .json({ message: 'Prikupljeni korisnici', users: users })
+    res
+      .json({Data: users })
   }
   catch (err) {
     res.json({ success: false });

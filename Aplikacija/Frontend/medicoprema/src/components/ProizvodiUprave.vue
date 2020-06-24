@@ -3,12 +3,13 @@
         <div class="proizvodi-uprave">
             <h5 style="text-align:center; font-family: 'Times New Roman', Times, serif;">Lista proizvoda</h5>
             <el-table :data="this.listaProizvoda">
-                <el-table-column prop="Title" label="Naziv" class="table-column"></el-table-column>
-                <el-table-column prop="Price" label="Cena" class="table-column"></el-table-column>
-                <el-table-column prop="ProductType" label="Tip" class="table-column"></el-table-column>
+                <el-table-column prop="title" label="Naziv" class="table-column"></el-table-column>
+                <el-table-column prop="price" label="Cena" class="table-column"></el-table-column>
+                <el-table-column prop="description" label="Opis" class="table-column"></el-table-column>
                 <el-table-column align="center">
                     <template slot-scope="scope">
-                        <el-button type="danger" icon="el-icon-delete" circle size="mini" @click="deleteProductItem(scope.row.Id)"></el-button>
+                        <el-button type="danger" icon="el-icon-delete" circle size="mini" 
+                            @click="deleteProductItem(scope.row._id)"></el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -33,8 +34,12 @@ export default {
         }
     },
     methods:{
-        deleteProductItem(id){
-            apiFetch('POST', destinationUrl + "/Product/RemoveShopProduct?productId=" + id)
+        deleteProductItem(index){
+            //let productId = getProductInfo().productID;
+             //this.indeksIzabranogProizvoda = index;
+             console.log(index);
+            //console.log(id);
+            apiFetch('DELETE', destinationUrl + "/admin/deleteProduct/" + index)
                 .then(result =>{
                     if(result.Success){
                         this.$message("Proizvod je uspešno obrisan!");
@@ -51,8 +56,9 @@ export default {
             this.loadDataTable();
         },
         loadDataTable(){
-            apiFetch('GET', destinationUrl + "/Product/GetAllProducts")
+            apiFetch('GET', destinationUrl + "/admin/products")
                 .then(result=>{
+                    console.log(result)
                     this.listaProizvoda=result.Data;
                 });
         }

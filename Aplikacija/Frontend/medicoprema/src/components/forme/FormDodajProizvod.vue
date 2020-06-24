@@ -7,24 +7,29 @@
                 </el-popover>
                 <div class="stavka">
                     <label>Naziv:</label>
-                    <el-input class="input" v-model="proizvod.Name" placeholder="Naziv proizvoda" size="small">
+                    <el-input class="input" v-model="proizvod.title" placeholder="Naziv proizvoda" size="small">
                         <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                     </el-input>
                 </div>
                 <div class="stavka">
                     <label>Cena:</label>
-                    <el-input class="input" v-model="proizvod.Price" placeholder="Cena proizvoda" size="small">
+                    <el-input class="input" v-model="proizvod.price" placeholder="Cena proizvoda" size="small">
                         <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                     </el-input>
                 </div>
                 <div class="stavka">
                     <label>Opis:</label>
-                    <el-input class="input" type="textarea" :autosize="{ minRows: 4}" v-model="proizvod.Description" placeholder="Opis proizvoda" size="small"></el-input>
+                    <el-input class="input" type="textarea" :autosize="{ minRows: 4}" v-model="proizvod.description" placeholder="Opis proizvoda" size="small"></el-input>
                 </div>
+                <!-- <div class="stavka"> -->
+                    <!-- <label>Slika:</label> -->
+                    <!-- <input type="file" accept="image/*" @change="uploadImages($event)" id="file-input"> -->
+                <!-- </div> -->
                 <div class="stavka">
                     <label>Slika:</label>
-                    <input type="file" accept="image/*" @change="uploadImages($event)" id="file-input">
+                    <el-input class="input" type="textarea" :autosize="{ minRows: 4}" v-model="proizvod.imageUrl" placeholder="Slika proizvoda" size="small"></el-input>
                 </div>
+
                 <div class="dugme">
                     <el-button round size="mini" @click="addProduct()" style="color:white; margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Dodaj proizvod</el-button>
                 </div>
@@ -35,30 +40,32 @@
 
 <script>
 import logofirme2 from '../../assets/logofirme2.png';
-import { ERRORS } from '../../data/errorsCode';
+//import { ERRORS } from '../../data/errorsCode';
 import { destinationUrl, apiFetch } from '../../services/authFetch';
 export default {
     data(){
         return{
             Logo:logofirme2,
             proizvod: {
-                Name: '',
-                Price: '',
-                Description: '',
-                ImageUrl: ''
+                title: '',
+                price: '',
+                description: '',
+                imageUrl: ''
             },
             isSpinnerActive: false,
             isUploadingDone: false,
-            uploadingImagesInProgress: false
+            //uploadingImagesInProgress: false
         }
     },
     methods: {
         validacija() {
-            if(this.proizvod.Name == '' || this.proizvod.Price == '' || this.proizvod.Description == '') {
+            if(this.proizvod.title == '' || this.proizvod.price == '' || this.proizvod.description == '') {
                 this.$message({message: "Morate uneti polja za naziv i cenu, kao i upload-ovati sliku.", type: "warning"});
                 return false;
             }
-            else if(this.proizvod.ImageUrl == '' && !this.uploadingImagesInProgress){
+            else if(this.proizvod.imageUrl == '' 
+            //&& !this.uploadingImagesInProgress
+            ){
                 this.$message({message: "Morate upload-ovati bar jednu sliku", type: "warning"});
                     return false;
             }
@@ -66,43 +73,21 @@ export default {
                 return true;
         },
         async addProduct(){
+            console.log(this.proizvod)
             if(!this.validacija())
                 return;
-            if(this.isUploadingDone && !this.isSpinnerActive) {
-                apiFetch('POST', destinationUrl + "/Product/AddShopProduct", this.proizvod)
-                    .then(result => {
-                        if(result.Success) {
-                            this.$message("Uspešno ste dodali novi proizvod!");
-                            this.$emit("zatvoriDodavanjeProizvoda");
-                        }
-                        else if (result.Errors != null && result.Errors.length != 0) {
-                            this.$message({message: ERRORS[result.Errors[0].Code], type: "error"});
-                        }
-                    }).catch(error=>{
-                        console.log(error);
-                    })
+            
+            await apiFetch('POST', destinationUrl + "/admin/addProduct/", this.proizvod)
+            .then(response => {
+                if(response.Success)
+                    this.$message('Dodali ste prizvod!');
+                else{
+                    this.$message('doslo je do greske!');
             }
-            else 
-                this.isSpinnerActive = true;
-        },
-        uploadImages(event){
-                this.uploadingImagesInProgress = true;
-                const formData = new FormData();
-                formData.append("image", event.target.files[0]);
-                fetch(destinationUrl + "Image/UploadImage", {method: 'POST', body: formData})
-                    .then (response => {
-                        return response.ok ? response.json() : new Error();
-                    }).then(result => {
-                        this.proizvod.ImageUrl= result.Data.Image.Small.Url;
-                        this.uploadingImagesInProgress = false;
-                        this.isUploadingDone = true;
-                        if(this.isSpinnerActive) {
-                            this.isSpinnerActive=false;
-                            this.addProduct();
-                        }
-                    }).catch(error => {
-                        console.log(error)
-                    });
+
+                 }).catch(err => console.log(err))
+                    
+            
         }
     }
 }

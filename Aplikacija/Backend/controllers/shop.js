@@ -2,6 +2,7 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Order = require('../models/order');
 const { orderValidation } = require('../validation');
+const { date } = require('@hapi/joi');
 
 exports.getProducts = async (req, res, next) => {
   try {
@@ -50,12 +51,13 @@ exports.getCart = async (req, res, next) => {
   //   .catch(err => console.log(err));
 };
 
+//dodaj u korpu
 exports.postCart = async (req, res, next) => {
   try {
     const user = await User.findById(req.body.userId);
     Product.findById(req.body.productId)
       .then(product => {
-        res.send('pokusavam da dodam u korpu')
+        res.status(200)
         return user.addToCart(product);
       })
       .catch(err => console.log(err))
@@ -65,16 +67,15 @@ exports.postCart = async (req, res, next) => {
     console.log(err);
   }
 };
-
+//brisanje iz korpe
 exports.cartDeleteProduct = async (req, res, next) => {
   try {
     const user = await User.findById(req.body.userId)
-    user
-      .removeFromCart(req.body.productId);
-    res.send('pokusavam da obrisem proizvod iz korpe');
+    user.removeFromCart(req.body.productId);
+    res.status(200);
   }
   catch (err) {
-    res.json({ success: false });
+    res.json({ Success: false });
     console.log(err);
   }
 };
@@ -94,21 +95,25 @@ exports.postOrder = async (req, res, next) => {
         const products = user.cart.items.map(i => {
           return { quantity: i.quantity, product: { ...i.productId._doc } };
           //_doc- samo podaci iz dokumenta(objecta)
-        });
+        }); 
+        //console.log(user.number)
         const order = new Order({
-          user: {
-            name: user.name,//req.user je ceo user object
-            userId: userId //mongoose sam odavde uzima Id 
-          },
-          products: products
+          
+            date: Date.now(),//req.user je ceo user object
+            address: user.address,
+            //price: user.cart,
+            number: user.number
+          
+          // ,
+          // products: products
+          
         });
+        //console.log(order);
+        user.addOrder(order);
         return order.save();
       })
       .then(result => {
         return user.clearCart();
-      })
-      .then(() => {
-        res.send('dodajem narudzbinu')
       })
       .catch(err => console.log(err));
   }
@@ -148,4 +153,36 @@ exports.getOrders = async (req, res, next) => {
   }
 };
 
+exports.getOrdersByUserId = async (req, res, next) => {
+//   try{
+//     const user = await User.findById(req.params.userId);
+//     Order.findById(req.params.orderId)
+//     .then(or => {
+//       res.send('pokusavam')
+//       res.json(or)
+//     })
+//     Data = {name: user.name, lastname: user.lastname, address: user.address, email: user.email, password: user.password, number: user.number}
+//     res.json({ message: 'pribavljen je korisnik', Data })
+//   }
+//   catch(err){
+//     res.json({ success: false });
+//     console.log(err);
+//   }
+// }
+
+try {
+  const user = await User.findById(req.params.userId)
+  // const ord = user.listoforders;
+  // ord.forEach(o => {
+  //   console.log(o.orderId)
+  // });
+  res.status(200)
+  
+    .json({Data: user.listoforders, Success: true })
+}
+catch (err) {
+  res.json({ Success: false });
+  console.log(err);
+}
+}
 

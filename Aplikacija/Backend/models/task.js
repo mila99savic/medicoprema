@@ -8,7 +8,7 @@ const taskSchema = new Schema ({
         required:true
     },
     date: {
-        type: Date
+        type: String
         //default: Date.now
     },
     comment: {
@@ -24,6 +24,9 @@ const taskSchema = new Schema ({
         required: true
     },
     zaposleniId: {
+        type: String
+    },
+    numberKorisnika:{
         type: String
     }
 });

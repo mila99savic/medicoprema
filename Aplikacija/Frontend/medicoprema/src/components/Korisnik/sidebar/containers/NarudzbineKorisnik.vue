@@ -3,16 +3,16 @@
         <div class="narudzbina-container-table">
             <h3>Lista narudžbina</h3>
             <el-table
-                :data="listaNarudzbina"
+                :data="this.listaNarudzbina"
                 max-height="1000"
                 style="width:100%"
                 :row-class-name="tableRowClassName"
                 highlight-current-row
                 @row-click="handleCurrentChange">
-                <el-table-column min-width="20%" prop="Order.Date" label="Datum" sortable></el-table-column>
-                <el-table-column min-width="20%" prop="Address" label="Adresa"></el-table-column>
-                <el-table-column min-width="20%" prop="Order.Price" label="Ukupna cena"></el-table-column>
-                <el-table-column min-width="20%" prop="PhoneNumber" label="Telefon"></el-table-column>
+                <el-table-column min-width="20%" prop="date" label="Datum" sortable></el-table-column>
+                <el-table-column min-width="20%" prop="address" label="Adresa"></el-table-column>
+                <!-- <el-table-column min-width="20%" prop="price" label="Ukupna cena"></el-table-column> -->
+                <el-table-column min-width="20%" prop="number" label="Telefon"></el-table-column>
                 <el-table-column width="50">
                     <template slot-scope="scope">
                         <el-button type="info" icon="el-icon-message" circle size="mini" @click="prikaziPoruku(scope.row)"></el-button>
@@ -29,7 +29,7 @@ import PrikazKorpe from "../../../prikazi/PrikazKorpe"
 import ObavestiKorisnika from "../../../ObavestiKorisnika.vue"
 import { APPROVED_REQUEST_MESSAGE, REJECTED_REQUEST_MESSAGE, ON_HOLD_REQUEST_MESSAGE } from "../../../../data/constants.js";
 import { getUserInfo } from '../../../../services/contextManagement';
-import { destinationUrl } from '../../../../services/authFetch';
+import { destinationUrl, apiFetch } from '../../../../services/authFetch';
 import { sortOrdersByDate } from '../../../../services/sort';
 export default {
     // eslint-disable-next-line vue/no-unused-components
@@ -45,36 +45,41 @@ export default {
         }
     },
     methods: {
-        loadOrders(){
-            let userId = getUserInfo().userID;
-            fetch(destinationUrl + '/Order/GetOrdersByUserId/?userId=' + userId, {method: "GET"})
-                .then(response => response.ok ? response.json() : new Error())
-                .then(result =>{
-                    this.listaNarudzbina = sortOrdersByDate(result.Data, false);
-                })
-        },
+        // loadOrders(){
+        //     let userId = getUserInfo().userID;
+        //     apiFetch('GET', destinationUrl + '/shop/orderdByUserId/' + userId)
+        //     //fetch(destinationUrl + '/shop/orderdByUserId/' + userId, {method: "GET"})
+
+        //         //.then(response => response.ok ? response.json() : new Error())
+        //         .then(result =>{
+        //             console.log(result.Data)
+        //             this.listaNarudzbina = sortOrdersByDate(result.Data, false);
+        //         })
+        // },
+
+
         handleCurrentChange(val){
             this.currentRow = val;
-            this.itemsinCart = this.currentRow.Order.CartItems;
+            //this.itemsinCart = this.currentRow.Order.CartItems;
         },
         prikaziPoruku(row){
             this.currentRow = row;
-            if(this.currentRow.Order.RequestsStatus == 1)
+            if(this.currentRow.status == 1)
                 this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.Order.Notification == null ? this.poruka1 : this.currentRow.Order.Notification, type:'success', position:'bottom-right'})
-            else if(this.currentRow.Order.RequestsStatus == 2)
+            else if(this.currentRow.status == 2)
                 this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.Order.Notification == null ? this.poruka2 : this.currentRow.Order.Notification, type:'error', position:'bottom-right'})
             else
                 this.$notify({title: "OBAVEŠTENJE", message: this.poruka3, type: 'warning', position: 'bottom-right'})
         },
         // eslint-disable-next-line no-unused-vars
         tableRowClassName({row, rowIndex}) {
-            if(this.listaNarudzbina[rowIndex].Order.RequestsStatus === 1){
+            if(this.listaNarudzbina[rowIndex].status === 1){
                 return 'success-row';
             }
-            else if(this.listaNarudzbina[rowIndex].Order.RequestsStatus === 2){
+            else if(this.listaNarudzbina[rowIndex].status === 2){
                 return 'reject-row';
             }
-            else if(this.listaNarudzbina[rowIndex].Order.RequestsStatus === 3){
+            else if(this.listaNarudzbina[rowIndex].status === 3){
                 return 'odHold-row';
             }
             else{
@@ -83,7 +88,15 @@ export default {
         }
     },
     mounted: function(){
-        this.loadOrders();
+         let userId = getUserInfo().userID;
+            apiFetch('GET', destinationUrl + '/shop/orderdByUserId/' + userId)
+            //fetch(destinationUrl + '/shop/orderdByUserId/' + userId, {method: "GET"})
+
+                //.then(response => response.ok ? response.json() : new Error())
+                .then(result =>{
+                    console.log(result.Data)
+                    this.listaNarudzbina = sortOrdersByDate(result.Data.orders, false);
+                })
     }
 }
 </script>

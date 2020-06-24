@@ -5,11 +5,11 @@
             <el-table :data="this.listaZahteva"
                 :default-sort="{prop:'Date', order:'ascending'}"
                 style="font-size:17px; width:100%;" max-height="250">
-                <el-table-column prop="Date" label="Datum" class="table-column" sortable></el-table-column>
-                <el-table-column prop="Time" label="Vreme" class="table-column"></el-table-column>
-                <el-table-column prop="Location" label="Lokacija" class="table-column"></el-table-column>
-                <el-table-column prop="EventType" label="Tip" class="table-column"></el-table-column>
-                <el-table-column prop="RequestStatus" align="center" label="Status">
+                <el-table-column prop="date" label="Datum" class="table-column" sortable></el-table-column>
+                <el-table-column prop="time" label="Vreme" class="table-column"></el-table-column>
+                <el-table-column prop="location" label="Lokacija" class="table-column"></el-table-column>
+                <el-table-column prop="type" label="Tip" class="table-column"></el-table-column>
+                <el-table-column prop="status" align="center" label="Status">
                     <template slot-scope="scope" label="Status">
                         <el-button v-if="scope.row.RequestStatus == 1" type="success"
                             icon="el-icon-check" circle @click="obavestenje(scope.row)"></el-button>
@@ -44,21 +44,30 @@ export default {
     },
     methods: {
         obavestenje(row){
-            if(row.ReqestStatus == 1) 
+            if(row.status == 1) 
                 this.$notify({title: "OBAVEŠTENJE", message: row.Notification==null ? this.poruka1 : row.Notification, type:'success', position: 'bottom-right'})
             else if(row.ReqestStatus == 2)
                 this.$notify({title: "OBAVEŠTENJE", message: row.Notification==null ? this.poruka2 : row.Notification, type: 'error', position: 'bottom-right'})
             else
                 this.$notify({title: "OBAVEŠTENJE", message: this.poruka3, type: 'warning', position: 'bottom-right'})
         },
-        pribaviZahtev(){
-            let userId = getUserInfo().userID;
-            fetch(destinationUrl + '/Request/GetRequestsByUserId/?id=' + userId, {method: "GET"})
-                .then(response => response.ok ? response.json() : new Error())
-                .then(result => {
-                    this.listaZahteva = result.Data;
-                })
-        },
+        // pribaviZahtev(){
+        //     apiFetch('GET', destinationUrl + "/request/getByUserId/" + getUserInfo().userID)
+        //         // .then(response => response.ok ? response.json() : new Error())
+        //         // .then(result => {
+        //         //     this.listaZahteva = result.Data;
+        //         // })
+        //         console.log("dsjkdj")
+        //          .then(result => {
+        //             console.log(result.Data)
+        //         if(result.Success) {
+        //             this.listaZahteva=result.Data;
+        //             // this.listaZahteva=this.listaZahteva.filter(x=>x.RequestStatus != 2);
+        //             // this.pribaviDatum(this.listaZahteva);
+        //         }
+        //         // this.preloadImages();
+        //     }).catch(error => console.log(error));
+        // },
         obrisiZahtev(row){
             apiFetch('POST', destinationUrl + "/Request/DeleteRequest?id=" + row.Id)
                 .then(result => {
@@ -69,8 +78,16 @@ export default {
                 }).catch(error => {console.log(error)});
         }
     },
-    beforeMount(){
-        this.pribaviZahteve()
+    // beforeMount(){
+    //     this.pribaviZahteve()
+    // }
+    mounted: function() {
+        apiFetch('GET', destinationUrl + "/request/getByUserId/" + getUserInfo().userID)
+                 .then(result => {
+                if(result.Success) {
+                    this.listaZahteva=result.Data.requests;
+                }
+            }).catch(error => console.log(error));
     }
 }
 </script>

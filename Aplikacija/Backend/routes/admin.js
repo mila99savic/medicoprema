@@ -18,6 +18,6 @@ router.post('/addProduct', adminController.postAddProduct);
 
 router.put('/editProduct', adminController.editProduct);
 
-router.delete('/deleteProduct', adminController.deleteProduct);
+router.delete('/deleteProduct/:prodId', adminController.deleteProduct);
 
 module.exports = router;

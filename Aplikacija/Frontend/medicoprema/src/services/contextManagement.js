@@ -43,3 +43,6 @@ export function getAccessToken(){
 export function clearAccessToken(){
 localStorage.removeItem('token')
 }
+export function getProductInfo(){
+  return {productID: localStorage.getItem('productID')}
+}

@@ -46,37 +46,49 @@ export default {
                     this.proizvodi = result.Data;
                 });
         },
-        onClickDodajUKorpu(index) {
+        async onClickDodajUKorpu(index) {
             if(getUserInfo().userType == REGULAR_USER_TYPE){
                 this.indeksIzabranogProizvoda = index;
-                this.dodajUKorpu(); 
+                await this.dodajUKorpu(); 
             }
             else{
                 this.$message("Da biste naručili proizvod morate se prijaviti ili registrovati.");
                 this.$emit("gotoLogin");
             }
         },
-        dodajUKorpu(){
+        async dodajUKorpu(){
             if(!this.isSpinnerActive) {    
                 const formData = new FormData();
-                formData.append("UserId", getUserInfo().userID);
-                formData.append("cart[" + 0 + "].items.productId", this.proizvodi[this.indeksIzabranogProizvoda].ProductType);
-                formData.append("cart[" + 0 + "].items.quantity", 1);
-                formData.append("cart[" + 0 + "].items.productTitle", this.proizvodi[this.indeksIzabranogProizvoda].title);
-                formData.append("cart[" + 0 + "].items.productPrice", this.proizvodi[this.indeksIzabranogProizvoda].price);
+                console.log(getUserInfo().userID);
+                console.log(this.proizvodi[this.indeksIzabranogProizvoda]._id);
+                formData.append("userId", getUserInfo().userID);
+                formData.append("productId", this.proizvodi[this.indeksIzabranogProizvoda]._id);
 
-                fetch(destinationUrl + "/shop/postToCart", {method: 'POST', body: formData})
-                    .then(response => response.ok ? response.json() : new Error())
-                    // eslint-disable-next-line no-unused-vars
-                    .then(result => { 
-                        this.$message({message: "Uspešno ste dodali proizvod u online korpu.", type: "success"});
-                        this.resetSpinner();
-                    })
-                    // eslint-disable-next-line no-unused-vars
-                    .catch(error => { 
-                        this.$message({message: "Greška pri dodavanju proizvoda u online korpu.", type: "error"})
-                        this.resetSpinner();
-                    });
+                var data = {
+                    userId: getUserInfo().userID,
+                    productId:  this.proizvodi[this.indeksIzabranogProizvoda]._id
+                }
+
+                await apiFetch('POST', destinationUrl + "/shop/postToCart", data)
+                    .then(response => {
+                        if(response.ok)
+                            this.$message({message: "Uspešno ste dodali proizvod u online korpu.", type: "success"});
+                })
+                .catch(err => {
+                    console.log('nije dobra ruta' + err);
+                })
+                    // .then(response => response.ok ? response.json() : new Error())
+                    // // eslint-disable-next-line no-unused-vars
+                    // .then(result => { 
+                    //     console.log('miljance');
+                    //     this.$message({message: "Uspešno ste dodali proizvod u online korpu.", type: "success"});
+                    //     this.resetSpinner();
+                    // })
+                    // // eslint-disable-next-line no-unused-vars
+                    // .catch(error => { 
+                    //     this.$message({message: "Greška pri dodavanju proizvoda u online korpu.", type: "error"})
+                    //     this.resetSpinner();
+                    // });
             }
             else {
                 this.isSpinnerActive = true;

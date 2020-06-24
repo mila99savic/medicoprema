@@ -18,14 +18,16 @@ exports.getTasks = async (req, res, next) => {
 exports.getTasksByUserId = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.zaposleniId)
+        //const kor = await User.findById(user.listoftasks.korisnikid)
+        console.log(user.listoftasks.tasks)
         res.status(200)
-            .json({
-                message: 'Prikupljene obaveze za korisnika',
-                tasks: user.listoftasks
+            .json({ 
+                Data: user.listoftasks,
+                Success: true
             })
     }
     catch (err) {
-        res.json({ success: false });
+        res.json({ Success: false });
         console.log(err);
     }
 }
@@ -40,7 +42,8 @@ exports.addTask = async (req, res, next) => {
         date: req.body.date,
         comment: req.body.comm,
         type: req.body.type,
-        korisnikid: req.body.korisnikid
+        korisnikid: req.body.korisnikid,
+        numberKorisnika: req.body.num
     });
     try {
         const savedTask = await task.save();
@@ -59,16 +62,18 @@ exports.assignTask = async (req, res, next) => {
         comment: req.body.comment,
         type: req.body.type,
         korisnikid: req.body.korisnikid,
+        numberKorisnika: req.body.num,
         zaposleniId: req.params.zaposleniId
     });
     try {
+        User.findById(req.params.zaposleniId).then(zaposlen => {
+            return zaposlen.addTask(task)
+        })
+        
         res.status(201).json({
             message: 'Dodeljena je obaveza(zakazivanje) i dodeljena zaposlenom',
             task: task
         });
-        User.findById(req.params.zaposleniId).then(zaposlen => {
-            return zaposlen.addTask(task)
-        })
     }
     catch (err) {
         res.json({ success: false });
