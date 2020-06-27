@@ -136,7 +136,7 @@ export default {
 <style scoped>
     .korisnik-container{
         display: flex;
-            height: 90%;
+            height: 100%;
             width: 100%;
             flex-direction: column;
             overflow: auto;
@@ -154,7 +154,7 @@ export default {
     .kalendar{
         margin: 20px 100px 50px;
     }
-    footer-bar{
+    /* footer-bar{
         justify-content: flex-end;
-    }
+    } */
 </style>

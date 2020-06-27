@@ -3,17 +3,16 @@
         <h3>Neobrađeni zahtevi</h3>
         <div class="zahtev-container-table">
             <el-table :data="this.listaZahteva" highlight-current-row @current-change="handleCurrentChange" height="1000">
-                <el-table-column prop="FirstName" label="Ime" width="100px" class="table-column"></el-table-column>
-                <el-table-column prop="LastName" label="Prezime" width="100px" class="table-column"></el-table-column>
-                <el-table-column prop="Location" label="Lokacija" width="150px" class="table-column"></el-table-column>
-                <el-table-column prop="Date" label="Datum" width="100px" class="table-column"></el-table-column>
-                <el-table-column prop="AdditionalRequests" label="Dodatni zahtevi"  class="table-column"></el-table-column>
-                <el-table-column prop="EventType" label="Tip" width="120px" class="table-column"></el-table-column>
-                <el-table-column prop="Time" label="Vreme" width="80px" class="table-column"></el-table-column>
+                <el-table-column prop="korIme" label="Ime" width="130px" class="table-column"></el-table-column>
+                <el-table-column prop="location" label="Lokacija" width="150px" class="table-column"></el-table-column>
+                <el-table-column prop="date" label="Datum" width="90px" class="table-column"></el-table-column>
+                <el-table-column prop="comment" label="Dodatni zahtevi"  class="table-column"></el-table-column>
+                <el-table-column prop="type" label="Tip" width="120px" class="table-column"></el-table-column>
+                <el-table-column prop="time" label="Vreme" width="80px" class="table-column"></el-table-column>
             </el-table>
             <div class="zahtevDugmici">
                 <el-select class="inputPolje" v-model="zaposleniId" placeholder="Izaberite zaposlenog" size="medium">
-                    <el-option v-for="item in zaposleni" :key="item.Id" :label="item.FirstName+' '+item.LastName" :value="item.Id"></el-option>
+                    <el-option v-for="item in zaposleni" :key="item.Id" :label="item.name+' '+item.lastname" :value="item.Id"></el-option>
                 </el-select>
                 <div class="dugmici">
                     <el-button type="success" round size="mini" style="margin-left: 20%;" @click="potvrdiZahtev()">Potvrdi</el-button>
@@ -25,13 +24,12 @@
         <h3>Potvrđeni zahtevi</h3>
         <div class="zahtev-container-table">
             <el-table :data="this.listaPotvrdjenihZahteva" max-height="400">
-                <el-table-column prop="FirstName" label="Ime" width="100px" class="table-column"></el-table-column>
-                <el-table-column prop="LastName" label="Prezime" width="100px" class="table-column"></el-table-column>
-                <el-table-column prop="Location" label="Lokacija" width="120px" class="table-column"></el-table-column>
-                <el-table-column prop="Date" label="Datum" width="100px" class="table-column"></el-table-column>
-                <el-table-column prop="AdditionalRequests" label="Dodatni zahtevi" class="table-column"></el-table-column>
-                <el-table-column prop="EventType" label="Tip" width="120px" class="table-column"></el-table-column>
-                <el-table-column prop="Time" label="Vreme" width="80px" class="table-column"></el-table-column>
+             <el-table-column prop="korIme" label="Ime" width="130px" class="table-column"></el-table-column>
+                <el-table-column prop="location" label="Lokacija" width="150px" class="table-column"></el-table-column>
+                <el-table-column prop="date" label="Datum" width="90px" class="table-column"></el-table-column>
+                <el-table-column prop="comment" label="Dodatni zahtevi"  class="table-column"></el-table-column>
+                <el-table-column prop="type" label="Tip" width="120px" class="table-column"></el-table-column>
+                <el-table-column prop="time" label="Vreme" width="80px" class="table-column"></el-table-column>
              </el-table>
         </div>
     </div>
@@ -58,26 +56,27 @@ export default {
             this.$emit('poruka');
         },
         pribaviListuZahteva(){
-            apiFetch('GET', destinationUrl + "Request/GetAllRequests")
+            apiFetch('GET', destinationUrl + "/request/all")
                 .then(result=>{
-                    if(this.Success){
-                        this.listaZahteva = sortReuquestByDate(result.Data.filter(x=>x.RequestStatus == 3), true);
-                        this.listaPotvrdjenihZahteva = sortReuquestByDate(result.Data.filter(x=>x.RequestStatus == 1), true);
+                    // if(this.Success){
+                        console.log(result)
+                        this.listaZahteva = sortReuquestByDate(result.Data.filter(x=>x.status == "neobradjen"), true);
+                        this.listaPotvrdjenihZahteva = sortReuquestByDate(result.Data.filter(x=>x.status == "potvrdjen"), true);
                         this.$emit('datum', this.listaZahteva);
                         this.$emit('potvrdjeni', this.listaPotvrdjenihZahteva);
-                    }
-                    else
-                        this.$message({message: "Došlo je do greške prilikom učitavanja zahteva!", type: 'error'})
+                    // }
+                    // else
+                    //     this.$message({message: "Došlo je do greške prilikom učitavanja zahteva!", type: 'error'})
                 }).catch(error=>{console.log(error);})
         },
         pribaviZaposlene(){
-            apiFetch('GET', destinationUrl + "User/GetAllEmployed")
+            apiFetch('GET', destinationUrl + "/user/getAllEmployed")
                 .then(result=>{
-                    if(result.Succes){
+                    // if(result.Succes){
                         this.zaposleni = result.Data;
-                    }
-                    else
-                        this.$message({message: "Došlo je do greške prilikom učitavanja zaposlenih!", type: 'error'})
+                    // }
+                    // else
+                    //     this.$message({message: "Došlo je do greške prilikom učitavanja zaposlenih!", type: 'error'})
                 }).catch(error => {console.log(error);})
         },
         potvrdiZahtev(){

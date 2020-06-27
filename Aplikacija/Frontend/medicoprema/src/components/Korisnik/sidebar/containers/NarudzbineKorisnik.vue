@@ -4,15 +4,16 @@
             <h3>Lista narudžbina</h3>
             <el-table
                 :data="this.listaNarudzbina"
-                max-height="1000"
+                height="250"
                 style="width:100%"
                 :row-class-name="tableRowClassName"
                 highlight-current-row
                 @row-click="handleCurrentChange">
                 <el-table-column min-width="20%" prop="date" label="Datum" sortable></el-table-column>
                 <el-table-column min-width="20%" prop="address" label="Adresa"></el-table-column>
-                <!-- <el-table-column min-width="20%" prop="price" label="Ukupna cena"></el-table-column> -->
+                <el-table-column min-width="20%" prop="price" label="Ukupna cena (din)"></el-table-column>
                 <el-table-column min-width="20%" prop="number" label="Telefon"></el-table-column>
+                <el-table-column min-width="20%" prop="status" label="Status"></el-table-column>
                 <el-table-column width="50">
                     <template slot-scope="scope">
                         <el-button type="info" icon="el-icon-message" circle size="mini" @click="prikaziPoruku(scope.row)"></el-button>
@@ -30,7 +31,7 @@ import ObavestiKorisnika from "../../../ObavestiKorisnika.vue"
 import { APPROVED_REQUEST_MESSAGE, REJECTED_REQUEST_MESSAGE, ON_HOLD_REQUEST_MESSAGE } from "../../../../data/constants.js";
 import { getUserInfo } from '../../../../services/contextManagement';
 import { destinationUrl, apiFetch } from '../../../../services/authFetch';
-import { sortOrdersByDate } from '../../../../services/sort';
+// import { sortOrdersByDate } from '../../../../services/sort';
 export default {
     // eslint-disable-next-line vue/no-unused-components
     components: {PrikazKorpe, ObavestiKorisnika},
@@ -45,29 +46,17 @@ export default {
         }
     },
     methods: {
-        // loadOrders(){
-        //     let userId = getUserInfo().userID;
-        //     apiFetch('GET', destinationUrl + '/shop/orderdByUserId/' + userId)
-        //     //fetch(destinationUrl + '/shop/orderdByUserId/' + userId, {method: "GET"})
-
-        //         //.then(response => response.ok ? response.json() : new Error())
-        //         .then(result =>{
-        //             console.log(result.Data)
-        //             this.listaNarudzbina = sortOrdersByDate(result.Data, false);
-        //         })
-        // },
-
-
         handleCurrentChange(val){
             this.currentRow = val;
-            //this.itemsinCart = this.currentRow.Order.CartItems;
+            console.log(this.currentRow.products.quantity)
+            this.itemsinCart = this.currentRow.products;
         },
         prikaziPoruku(row){
             this.currentRow = row;
-            if(this.currentRow.status == 1)
-                this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.Order.Notification == null ? this.poruka1 : this.currentRow.Order.Notification, type:'success', position:'bottom-right'})
-            else if(this.currentRow.status == 2)
-                this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.Order.Notification == null ? this.poruka2 : this.currentRow.Order.Notification, type:'error', position:'bottom-right'})
+            if(this.currentRow.status == "odobren")
+                this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.notification == null ? this.poruka1 : this.currentRow.Order.Notification, type:'success', position:'bottom-right'})
+            else if(this.currentRow.status == "odbijen")
+                this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.notification == null ? this.poruka2 : this.currentRow.Order.Notification, type:'error', position:'bottom-right'})
             else
                 this.$notify({title: "OBAVEŠTENJE", message: this.poruka3, type: 'warning', position: 'bottom-right'})
         },
@@ -90,12 +79,10 @@ export default {
     mounted: function(){
          let userId = getUserInfo().userID;
             apiFetch('GET', destinationUrl + '/shop/orderdByUserId/' + userId)
-            //fetch(destinationUrl + '/shop/orderdByUserId/' + userId, {method: "GET"})
-
                 //.then(response => response.ok ? response.json() : new Error())
                 .then(result =>{
-                    console.log(result.Data)
-                    this.listaNarudzbina = sortOrdersByDate(result.Data.orders, false);
+                    this.listaNarudzbina = result.Data.orders;
+                    // sortOrdersByDate(result.Data.orders, false);
                 })
     }
 }

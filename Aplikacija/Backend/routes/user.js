@@ -10,6 +10,8 @@ router.get('/users', userController.getUsers);
 
 router.get('/findById/:userId', userController.getUserById);
 
+router.get('/getAllEmployed', userController.getAllEmployed);
+
 router.get('/find/:userEmail', userController.findByEmail)
 
 router.put('/edit/:userId', userController.updateUser);

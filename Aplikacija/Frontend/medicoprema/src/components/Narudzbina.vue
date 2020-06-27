@@ -4,12 +4,11 @@
             <h3>Lista narudžbina</h3>
             <el-table :data="listaNarudzbina" height="250"
                 style="width:100%" highlight-current-row @row-click="handleCurrentChange">
-                <el-table-column min-width="100" prop="Order.Date" label="Datum"></el-table-column>
-                <el-table-column min-width="150" prop="FirstName" label="Ime"></el-table-column>
-                <el-table-column min-width="150" prop="LastName" label="Prezime"></el-table-column>
-                <el-table-column min-width="220" prop="Address" label="Adresa"></el-table-column>
-                <el-table-column min-width="140" prop="PhoneNumber" label="Telefon"></el-table-column>
-                <el-table-column min-width="140" prop="Order.Price" label="Ukupna cena"></el-table-column>
+                <el-table-column min-width="100" prop="date" label="Datum"></el-table-column>
+                <el-table-column min-width="150" prop="name" label="Ime"></el-table-column>
+                <el-table-column min-width="220" prop="address" label="Adresa"></el-table-column>
+                <el-table-column min-width="140" prop="number" label="Telefon"></el-table-column>
+                <el-table-column min-width="140" prop="price" label="Ukupna cena"></el-table-column>
                 <el-table-column width="125">
                     <template slot-scope="scope">
                         <div class="kolonaDugmici-1">
@@ -58,7 +57,7 @@ export default {
     },
     methods: {
         loadOrders(){
-            fetch(destinationUrl+'/Order/GetUnresolvedOrders', {method:"GET"})
+            fetch(destinationUrl+'/shop/getUnresolvedOrders', {method:"GET"})
                 .then(response=> response.ok ? response.json() : new Error())
                 .then(result => {
                     this.listaNarudzbina=result.Data;
@@ -67,7 +66,7 @@ export default {
         },
         handleCurrentChange(value){
             this.currentRow=value;
-            this.itemsinCart=this.currentRow.Order.CartItems;
+            this.itemsinCart=this.currentRow.products;
         },
         sortiraj(){
             this.listaNarudzbina = sortOrdersByDate(this.listaNarudzbina);

@@ -105,10 +105,10 @@ export default {
 
     .info{
         width: 100%;
-        height: 60%;
-        padding: 40px 40px;
-        padding-top: 50px;
-        margin-top: 120px;
+        height: 70%;
+        padding: 60px 60px;
+        padding-top: 80px;
+        margin-top: 100px;
         justify-content: center;
         background-color: rgba(231, 231, 236, 0.4);
         border-radius: 8px;
@@ -124,7 +124,6 @@ export default {
     h3 {
         text-align: center;
     } 
-
   @media screen and (max-width: 800px) {
       .information{
           flex-direction: column;

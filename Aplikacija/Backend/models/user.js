@@ -82,34 +82,26 @@ const userSchema = new Schema({
                     type: String,
                     required: true
                 },
+                number: {
+                    type: Number,
+                    required: true
+                },
+                status:{
+                    type: String
+                },
+                name: {
+                    tpe:String
+                },
                 price: {
                     type: String,
                     //required: true
                 },
-                number: {
-                    type: String,
-                    required: true
-                }
-                //,
-                // items: [
-                //     {
-                //         // product: { 
-                //         //     type: Object, 
-                //         //     //ref: 'Product',
-                //         //     required: true
-                //         // }
-                //         productTitle: {
-                //             type: String
-                //         },
-                //         productPrice: {
-                //             type: Number
-                //         },
-                //         quantity: {
-                //             type: Number,
-                //             required: true
-                //         }
-                //     }
-                // ]
+                products: [
+                    {
+                      product: { type: Object, required: true },
+                      quantity: { type: Number, required: true }
+                    }
+                  ],
             }
         ]
     },
@@ -205,10 +197,10 @@ userSchema.methods.removeFromCart = function (productId) {
     return this.save();
 };
 
-userSchema.methods.clearCart = function () {
-    this.cart = { items: [] };
-    return this.save();
-}
+// userSchema.methods.clearCart = function () {
+//     this.cart = { items: [] };
+//     return this.save();
+// }
 
 userSchema.methods.addImpression = function (impression) {
     const updatedImprlist = [...this.listofimpressions.impressions];
@@ -242,10 +234,10 @@ userSchema.methods.addReq = function (task) {
     const updatedTasklist = [...this.listofrequests.requests];
     updatedTasklist.push({
         location: task.location,
-        date: task.location,
+        date: task.date,
         comment: task.comment,
         type: task.type,
-        status: "obradjuje se"
+        status: "neobradjen"
     });
 
     updatedlist = {
@@ -256,27 +248,24 @@ userSchema.methods.addReq = function (task) {
 }
 
 userSchema.methods.addOrder = function (order) {
-    const updatedImprlist = [...this.listoforders.orders];
-    //console.log(order._id)
-    updatedImprlist.push({
+    const updatedOrderList = [...this.listoforders.orders];
+    console.log(order._id)
+    updatedOrderList.push({
         orderId: order._id,
         date: order.date,
         address: order.address,
-        price: order.price,
         number: order.number,
-        status: "obradjuje se"
-        //   items: [{
-        //       productTitle: order.products.product.title,
-        //       productPrice: order.products.product.price,
-        //       quantity: order.products.product.quantity
-        //   }
-        //]
+        status: order.status,
+        name: order.name,
+        price: order.price,
+        products: order.products
     });
 
     updatedlist = {
-        orders: updatedImprlist
+        orders: updatedOrderList
     };
     this.listoforders = updatedlist
+    this.cart = { items: [] };
     return this.save();
 }
 

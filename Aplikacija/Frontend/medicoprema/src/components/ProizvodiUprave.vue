@@ -2,7 +2,7 @@
     <div class="proizvodi-uprave-container">
         <div class="proizvodi-uprave">
             <h5 style="text-align:center; font-family: 'Times New Roman', Times, serif;">Lista proizvoda</h5>
-            <el-table :data="this.listaProizvoda">
+            <el-table :data="this.listaProizvoda" style="width=100%;" height="250">
                 <el-table-column prop="title" label="Naziv" class="table-column"></el-table-column>
                 <el-table-column prop="price" label="Cena" class="table-column"></el-table-column>
                 <el-table-column prop="description" label="Opis" class="table-column"></el-table-column>

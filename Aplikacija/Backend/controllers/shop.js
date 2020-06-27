@@ -30,7 +30,7 @@ exports.getCart = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId)
     res.status(200)
-      .json({ message: 'Korpa korisnika'  , Data: user.cart, Success: true })
+      .json({ message: 'Korpa korisnika', Data: user.cart, Success: true })
   }
   catch (err) {
     res.json({ Success: false });
@@ -80,6 +80,49 @@ exports.cartDeleteProduct = async (req, res, next) => {
   }
 };
 
+// exports.postOrder = async (req, res, next) => {
+//   const { error } = orderValidation(req.body);
+//   if (error)
+//     return res.status(400).send(error.details[0].message);
+
+//   const userId = req.body.userId;
+//   try {
+//     const user = await User.findById(userId)
+//     user
+//       .populate('cart.items.productId ')
+//       .execPopulate()
+//       .then(user => {
+//         const products = user.cart.items.map(i => {
+//           return { quantity: i.quantity, product: { ...i.productId._doc } };
+//           //_doc- samo podaci iz dokumenta(objecta)
+//         }); 
+
+//       const products1 = user.cart.items;
+//       let total = 0;
+//       products1.forEach(p => {
+//         total += p.quantity * p.productPrice;
+//         console.log(total)
+  //     })
+  //       const order = new Order({
+  //           date: Date.now(),
+  //           address: user.address,
+  //           number: user.number,
+  //           name: user.name,
+  //           price: total
+  //       });
+  //       return order.save();
+  //     })
+  //     // .then(user => {
+  //     //   return user.addOrder(order)
+  //     // })
+  //     // return user.clearCart();
+  //     return user.addOrder(order)
+  // }
+  // catch (err) {
+  //   res.json({ success: false });
+  //   console.log(err);
+  // }
+// };
 exports.postOrder = async (req, res, next) => {
   const { error } = orderValidation(req.body);
   if (error)
@@ -95,25 +138,28 @@ exports.postOrder = async (req, res, next) => {
         const products = user.cart.items.map(i => {
           return { quantity: i.quantity, product: { ...i.productId._doc } };
           //_doc- samo podaci iz dokumenta(objecta)
-        }); 
-        //console.log(user.number)
-        const order = new Order({
-          
-            date: Date.now(),//req.user je ceo user object
-            address: user.address,
-            //price: user.cart,
-            number: user.number
-          
-          // ,
-          // products: products
-          
         });
-        //console.log(order);
-        user.addOrder(order);
+        const products1 = user.cart.items;
+        let total = 0;
+        products1.forEach(p => {
+          total += p.quantity * p.productPrice;
+          console.log(total)
+        })
+        const order = new Order({
+          date: Date.now(),
+          address: user.address,
+          price: total,
+          number: user.number,
+          status: "neobradjen",
+          name: user.name,
+          userId: user._id,
+          products: products
+        });
+        console.log("radi");
         return order.save();
       })
-      .then(result => {
-        return user.clearCart();
+      .then(order => {
+        return user.addOrder(order);
       })
       .catch(err => console.log(err));
   }
@@ -123,23 +169,23 @@ exports.postOrder = async (req, res, next) => {
   }
 };
 
-exports.sum = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.userId)
-    const products = user.cart.items;
-    let total = 0;
+// exports.sum = async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.params.userId)
+//     const products = user.cart.items;
+//     let total = 0;
 
-    products.forEach(p => {
-      total += p.quantity * p.productPrice;
-      console.log(total)
-    });
-    res.json({ message: 'pribavljena suma', total: total })
-  }
-  catch (err) {
-    res.json({ success: false });
-    console.log(err);
-  }
-};
+//     products.forEach(p => {
+//       total += p.quantity * p.productPrice;
+//       console.log(total)
+//     });
+//     res.json({ message: 'pribavljena suma', total: total })
+//   }
+//   catch (err) {
+//     res.json({ success: false });
+//     console.log(err);
+//   }
+// };
 
 exports.getOrders = async (req, res, next) => {
   try {
@@ -152,37 +198,46 @@ exports.getOrders = async (req, res, next) => {
     console.log(err);
   }
 };
-
-exports.getOrdersByUserId = async (req, res, next) => {
-//   try{
-//     const user = await User.findById(req.params.userId);
-//     Order.findById(req.params.orderId)
-//     .then(or => {
-//       res.send('pokusavam')
-//       res.json(or)
-//     })
-//     Data = {name: user.name, lastname: user.lastname, address: user.address, email: user.email, password: user.password, number: user.number}
-//     res.json({ message: 'pribavljen je korisnik', Data })
+// exports.getOrdersItems= async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.params.userId)
+//     console.log(user.listoforders.orders.orderId)
+//     const items = await Order.find({"_id": user.listoforders.orders.orderId})
+//     res.status(200)
+//       .json({ message: 'Prikupljene narudzbine', Data: items })
 //   }
-//   catch(err){
+//   catch (err) {
 //     res.json({ success: false });
 //     console.log(err);
 //   }
-// }
+// };
+exports.getUnOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find()//find vraca proizvod a ne kursor
+    const unresOrders = await Order.find({ "status": "neobradjen" })
+    res.status(200)
+      .json({ Data: unresOrders })
+  }
+  catch (err) {
+    res.json({ success: false });
+    console.log(err);
+  }
+};
 
-try {
-  const user = await User.findById(req.params.userId)
-  // const ord = user.listoforders;
-  // ord.forEach(o => {
-  //   console.log(o.orderId)
-  // });
-  res.status(200)
-  
-    .json({Data: user.listoforders, Success: true })
-}
-catch (err) {
-  res.json({ Success: false });
-  console.log(err);
-}
+exports.getOrdersByUserId = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.userId)
+    // const ord = user.listoforders;
+    // ord.forEach(o => {
+    //   console.log(o.orderId)
+    // });
+    res.status(200)
+
+      .json({ Data: user.listoforders, Success: true })
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
 }
 

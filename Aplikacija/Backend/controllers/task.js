@@ -19,7 +19,7 @@ exports.getTasksByUserId = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.zaposleniId)
         //const kor = await User.findById(user.listoftasks.korisnikid)
-        console.log(user.listoftasks.tasks)
+        // console.log(user.listoftasks.tasks)
         res.status(200)
             .json({ 
                 Data: user.listoftasks,

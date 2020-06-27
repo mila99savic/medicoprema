@@ -8,7 +8,7 @@
         <user-sidebar v-if="this.showComp == 'profil'" ></user-sidebar>
         <korpa-korisnik v-if="this.showComp == 'korpa'" ></korpa-korisnik>
         <proizvodi v-if="this.showComp == 'proizvodi'"></proizvodi>
-        <footer-bar></footer-bar>
+        <footer-bar class="footer"></footer-bar>
     </div>
 </template>
 
@@ -24,7 +24,7 @@ import { setPageShown, getPageToShow, getUserInfo } from '../services/contextMan
 
 export default {
     // eslint-disable-next-line vue/no-unused-components
-    components: { ZakazivanjaKorisnik, UserSidebar, KorpaKorisnik,  HeaderBar, Proizvodi, FooterBar, CustomBar},
+    components: { ZakazivanjaKorisnik, UserSidebar, KorpaKorisnik,  HeaderBar,FooterBar,Proizvodi, CustomBar},
     data() {
         return {
             menuItems: [
@@ -67,15 +67,16 @@ export default {
         flex-direction: column;
         justify-content: space-between;
         position: absolute;
+        overflow: auto;
         top: 0;
         left:0;
         z-index: -1;
         background-size: cover;
         background-position: bottom;
+        /* background-color: rgba(231, 231, 236, 0.4);; */
         background-image: linear-gradient(
             rgba(26, 111, 168, 0.171),
             rgba(57, 63, 61, 0.205)
         ),url("../assets/pozadina.png");
     }
-
 </style>

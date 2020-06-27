@@ -85,8 +85,8 @@ export default {
                 || this.signupData.number==="" || this.signupData.email==="" || this.signupData.username==="" || this.signupData.password===""){
                     this.$message({message: "Morate popuniti sva polja", type: "warning"});
                 }
-            else if(!this.isPhoneNumberValid())
-                this.$message({message: "Broj telefona nije validan", type: "warning"});
+            // else if(!this.isPhoneNumberValid())
+            //     this.$message({message: "Broj telefona nije validan", type: "warning"});
             else{
                 console.log(this.signupData);
                  apiFetch('POST', destinationUrl + "/auth/register", this.signupData)

@@ -4,22 +4,22 @@
       v-if="this.ListaObaveza.length > 0"
       :data="this.ListaObaveza"
       :default-sort="{prop: 'Date'}"
-    >
+      style="height:300px; width:700px; background: linear-gradient(0deg, #bccecfc7, #fcfcfcab);">
       <!-- <el-table-column prop="CustomerFirstName" label="Ime" width="100px" class="table-column"></el-table-column> -->
       <!-- <el-table-column prop="CustomerLastName" label="Prezime" width="100px" class="table-column"></el-table-column> -->
-      <el-table-column
+
+      <el-table-column prop="date" label="Datum" width="200px" class="table-column" sortable></el-table-column>
+      <!-- <el-table-column prop="Time" label="Vreme" width="80px" class="table-column"></el-table-column> -->
+      <el-table-column prop="location" label="Lokacija" width="200px" class="table-column"></el-table-column>
+            <el-table-column
         prop="numberKorisnika"
         label="Broj telefona"
-        width="100px"
-        class="table-column"
-      ></el-table-column>
-      <el-table-column prop="date" label="Datum" width="100px" class="table-column" sortable></el-table-column>
-      <!-- <el-table-column prop="Time" label="Vreme" width="80px" class="table-column"></el-table-column> -->
-      <el-table-column prop="location" label="Lokacija" width="100px" class="table-column"></el-table-column>
-      <el-table-column prop="type" label="Tip" width="100px" class="table-column"></el-table-column>
-      <el-table-column prop="comment" label="Dodatne informacije" class="table-column"></el-table-column>
-      <el-table-column align="right" width="50px">
-        <template slot-scope="scope">
+        width="200px"
+        class="table-column"></el-table-column>
+      <el-table-column prop="type" label="Tip" width="139px" class="table-column"></el-table-column>
+      <el-table-column prop="comment" label="Dodatne informacije" width="261px" class="table-column"></el-table-column>
+      <el-table-column align="right" width="150px">
+        <!-- <template slot-scope="scope">
           <el-button
             type="danger"
             icon="el-icon-delete"
@@ -28,7 +28,7 @@
             v-if="datum(scope.row)"
             @click="deleteTask((scope.row.Id))"
           ></el-button>
-        </template>
+        </template> -->
       </el-table-column>
     </el-table>
     <label v-else>Nemate dodeljene obaveze</label>
@@ -55,8 +55,6 @@ export default {
         //.then(response => (response.ok ? response.json() : new Error()))
         .then(result => {
           // if(result.Success) {
-
-          console.log(result.Data);
           this.ListaObaveza = result.Data.tasks;
           this.odrediTipDogadjaja();
           //}
@@ -109,5 +107,6 @@ export default {
 .prikaz-obaveza {
   display: flex;
   justify-content: center;
+  width: 1150px;
 }
 </style>

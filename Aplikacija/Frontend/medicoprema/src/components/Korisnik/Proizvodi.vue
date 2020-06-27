@@ -23,7 +23,7 @@
                 </div>
             </template>
             </div>
-        </div> 
+        </div>
     </div>
 </template>
 
@@ -136,7 +136,7 @@ export default {
     width: 35%;
     display: flex;
     justify-content: center;
-    align-proizvodi: center;
+    align-items: center;
 }
 .part2part3{
     display: flex;
@@ -147,7 +147,7 @@ export default {
     width: 60%;
     display: flex;
     justify-content: space-around;
-    align-proizvodi: center;
+    align-items: center;
     flex-direction: column;
 }
 .part3{
@@ -156,7 +156,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-proizvodi: center;
+    align-items: center;
 }
 #cena{
     margin-bottom:20%; 

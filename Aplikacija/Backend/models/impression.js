@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { required } = require('@hapi/joi');
 
 const Schema = mongoose.Schema;
 
@@ -8,16 +9,22 @@ const impressionSchema = new Schema ({
         required:true
     },
     korisnikid: {
-        type: String,
-        required: true
+        type: String
     },
     zaposlenid: {
-        type: String,
-        required: true
+        type: String
     },
     date: {
         type: Date,
         default: Date.now
+    },
+    nameKorisnika:{
+        type:String, 
+        required:true
+    },
+    addressKorisnika:{
+        type:String,
+        required:true
     }
 });
 

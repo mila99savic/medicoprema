@@ -6,7 +6,7 @@ const { requestValidation } = require('../validation');
 exports.getRequests = async (req, res, next) => {
   try{
     const req = await Request.find();//find vraca proizvod a ne kursor
-    res.json(req);
+    res.json({Data:req});
     }
     catch(err){
       res.json({success: false});
@@ -30,19 +30,22 @@ exports.addRequest = async (req, res, next) => {
   const { error } = requestValidation(req.body);
   if (error)
       return res.status(400).send(error.details[0].message);
-      
+      const user = await User.findById(req.body.korisnikid);
+      const ime = user.name;
         const request = new Request({
             location: req.body.location,
-            //date: req.body.date,
+            date: req.body.date,
             comment: req.body.comment,
             time: req.body.time,
             type: req.body.type,
             status: req.body.status,
-            korisnikid: req.body.korisnikid
+            korisnikid: req.body.korisnikid,
+            korIme: ime
         });
         try{
+          
           const savedReq = await request.save();
-          const user = await User.findById(req.body.korisnikid)
+          // const user = await User.findById(req.body.korisnikid)
           user.addReq(request)
           
           res.json({Success: true,  savedReq});

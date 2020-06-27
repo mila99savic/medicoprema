@@ -26,6 +26,20 @@ exports.getUserById = async (req, res) => {
   }
 }
 
+exports.getAllEmployed = async (req, res, next) => {
+  try {
+    const users = await User.find()
+    
+    const usersEmployed = await User.find({"usertype": 1})
+    res.status(200)
+      .json({ Data: usersEmployed })
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+};
+
 exports.findByEmail = async (req, res, next) => {
   const userEmail = req.params.userEmail;
 

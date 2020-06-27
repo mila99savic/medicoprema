@@ -10,14 +10,14 @@
                 <el-table-column prop="location" label="Lokacija" class="table-column"></el-table-column>
                 <el-table-column prop="type" label="Tip" class="table-column"></el-table-column>
                 <el-table-column prop="status" align="center" label="Status">
-                    <template slot-scope="scope" label="Status">
+                    <!-- <template slot-scope="scope" label="Status">
                         <el-button v-if="scope.row.RequestStatus == 1" type="success"
                             icon="el-icon-check" circle @click="obavestenje(scope.row)"></el-button>
                         <el-button v-if="scope.row.RequestStatus == 2" type="danger"
                             icon="el-icon-close" circle @click="obavestenje(scope.row)"></el-button>
                         <el-button v-if="scope.row.RequestStatus == 3" type="warning"
                             icon="el-icon-quesstion" circle @click="obavestenje(scope.row)"></el-button>
-                    </template>
+                    </template> -->
                 </el-table-column>
                 <el-table-column align="right" label="Obriši">
                     <template slot-scope="scope">

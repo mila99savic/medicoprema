@@ -31,6 +31,9 @@ const requestSchema = new Schema ({
     korisnikid: {
         type: String, 
         required: true
+    },
+    korIme:{
+        type:String
     }
 });
 
