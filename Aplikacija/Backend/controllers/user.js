@@ -14,7 +14,32 @@ exports.getUsers = async (req, res, next) => {
     console.log(err);
   }
 };
+exports.getAllEmployed = async (req, res, next) => {
+  try {
+    const users = await User.find()
+    
+    const usersEmployed = await User.find({"usertype": 1})
+    res.status(200)
+      .json({ Data: usersEmployed })
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+};
+exports.getAllRegularUsers = async (req, res, next) => {
+  try {
+    const users = await User.find()
 
+    const usersRegular = await User.find({"usertype": 0})
+    res.status(200)
+      .json({ Data: usersRegular })
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+};
 exports.getUserById = async (req, res) => {
   try{
     const user = await User.findById(req.params.userId);
@@ -71,3 +96,4 @@ exports.deleteUser = async (req, res, next) => {
     console.log(err);
   }
 }
+

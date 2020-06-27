@@ -6,7 +6,7 @@
                 <div style="flex:1"></div>
                 <h5 style="text-align:center; font-family:'Times New Roman', Times, serif; flex:1">Evidencija članova</h5>
                 <div class="select-container" style="display:flex; flex:1; justify-content:flex-end;">
-                    <el-select :value="user" @change="setUSer($event)">
+                    <el-select :value="user" @change="setUser($event)">
                         <el-option :value="'/'"></el-option>
                         <el-option :value="'Zaposleni'">Zaposleni</el-option>
                         <el-option :value="'Korisnik'" >Korisnik</el-option>
@@ -89,34 +89,43 @@ export default {
             this.user=event;
 
             if(this.user==UserTypes[EMPLOYED_USER_TYPE]){
-                apiFetch('GET', destinationUrl+"/User/GetAllEmployed")
+                apiFetch('GET', destinationUrl+"/user/getAllEmployed")
                     .then(result=>{
-                        this.handleResponse(result);
+                        this.tableData=result.Data;
+                        this.tableData.forEach((data,index)=>{
+                            data.usertype = UserTypes[result.Data[index].usertype];
+                    });
                     });
             }
             else if(this.user==UserTypes[REGULAR_USER_TYPE]){
-                apiFetch('GET', destinationUrl + "/User/GetAllRegularUsers")
+                apiFetch('GET', destinationUrl + "/user/getAllRegularUsers")
                         .then(result => {
-                            this.handleResponse(result);
+                            this.tableData=result.Data;
+                            this.tableData.forEach((data,index)=>{
+                                data.usertype = UserTypes[result.Data[index].usertype];
+                        });
                         });
             }
             else {
-                apiFetch('GET', destinationUrl + "/User/GetAllUsers")
+                apiFetch('GET', destinationUrl + "/user/users")
                     .then(result => {
-                        this.handleResponse(result);
+                        this.tableData=result.Data;
+                        this.tableData.forEach((data,index)=>{
+                            data.usertype = UserTypes[result.Data[index].usertype];
+                        });
                     });
             }
         },
-        handleResponse(result){
-            if(result.Success){
-                this.tableData=result.Data;
-                this.tableData.forEach((data,index)=>{
-                    data.UserType=UserTypes[result.Data[index].UserType];
-                });
-            }
-            else
-                this.$message({message: "Došlo je do greške!", type: 'error'})
-        }
+        // handleResponse(result){
+        //     if(result.Success){
+        //         this.tableData=result.Data;
+        //         this.tableData.forEach((data,index)=>{
+        //             data.usertype = UserTypes[result.Data[index].usertype];
+        //         });
+        //     }
+        //     else
+        //         this.$message({message: "Došlo je do greške!", type: 'error'})
+        // }
     },
     mounted:function(){
         this.$emit('loadDataTable');

@@ -8,6 +8,13 @@ const router = express.Router();
 
 router.get('/users', userController.getUsers);
 
+router.get('/getAllEmployed', userController.getAllEmployed);
+
+router.get('/getAllRegularUsers', userController.getAllRegularUsers);
+
+// router.get('/getAllUsers', userController.getAllUsers);
+
+
 router.get('/findById/:userId', userController.getUserById);
 
 router.get('/find/:userEmail', userController.findByEmail)

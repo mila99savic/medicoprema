@@ -6,7 +6,7 @@
             </el-popover>
             <h5>Dodaj utisak o proizvodu</h5>
             <!-- <label class="form-line">Tekst:</label> -->
-            <el-input type="textarea" v-model="utisakText" :rows="10"></el-input>
+            <el-input type="textarea" v-model="savedComm" :rows="10"></el-input>
             <div class="dugme">
                 <el-button @click="potvrdiUnos" type="success" round style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Sačuvaj</el-button>
                 <el-button @click="ponisti" type="danger" round style="color:rgba(24, 102, 89, 0.925); background-color: white; border-color:white">Poništi</el-button>
@@ -17,29 +17,30 @@
 
 <script>
 import logofirme2 from '../../assets/logofirme2.png';
+import { destinationUrl, apiFetch } from '../../services/authFetch';
+
 export default {
     data() {
         return{
             Logo: logofirme2,
-            utisakText:''
+            savedComm:''
         }
     },
     methods: {
-        potvrdiUnos: function(){
-            if(this.utisakText==='')
-            {
-                this.$message('Morate uneti tekst utiska')
-                return
+        potvrdiUnos: async function(){
+         await apiFetch('POST', destinationUrl + "/comment/add", this.savedComm)
+            .then(response => {
+                if(response.Success)
+                    this.$message('Dodali ste prizvod!');
+                else{
+                    this.$message('doslo je do greske!');
             }
-            var novo = {
-                tekst: this.utisakText,
-            }
-            this.utisakText=''
-            this.$emit('zavrsenUnos', novo)
+
+                 }).catch(err => console.log(err))
         },
-        ponisti: function(){
-            this.$emit('zavrsenUnos','cancel')
-        }
+        ponisti: function () {
+            this.$emit('zavrsenUnos', 'cancel')
+        } 
     }
 }
 </script>
@@ -56,7 +57,7 @@ export default {
     }
     .dugme{
         display: flex;
-        justify-content: space-between;
+        justify-savedComm: space-between;
         margin-top: 5%;
     }
 </style>

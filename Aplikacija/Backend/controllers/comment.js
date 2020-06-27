@@ -5,10 +5,11 @@ const { commentValidation } = require('../validation');
 exports.getComments = async (req, res, next) => {
   try{
     const comments = await Comment.find();//find vraca proizvod a ne kursor
-    res.json(comments);
+    Data = {content: comments.content, productid: comments.productid, korisnikid:comments.korisnikid, date: comments.date}
+    res.json(Data);
     }
     catch(err){
-      res.json({success: false});
+      res.json({Success: false});
     }
 }
 
@@ -30,7 +31,7 @@ exports.addComment = async (req, res, next) => {
     })
   }
   catch(err){
-    res.json({success: false});
+    res.json({Success: false});
   }
 };
 

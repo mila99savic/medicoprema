@@ -26,11 +26,11 @@ exports.postAddProduct = async (req, res, next) => {
     //a moze i _id
   });
   try{
-    const savedProduct = await product.save();
-    res.json({Success: true,  savedProduct});
+    const proizvod = await product.save();
+    res.json({Success: true,  proizvod});
   }
   catch(err){
-    res.json({success: false});
+    res.json({Success: false});
   }
 };
 

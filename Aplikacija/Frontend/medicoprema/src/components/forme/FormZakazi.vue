@@ -25,12 +25,12 @@
                     <el-option v-for="item in options" :key="item.tip" :label="item.label" :value="item.tip"></el-option>
                 </el-select>
             </div>
-            <!-- <div class="stavka">
+            <div class="stavka">
                 <label>Vreme:</label>
-                <el-select  v-model="podaciZakazi.vreme" placeholder="Select time">
-                    <el-option v-for="item in optionstime" :key="item.vreme" :label="item.label" :value="item.vreme"></el-option>
+                <el-select  v-model="podaciZakazi.vreme" placeholder="Izaberite vreme">
+                    <el-option v-for="item in optionstime" :key="item.time" :label="item.label" :value="item.time"></el-option>
                 </el-select>
-            </div> -->
+            </div>
             <div class="dugme">
                 <el-button id="dugmeZakazi" round @click="proslediZahtev()" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
             </div>
@@ -50,7 +50,7 @@ export default {
                 date: '',
                 comment: '',
                 type: '',
-                // vreme: '',
+                vreme: '',
                 korisnikid: ''
             },
             // user: {name:'', lastname:''},
@@ -64,17 +64,17 @@ export default {
                 tip:'Preventivni godišnji pregled',
                 label:'Preventivni godišnji pregled'
             }],
-            // optionstime: [{
-            //     vreme:'08h',
-            //     label:'08h'
-            //     },{
-            //     vreme:'10h',
-            //     label:'10h'
-            //     },{
-            //     vreme:'12h',
-            //     label:'12h'
-            //     }
-            // ],
+            optionstime: [{
+                time:'08h',
+                label:'08h'
+                },{
+                time:'10h',
+                label:'10h'
+                },{
+                time:'12h',
+                label:'12h'
+                }
+            ],
         }
     },
     props: {date:String},
@@ -94,16 +94,13 @@ export default {
         proslediZahtev() {
              if(!this.validacija())
                  return
-            // this.podaciZakazi.time=this.time;
-            // console.log(this.podaciZakazi.time);
             this.podaciZakazi.date = this.date;
-            // this.podaciZakazi.name = this.user.name;
-            // this.podaciZakazi.lastname = this.user.lastname;
             this.podaciZakazi.korisnikid = getUserInfo().userID;
             console.log(this.podaciZakazi);
-            apiFetch('POST', destinationUrl + "/request/add", this.podaciZakazi)
+            apiFetch('POST', destinationUrl + "/request/add/", this.podaciZakazi)
             // .then(response => response.ok ? response.json() : new Error())
             .then(response => {
+                 console.log("radi")
                 if(response.Success){
                     this.$message({message: "Uspesno ste zakazali termin.", type: 'success'});
                     this.$emit("zakazano",this.podaciZakazi);
@@ -123,12 +120,12 @@ export default {
         },
         pribaviKorisnika(){
             let korisnikid = getUserInfo().userID;
-            fetch(destinationUrl + '/user/findById/' + korisnikid, {method: "GET"})
+            apiFetch('GET', destinationUrl + '/user/findById/' + korisnikid)
                 .then(response => response.ok ? response.json() : new Error())
-                .then(result => {
-                    this.user.name = result.Data.name;
-                    this.user.lastname = result.Data.lastname;
-                }).catch(error => console.log(error));
+                // .then(response => {
+                    // this.user.name = result.Data.name;
+                    // this.user.lastname = result.Data.lastname;
+                // }).catch(error => console.log(error));
         },
         clearForm() {
             this.podaciZakazi.date = "";

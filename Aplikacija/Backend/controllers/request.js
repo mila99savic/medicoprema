@@ -23,14 +23,14 @@ exports.addRequest = async (req, res, next) => {
             date: req.body.date,
             comment: req.body.comment,
             type: req.body.type,
-            // vreme: req.body.vreme,
+            vreme: req.body.vreme,
             status: req.body.status,
             korisnikid: req.body.korisnikid
         });
         // const token = jwt.sign({ _id: user._id }, process.env.TOKEN);
         try{
           const savedReq = await request.save()
-          const Data = { location: savedReq.location, date: savedReq.date, comment: savedReq.comment, type:savedReq.type, status:savedReq.status, korisnikid:savedReq.korisnikid }
+          const Data = { location: savedReq.location, date: savedReq.date, comment: savedReq.comment, type:savedReq.type,vreme:savedReq.vreme, status:savedReq.status, korisnikid:savedReq.korisnikid }
           res.json({Success: true, Data});
         }
         catch(err){

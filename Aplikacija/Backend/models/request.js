@@ -20,16 +20,16 @@ const requestSchema = new Schema ({
         type:String,
         required: true
     },
-    // vreme: {
-    //     type:String,
-    //     required: true
-    // },
+    vreme: {
+        type:String,
+        required: true
+    },
     status: {
         type: String
     },
     korisnikid: {
         type: String, 
-        required: true
+        // required: true
     }
 });
 
