@@ -5,7 +5,7 @@
             <el-table :data="listaNarudzbina" height="250"
                 style="width:100%" highlight-current-row @row-click="handleCurrentChange">
                 <el-table-column min-width="100" prop="date" label="Datum"></el-table-column>
-                <el-table-column min-width="150" prop="name" label="Ime"></el-table-column>
+                <el-table-column min-width="150" prop="status" label="Status"></el-table-column>
                 <el-table-column min-width="220" prop="address" label="Adresa"></el-table-column>
                 <el-table-column min-width="140" prop="number" label="Telefon"></el-table-column>
                 <el-table-column min-width="140" prop="price" label="Ukupna cena"></el-table-column>
@@ -38,12 +38,12 @@
 </template>
 
 <script>
-const Status=['Obrađena','Odbijena','Na čekanju'];
+// const Status=['Obrađena','Odbijena','Na čekanju'];
 import PrikazKorpe from "./prikazi/PrikazKorpe"
 import ObavestiKorisnika from "./ObavestiKorisnika.vue"
-import { destinationUrl } from '../services/authFetch';
+import { destinationUrl, apiFetch } from '../services/authFetch';
 import {sortOrdersByDate} from "../services/sort.js";
-import { REJECTED_REQUEST_MESSAGE } from '../data/constants';
+// import { REJECTED_REQUEST_MESSAGE } from '../data/constants';
 export default {
     components:{PrikazKorpe,ObavestiKorisnika},
     data(){
@@ -85,26 +85,22 @@ export default {
             this.selectedIndex='';
         },
         updateOrderStatus(index,vrednost){
-            const formData = new FormData();
+            // const formData = new FormData();
+            // formData.append('ordId', this.listaNarudzbina[index].orders._id);
+            // formData.append('vrednost', vrednost);
+            console.log(this.listaNarudzbina[index])
+               let Data = {ordId: '', vrednost: ''};
+                Data.ordId = this.listaNarudzbina[index]._id
+                Data.vrednost = vrednost
+                console.log(Data)
 
-            const isNotificationNull = this.listaNarudzbina[index].Order.Notification == null ||
-                this.listaNarudzbina[index].Order.Notification == "" ||
-                this.listaNarudzbina[index].Order.Notification == "null";
-
-            if(vrednost == 2 && isNotificationNull){
-                this.listaNarudzbina[index].Order.Notification = REJECTED_REQUEST_MESSAGE;
-            }
-
-            formData.append('OrderId', this.listaNarudzbina[index].Order.Id);
-            formData.append('RequestStatus', vrednost);
-            formData.append('Notification', this.listaNarudzbina[index].Order.Notification);
-
-            fetch(destinationUrl + "/Order/UpdateOrderState", {method:'POST', body:formData})
-                .then(response=> response.ok ? response.json() : new Error())
+            apiFetch('PUT', destinationUrl + "/shop/updateOrderState", Data)
+            // fetch(destinationUrl + "/order/updateOrderState", {method:'PUT', body:formData})
+                // .then(response=> response.ok ? response.json() : new Error())
                 .then(result=>{
                     if(result.Success){
-                        this.$set(this.listaNarudzbina[index].Order, 'RequestStatus', Status[vrednost - 1]);
-                        this.sortiraj();
+                        // this.$set(this.listaNarudzbina[index].Order, 'RequestStatus', Status[vrednost - 1]);
+                        // this.sortiraj();
                     this.listaNarudzbina.splice(index, 1);
                     this.itemsinCart = [];
                     if(vrednost == 1){

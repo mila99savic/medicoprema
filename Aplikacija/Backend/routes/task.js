@@ -8,6 +8,6 @@ router.get('/getTasks/:zaposleniId', taskController.getTasksByUserId)
 
 router.post('/add', taskController.addTask);
 
-router.post('/add/:zaposleniId', taskController.assignTask)
+router.post('/assign', taskController.assignTask)
 
 module.exports = router;

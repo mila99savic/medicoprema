@@ -23,7 +23,7 @@
 import {} from 'element-ui'
 import { apiFetch, destinationUrl } from '../../../../../../services/authFetch';
 import { getUserInfo } from '../../../../../../services/contextManagement';
-import { ERRORS} from "../../../../../../data/errorsCode.js";
+// import { ERRORS} from "../../../../../../data/errorsCode.js";
     export default {
         data(){
             return{
@@ -53,25 +53,28 @@ import { ERRORS} from "../../../../../../data/errorsCode.js";
                 return true;
             },
             potvrdiUnos: function(){
-                if(this.validacijaPassworda()){
-                    apiFetch('PUT', destinationUrl + "/user/edit", {
-                        UserId: getUserInfo().userID,
-                        OldPassword: this.oldPass,
-                        NewPassword: this.newPass
-                    }).then(result => {
-                        if(result.Success) {
+                // if(this.validacijaPassworda()){
+                    let data = {
+                        userId: getUserInfo().userID,
+                        oldPass: this.oldPass,
+                        newPass: this.newPass
+                    }
+                    apiFetch('PUT', destinationUrl + "/user/edit", data)
+                    .then(result => {
+                        // if(result.Success) {
+                            console.log(result)
                             this.$message({message: "Uspesno ste promenili lozinku", type: "success"});
                             this.clearFormFilds();
                             this.$emit("closeChangePasswordForm");
-                        }
-                        else if(result.Errors != null) {
-                            result.Errors.forEach(error => this.$message({
-                                message: ERRORS[error.Code],
-                                type: "warning"
-                            }));
-                        }
+                        // }
+                        // else if(result.Errors != null) {
+                        //     result.Errors.forEach(error => this.$message({
+                        //         message: ERRORS[error.Code],
+                        //         type: "warning"
+                        //     }));
+                        // }
                     });
-                }
+                // }
             },
             ponistiUnos: function(){
                 this.clearFormFilds();

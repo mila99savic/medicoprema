@@ -51,7 +51,7 @@ export default {
                 time: '',
                 korisnikid: ''
             },
-            user: {name:'', lastname:''},
+            user: {FirstName:'', LastName:''},
             options: [{
                 tip:'Obuka',
                 label:'Obuka'
@@ -111,8 +111,8 @@ export default {
             fetch(destinationUrl + '/user/findById/' + korisnikid, {method: "GET"})
                 .then(response => response.ok ? response.json() : new Error())
                 .then(result => {
-                    this.user.name = result.Data.name;
-                    this.user.lastname = result.Data.lastname;
+                    this.user.FirstName = result.Data.FirstName;
+                    this.user.LastName = result.Data.LastName;
                 })
         },
         clearForm() {

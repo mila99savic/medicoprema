@@ -71,7 +71,7 @@ export default {
 
                 await apiFetch('POST', destinationUrl + "/shop/postToCart", data)
                     .then(response => {
-                        if(response.ok)
+                        if(response.Success)
                             this.$message({message: "Uspešno ste dodali proizvod u online korpu.", type: "success"});
                 })
                 .catch(err => {

@@ -28,4 +28,6 @@ router.get('/getUnresolvedOrders', shopController.getUnOrders);
 
 router.get('/orderdByUserId/:userId', shopController.getOrdersByUserId);
 
+router.put('/updateOrderState', shopController.updateOrderState);
+
 module.exports = router;

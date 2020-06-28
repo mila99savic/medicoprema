@@ -34,6 +34,9 @@ const requestSchema = new Schema ({
     },
     korIme:{
         type:String
+    },
+    notification:{
+        type:String
     }
 });
 

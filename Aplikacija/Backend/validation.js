@@ -40,20 +40,25 @@ const commentValidation = (data) => {
 const impressionValidation = (data) => {
     const schema = Joi.object({
         content: Joi.string().min(2).required(),
-        korisnikid: Joi.string().required(),
-        zaposlenid: Joi.string().required()
+        korisnikid: Joi.string(),
+        zaposlenid: Joi.string().required(),
+        nameKorisnika: Joi.string().min(2).required(),
+        addressKorisnika: Joi.string()
     });
     return schema.validate(data);
 };
 
 const requestValidation = (data) => {
     const schema = Joi.object({
-        location: Joi.string().min(3).required(),
-        date: Joi.string().required(),
+        location: Joi.string().min(3),
+        date: Joi.string(),
         comment: Joi.string(),
-        type: Joi.string().required(),
+        type: Joi.string(),
         status: Joi.string(),
-        korisnikid: Joi.string().required()
+        korisnikid: Joi.string(),
+        korIme: Joi.string(),
+        time: Joi.string(),
+        reqId: Joi.string()
     });
     return schema.validate(data);
 };
@@ -66,7 +71,8 @@ const taskValidation = (data) => {
         type: Joi.string().required(),
         status: Joi.string(),
         korisnikid: Joi.string().required(),
-        zaposleniId: Joi.string()
+        zaposleniId: Joi.string(),
+        requestId: Joi.string()
     });
     return schema.validate(data);
 }

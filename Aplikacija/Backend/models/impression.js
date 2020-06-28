@@ -8,11 +8,13 @@ const impressionSchema = new Schema ({
         type:String,
         required:true
     },
-    korisnikid: {
-        type: String
-    },
+    // korisnikid: {
+    //     type: String
+    // },
     zaposlenid: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     },
     date: {
         type: Date,
@@ -24,7 +26,7 @@ const impressionSchema = new Schema ({
     },
     addressKorisnika:{
         type:String,
-        required:true
+        // required:true
     }
 });
 

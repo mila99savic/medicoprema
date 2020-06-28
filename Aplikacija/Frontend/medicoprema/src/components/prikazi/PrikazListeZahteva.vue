@@ -9,10 +9,11 @@
                 <el-table-column prop="comment" label="Dodatni zahtevi"  class="table-column"></el-table-column>
                 <el-table-column prop="type" label="Tip" width="120px" class="table-column"></el-table-column>
                 <el-table-column prop="time" label="Vreme" width="80px" class="table-column"></el-table-column>
+                <el-table-column prop="status" label="Status" width="80px" class="table-column"></el-table-column>
             </el-table>
             <div class="zahtevDugmici">
                 <el-select class="inputPolje" v-model="zaposleniId" placeholder="Izaberite zaposlenog" size="medium">
-                    <el-option v-for="item in zaposleni" :key="item.Id" :label="item.name+' '+item.lastname" :value="item.Id"></el-option>
+                    <el-option v-for="item in zaposleni" :key="item._id" :label="item.name+' '+item.lastname" :value="item._id"></el-option>
                 </el-select>
                 <div class="dugmici">
                     <el-button type="success" round size="mini" style="margin-left: 20%;" @click="potvrdiZahtev()">Potvrdi</el-button>
@@ -30,6 +31,7 @@
                 <el-table-column prop="comment" label="Dodatni zahtevi"  class="table-column"></el-table-column>
                 <el-table-column prop="type" label="Tip" width="120px" class="table-column"></el-table-column>
                 <el-table-column prop="time" label="Vreme" width="80px" class="table-column"></el-table-column>
+                <el-table-column prop="status" label="Status" width="80px" class="table-column"></el-table-column>
              </el-table>
         </div>
     </div>
@@ -38,9 +40,9 @@
 <script>
 import { apiFetch, destinationUrl } from '../../services/authFetch';
 import { sortReuquestByDate } from '../../services/sort';
-import { ERRORS } from '../../data/errorsCode';
+// import { ERRORS } from '../../data/errorsCode';
 
-const eventTypes = ['Obuka', 'Servis aparata', 'Preventivni godišnji pregled'];
+// const eventTypes = ['Obuka', 'Servis aparata', 'Preventivni godišnji pregled'];
 export default {
     data(){
         return{
@@ -58,40 +60,33 @@ export default {
         pribaviListuZahteva(){
             apiFetch('GET', destinationUrl + "/request/all")
                 .then(result=>{
-                    // if(this.Success){
-                        console.log(result)
                         this.listaZahteva = sortReuquestByDate(result.Data.filter(x=>x.status == "neobradjen"), true);
                         this.listaPotvrdjenihZahteva = sortReuquestByDate(result.Data.filter(x=>x.status == "potvrdjen"), true);
+                        // this.listaPotvrdjenihZahteva = sortReuquestByDate(result.Data.filter(x=>x.status == "odbijen"), true);
                         this.$emit('datum', this.listaZahteva);
                         this.$emit('potvrdjeni', this.listaPotvrdjenihZahteva);
-                    // }
-                    // else
-                    //     this.$message({message: "Došlo je do greške prilikom učitavanja zahteva!", type: 'error'})
                 }).catch(error=>{console.log(error);})
         },
         pribaviZaposlene(){
             apiFetch('GET', destinationUrl + "/user/getAllEmployed")
                 .then(result=>{
-                    // if(result.Succes){
                         this.zaposleni = result.Data;
-                    // }
-                    // else
-                    //     this.$message({message: "Došlo je do greške prilikom učitavanja zaposlenih!", type: 'error'})
                 }).catch(error => {console.log(error);})
         },
         potvrdiZahtev(){
             if(this.currentRow != null && this.zaposleniId != ''){
-                let Data = {Location:'', Date:'', Time:'', Note:'', EmployedId:'', EventType:1, RequestId:'', Notification:'', CustomerId:''};
-                Data.Location = this.currentRow.Location;
-                Data.Date = this.currentRow.Date;
-                Data.Time = this.currentRow.Time;
-                Data.Note = this.currentRow.AdditionalRequests;
-                Data.EmployedId = this.currentRow.zaposleniId;
-                Data.RequestId = this.currentRow.Id;
-                Data.EventType = eventTypes.indexOf(this.currentRow.EventType);
-                Data.Notification = this.notification;
-                Data.CustomerId = this.currentRow.UserId;
-                apiFetch('POST', destinationUrl + "/Task/AssignTask", Data)
+                let Data = {location:'', date:'', time:'', comment:'', zaposleniId:'', type:'', requestId:'', korisnikid:''};
+                Data.location = this.currentRow.location;
+                Data.date = this.currentRow.date;
+                Data.time = this.currentRow.time;
+                Data.comment = this.currentRow.comment;
+                Data.zaposleniId = this.zaposleniId;
+                Data.requestId = this.currentRow._id;
+                Data.type = this.currentRow.type;
+                // Data.notification = this.notification;
+                Data.korisnikid = this.currentRow.korisnikid;
+                console.log(Data)
+                apiFetch('POST', destinationUrl + "/task/assign", Data)
                     .then(result=>{
                         if(result.Success){
                             this.$message({message: "Uspešno dodeljivanje obaveze zaposlenom", type:'success'})
@@ -100,9 +95,10 @@ export default {
                             this.$emit('datum',this.listaZahteva);
                             this.$emit('potvrdjeni', this.listaPotvrdjenihZahteva);
                             this.zaposleniId = '';
+                            this.$message({message: "Uspesno ste potvrdili zahtev", type: 'success'})
                         }
-                        else    
-                            this.$message({message: ERRORS[result.Errors[0].Code], type: "warning"});
+                        // else    
+                        //     this.$message({message: ERRORS[result.Errors[0].Code], type: "warning"});
                     }).catch(error=>{console.log(error);})
             }
             else if(this.currentRow == null){
@@ -115,19 +111,20 @@ export default {
         },
         odbijZahtev(){
             if(this.currentRow != null){
-                let Data = {Id:'', Notification:''};
-                Data.Id = this.currentRow.Id;
-                Data.Notification = this.notification;
-                apiFetch('POST',destinationUrl + "/Request/RejectRequest", Data)
+               let Data = {reqId: ''};
+                Data.reqId = this.currentRow._id;
+                console.log(Data)
+                apiFetch('PUT',destinationUrl + "/request/rejectRequest", Data)
                     .then(result=>{
-                        if(result.Success){
+                        // if(result.Success){
+                            console.log(result)
                             this.$message({message: "Uspešno ste odbili zahtev.", type: 'warning'})
                             this.listaZahteva.splice(this.listaZahteva.indexOf(this.currentRow),1);
                             this.$emit('datum',this.listaZahteva);
                             this.zaposleniId = '';
-                        }
-                        else
-                            this.$message("Došlo je do greške!");
+                        // }
+                        // else
+                        //     this.$message("Došlo je do greške!");
                     }).catch(error => {console.log(error);})
             }
             else

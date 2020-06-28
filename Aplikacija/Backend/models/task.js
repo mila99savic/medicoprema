@@ -15,9 +15,17 @@ const taskSchema = new Schema ({
         //dodatni zahtev
         type: String
     },
+    requestId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Request',
+        required: true
+    },
     type: {
         type:String,
         required: true
+    },
+    time:{
+        type:String,
     },
     korisnikid: {
         type: String, 

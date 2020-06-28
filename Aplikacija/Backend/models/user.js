@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const request = require('./request');
 
 const Schema = mongoose.Schema;
 
@@ -154,7 +155,11 @@ const userSchema = new Schema({
                 },
                 status: {
                     type: String
-                }
+                },
+                requestId: {
+                    type: Schema.Types.ObjectId,
+                    ref: 'Request'
+                },
             }
         ]
     }
@@ -196,7 +201,17 @@ userSchema.methods.removeFromCart = function (productId) {
     this.cart.items = updatedCartItems;
     return this.save();
 };
-
+userSchema.methods.removeReq = function (requestId) {
+    console.log(requestId)
+    const updated = this.listofrequests.requests.filter(item => {
+        return item.requestId.toString() !== requestId.toString();
+        //vracamo tacno ako hocem oda zadrzimo element
+        //ali nama ipak treba netacno (false)
+        //jer ga brisemo, toString()
+    });
+    this.listofrequests.requests = updated;
+    return this.save();
+};
 // userSchema.methods.clearCart = function () {
 //     this.cart = { items: [] };
 //     return this.save();
@@ -237,7 +252,9 @@ userSchema.methods.addReq = function (task) {
         date: task.date,
         comment: task.comment,
         type: task.type,
-        status: "neobradjen"
+        status: "neobradjen",
+        time: task.time,
+        requestId: task._id
     });
 
     updatedlist = {
@@ -268,6 +285,8 @@ userSchema.methods.addOrder = function (order) {
     this.cart = { items: [] };
     return this.save();
 }
+
+
 
 module.exports = mongoose.model('User', userSchema);
 

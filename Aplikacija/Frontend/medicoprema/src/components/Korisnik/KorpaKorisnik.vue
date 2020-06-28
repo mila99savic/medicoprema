@@ -43,20 +43,10 @@ export default {
 
                 today = yyyy + '-' + mm + '-' + dd;
 
-                const formData = new FormData();
-                formData.append('DeliveryAddress', '');
-                formData.append('userId', getUserInfo().userID);
-                formData.append('Date', today);
-                formData.append('productPrice', this.izracunajCenu());
-                this.items.forEach((item, index)=> {
-                    formData.append("items[" + index + "].productId",item.productId);
-                    formData.append("items[" + index + "].quantity", item.quantity);
-                    formData.append("items[" + index + "].title", item.productTitle);
-                    formData.append("items[" + index + "].productPrice", item.productPrice);
-                });
-                fetch(destinationUrl + "/shop/create-order", {
-                    method: 'POST', body: formData
-                }).then(response => response.ok ? response.json() : new Error())
+                 var data = {
+                    userId: getUserInfo().userID
+                }
+                apiFetch('POST', destinationUrl + "/shop/create-order", data)
                 .then(result=>{
                     if(result.Success)
                     {
@@ -86,8 +76,14 @@ export default {
                         productId: cartItem.productId,
                         userId: getUserInfo().userID
                     }
-                apiFetch('DELETE', destinationUrl + "/shop/cart-delete-item", body);
-              //  fetch(destinationUrl + "/shop/cart-delete-item", {responseType: 'text'}, {method: "DELETE", formData});           
+                apiFetch('DELETE', destinationUrl + "/shop/cart-delete-item", body)
+                .then(result => {
+                    if(result.Success)
+                    {
+                        this.$message({message: "Uspešno ste obrisali proizvod iz korpe", type: "success"});
+                        this.items = [];
+                    }
+                })     
             
         }
     },
@@ -101,7 +97,7 @@ export default {
                 }
                 // this.preloadImages();
             }).catch(error => console.log(error));
-        console.log(this.items);
+        // console.log(this.items);
     }
 }
 </script>

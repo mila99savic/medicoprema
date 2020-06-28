@@ -1,5 +1,6 @@
 const Task = require('../models/task');
 const User = require('../models/user');
+const Request = require('../models/request')
 
 const { taskValidation } = require('../validation');
 
@@ -56,23 +57,32 @@ exports.addTask = async (req, res, next) => {
 }
 
 exports.assignTask = async (req, res, next) => {
+    const kor = await User.findById(req.body.korisnikid);
     const task = new Task({
         location: req.body.location,
         date: req.body.date,
         comment: req.body.comment,
         type: req.body.type,
+        time: req.body.time,
         korisnikid: req.body.korisnikid,
-        numberKorisnika: req.body.num,
-        zaposleniId: req.params.zaposleniId
+        numberKorisnika: kor.number,
+        zaposleniId: req.body.zaposleniId,
+        requestId: req.body.requestId
     });
     try {
-        User.findById(req.params.zaposleniId).then(zaposlen => {
+        Request.findById(req.body.requestId)
+        .then(requ => {
+            requ.status = "potvrdjen";
+            console.log(requ)
+            return requ.save()
+        })
+        User.findById(req.body.zaposleniId)
+        .then(zaposlen => {
             return zaposlen.addTask(task)
         })
         
         res.status(201).json({
-            message: 'Dodeljena je obaveza(zakazivanje) i dodeljena zaposlenom',
-            task: task
+            Success: true
         });
     }
     catch (err) {

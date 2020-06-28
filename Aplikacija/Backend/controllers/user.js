@@ -6,7 +6,7 @@ exports.getUsers = async (req, res) => {
   try {
     const users = await User.find()
     res
-      .json({Data: users })
+      .json({ Data: users })
   }
   catch (err) {
     res.json({ success: false });
@@ -15,12 +15,12 @@ exports.getUsers = async (req, res) => {
 };
 
 exports.getUserById = async (req, res) => {
-  try{
+  try {
     const user = await User.findById(req.params.userId);
-    Data = {name: user.name, lastname: user.lastname, address: user.address, email: user.email, password: user.password, number: user.number}
+    Data = { name: user.name, lastname: user.lastname, address: user.address, email: user.email, password: user.password, number: user.number }
     res.json({ message: 'pribavljen je korisnik', user: user, Data })
   }
-  catch(err){
+  catch (err) {
     res.json({ success: false });
     console.log(err);
   }
@@ -29,8 +29,8 @@ exports.getUserById = async (req, res) => {
 exports.getAllEmployed = async (req, res, next) => {
   try {
     const users = await User.find()
-    
-    const usersEmployed = await User.find({"usertype": 1})
+
+    const usersEmployed = await User.find({ "usertype": 1 })
     res.status(200)
       .json({ Data: usersEmployed })
   }
@@ -58,20 +58,47 @@ exports.updateUser = async (req, res, next) => {
   if (error)
     return res.status(400).send(error.details[0].message);
   const salt = await bcryptjs.genSalt(10);
-  const hashedPw = await bcryptjs.hash(req.body.password, salt);
+  // const hashedPw = await bcryptjs.hash(req.body.password, salt);
 
-  const user = await User.findById(req.params.userId)
-  user.name = user.name;
-  user.email = user.email;
-  user.password = hashedPw;
+  const user = await User.findById(req.body.userId)
+  const oldPass = req.body.oldPass
+  const newPass = req.body.newPass
+
+  const goodPassword = checkPassword(oldPass, user.password)
+  if (goodPassword) {
+    const hashedPw = await bcryptjs.hash(req.body.newPass, salt);
+    user.password = hashedPw
+  }
   try {
     const savedUser = await user.save()
-    res.json({ Success: true, savedUser });
+    res.json({ Success: true });
   }
   catch (err) {
     res.json({ success: false });
     console.log(err);
+    // }
   }
+  exports.checkPassword = (password, hash) => {
+    return bcrypt.compareSync(password.toString(), hash)
+  }
+  // const { error } = updateUserValidation(req.body);
+  // if (error)
+  //   return res.status(400).send(error.details[0].message);
+  // const salt = await bcryptjs.genSalt(10);
+  // const hashedPw = await bcryptjs.hash(req.body.password, salt);
+
+  // const user = await User.findById(req.body.userId)
+  // // user.name = user.name;
+  // user.email = user.email;
+  // user.password = hashedPw;
+  // try {
+  //   const savedUser = await user.save()
+  //   res.json({ Success: true, savedUser });
+  // }
+  // catch (err) {
+  //   res.json({ success: false });
+  //   console.log(err);
+  // }
 };
 
 exports.deleteUser = async (req, res, next) => {

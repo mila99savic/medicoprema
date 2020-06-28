@@ -57,7 +57,7 @@ exports.postCart = async (req, res, next) => {
     const user = await User.findById(req.body.userId);
     Product.findById(req.body.productId)
       .then(product => {
-        res.status(200)
+        res.json({ Success: true })
         return user.addToCart(product);
       })
       .catch(err => console.log(err))
@@ -72,7 +72,7 @@ exports.cartDeleteProduct = async (req, res, next) => {
   try {
     const user = await User.findById(req.body.userId)
     user.removeFromCart(req.body.productId);
-    res.status(200);
+    res.status(200).json({ Success: true });
   }
   catch (err) {
     res.json({ Success: false });
@@ -80,49 +80,6 @@ exports.cartDeleteProduct = async (req, res, next) => {
   }
 };
 
-// exports.postOrder = async (req, res, next) => {
-//   const { error } = orderValidation(req.body);
-//   if (error)
-//     return res.status(400).send(error.details[0].message);
-
-//   const userId = req.body.userId;
-//   try {
-//     const user = await User.findById(userId)
-//     user
-//       .populate('cart.items.productId ')
-//       .execPopulate()
-//       .then(user => {
-//         const products = user.cart.items.map(i => {
-//           return { quantity: i.quantity, product: { ...i.productId._doc } };
-//           //_doc- samo podaci iz dokumenta(objecta)
-//         }); 
-
-//       const products1 = user.cart.items;
-//       let total = 0;
-//       products1.forEach(p => {
-//         total += p.quantity * p.productPrice;
-//         console.log(total)
-  //     })
-  //       const order = new Order({
-  //           date: Date.now(),
-  //           address: user.address,
-  //           number: user.number,
-  //           name: user.name,
-  //           price: total
-  //       });
-  //       return order.save();
-  //     })
-  //     // .then(user => {
-  //     //   return user.addOrder(order)
-  //     // })
-  //     // return user.clearCart();
-  //     return user.addOrder(order)
-  // }
-  // catch (err) {
-  //   res.json({ success: false });
-  //   console.log(err);
-  // }
-// };
 exports.postOrder = async (req, res, next) => {
   const { error } = orderValidation(req.body);
   if (error)
@@ -159,12 +116,13 @@ exports.postOrder = async (req, res, next) => {
         return order.save();
       })
       .then(order => {
+        res.json({ Success: true });
         return user.addOrder(order);
       })
       .catch(err => console.log(err));
   }
   catch (err) {
-    res.json({ success: false });
+    res.json({ Success: false });
     console.log(err);
   }
 };
@@ -241,3 +199,22 @@ exports.getOrdersByUserId = async (req, res, next) => {
   }
 }
 
+exports.updateOrderState = async (req, res, next) => {
+  try {
+    const ord = await Order.findById(req.body.ordId)
+    const vrednost = req.body.vrednost
+    console.log(ord)
+    if (vrednost == 1) {
+      ord.status = "potvrdjen"
+    }
+    else if (vrednost == 2)
+      ord.status = "odbijen"
+    res.status(200)
+      .json({ Success: true })
+      return ord.save()
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+}

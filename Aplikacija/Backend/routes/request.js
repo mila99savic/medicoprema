@@ -8,7 +8,9 @@ router.get('/getByUserId/:userId', requestController.getByUserId)
 
 router.post('/add', requestController.addRequest);
 
-router.delete('/delete/:reqId', requestController.deleteRequest);
+router.put('/rejectRequest', requestController.rejectRequest);
+
+router.delete('/delete', requestController.deleteRequest);
 
 // router.delete('/delete', requestController.deleteResolvedRequests)
 

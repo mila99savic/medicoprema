@@ -14,7 +14,7 @@ router.get('/getAllEmployed', userController.getAllEmployed);
 
 router.get('/find/:userEmail', userController.findByEmail)
 
-router.put('/edit/:userId', userController.updateUser);
+router.put('/edit', userController.updateUser);
 
 router.delete('/delete/:userId', userController.deleteUser);
 
