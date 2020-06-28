@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const bcryptjs = require('bcryptjs');
 const { updateUserValidation } = require('../validation')
+const controller = require('../controllers/auth')
 
 exports.getUsers = async (req, res) => {
   try {
@@ -64,7 +65,7 @@ exports.updateUser = async (req, res, next) => {
   const oldPass = req.body.oldPass
   const newPass = req.body.newPass
 
-  const goodPassword = checkPassword(oldPass, user.password)
+  const goodPassword = controller.checkPassword(oldPass, user.password)
   if (goodPassword) {
     const hashedPw = await bcryptjs.hash(req.body.newPass, salt);
     user.password = hashedPw
@@ -77,9 +78,6 @@ exports.updateUser = async (req, res, next) => {
     res.json({ success: false });
     console.log(err);
     // }
-  }
-  exports.checkPassword = (password, hash) => {
-    return bcrypt.compareSync(password.toString(), hash)
   }
   // const { error } = updateUserValidation(req.body);
   // if (error)

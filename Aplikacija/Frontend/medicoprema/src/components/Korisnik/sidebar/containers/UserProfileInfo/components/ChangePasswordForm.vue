@@ -53,28 +53,22 @@ import { getUserInfo } from '../../../../../../services/contextManagement';
                 return true;
             },
             potvrdiUnos: function(){
-                // if(this.validacijaPassworda()){
+                if(this.validacijaPassworda()){
                     let data = {
                         userId: getUserInfo().userID,
                         oldPass: this.oldPass,
                         newPass: this.newPass
                     }
+                    console.log(data)
                     apiFetch('PUT', destinationUrl + "/user/edit", data)
                     .then(result => {
-                        // if(result.Success) {
                             console.log(result)
                             this.$message({message: "Uspesno ste promenili lozinku", type: "success"});
                             this.clearFormFilds();
                             this.$emit("closeChangePasswordForm");
-                        // }
-                        // else if(result.Errors != null) {
-                        //     result.Errors.forEach(error => this.$message({
-                        //         message: ERRORS[error.Code],
-                        //         type: "warning"
-                        //     }));
-                        // }
+                        
                     });
-                // }
+                }
             },
             ponistiUnos: function(){
                 this.clearFormFilds();

@@ -59,3 +59,7 @@ exports.login = async (req, res, next) => {
   res.json({ AuthToken: token, Success: true, Data });
 }
 
+exports.checkPassword = (password, hash) => {
+  return bcryptjs.compareSync(password.toString(), hash)
+}
+
