@@ -4,7 +4,7 @@
             <evidencija-clanova v-if="this.showComp == 'evidencijaclanova'"></evidencija-clanova>
             <narudzbina v-if="this.showComp == 'narudzbina'"></narudzbina>
             <pocetna-strana hidden></pocetna-strana>
-            <utisak-uprave v-if="this.showComp == 'utisakuprave'"></utisak-uprave>
+            <!-- <utisak-uprave v-if="this.showComp == 'utisakuprave'"></utisak-uprave> -->
             <zakazivanja v-if="this.showComp == 'zakazivanja'" ></zakazivanja>
             <proizvodi-uprave v-if="this.showComp == 'proizvodiuprave'"></proizvodi-uprave>
        </custom-bar>
@@ -17,13 +17,13 @@ import CustomBar from "../components/CustomBar"
 import PocetnaStrana from "../components/PocetnaStrana.vue"
 import EvidencijaClanova from "../components/EvidencijaClanova.vue"
 import Narudzbina from "../components/Narudzbina.vue"
-import UtisakUprave from "../components/UtisakUprave.vue"
+// import UtisakUprave from "../components/UtisakUprave.vue"
 import Zakazivanja from "../components/Zakazivanja.vue"
 import ProizvodiUprave from "../components/ProizvodiUprave.vue"
 import {setPageShown, getPageToShow, getUserInfo } from "../services/contextManagement"
 export default {
     // eslint-disable-next-line vue/no-unused-components
-    components:{CustomBar, PrikazObaveza, EvidencijaClanova, Narudzbina, PocetnaStrana, UtisakUprave, Zakazivanja, ProizvodiUprave},
+    components:{CustomBar, PrikazObaveza, EvidencijaClanova, Narudzbina, PocetnaStrana, Zakazivanja, ProizvodiUprave},
     data(){
         return{
             menuItems: [
@@ -39,26 +39,26 @@ export default {
                     index: 'narudzbina',
                     slika: 'narudzbine.png'
                 },
+                // {
+                //     key: 3,
+                //     label: 'Utisci',
+                //     index: 'utisakuprave',
+                //     slika: 'utisak.png'
+                // },
                 {
                     key: 3,
-                    label: 'Utisci',
-                    index: 'utisakuprave',
-                    slika: 'utisak.png'
-                },
-                {
-                    key: 4,
                     label: 'Proizvodi',
                     index: 'proizvodiuprave',
                     slika: 'proizvodi.png'
                 },
                 {
-                    key: 5,
+                    key: 4,
                     label: 'Evidencija članova',
                     index: 'evidencijaclanova',
                     slika: 'evidencijaclanova.png'
                 }
             ],
-            showComp: 'utisakuprave',
+            showComp: 'proizvodiupsrave',
             userId: -1,
             userType: 'uprava'
         }

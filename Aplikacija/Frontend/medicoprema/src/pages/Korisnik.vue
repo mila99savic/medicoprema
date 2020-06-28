@@ -37,7 +37,7 @@ export default {
                     key:2,
                     label: 'Proizvodi',
                     index: 'proizvodi'
-                }
+                },
             ],
             showComp: 'profil',
             userType: ''

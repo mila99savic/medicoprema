@@ -1,53 +1,69 @@
 <template>
     <div class="utisak-o-proizvodu">
-        <el-dialog visible class="dialog" width="30%" center>
+        <!-- <el-dialog visible class="dialog" width="30%" center> -->
+        <!-- <el-form> -->
             <el-popover>
                 <img :src="Logo" style="height:50px; width: 150px; margin: 0 auto; display:flex; justify-self: center;" slot="reference"/> 
             </el-popover>
             <h5>Dodaj utisak o proizvodu</h5>
-            <!-- <label class="form-line">Tekst:</label> -->
-            <el-input type="textarea" v-model="savedComm" :rows="10"></el-input>
-            <div class="dugme">
-                <el-button @click="potvrdiUnos" type="success" round style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Sačuvaj</el-button>
-                <el-button @click="ponisti" type="danger" round style="color:rgba(24, 102, 89, 0.925); background-color: white; border-color:white">Poništi</el-button>
+            <div>
+            <label>Proizvod:</label>
+                <el-input v-model="data.nameProduct"></el-input>
             </div>
-        </el-dialog>
+            <label class="form-line">Komentar:</label>
+            <el-input type="textarea" v-model="data.content" :rows="10"></el-input>
+            <div class="dugme">
+                <el-button @click="potvrdiUnos()" type="success" round style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Sačuvaj</el-button>
+                <!-- <el-button @click="ponisti" type="danger" round style="color:rgba(24, 102, 89, 0.925); background-color: white; border-color:white">Poništi</el-button> -->
+            </div>
+        <!-- </el-form> -->
+        <!-- </el-dialog> -->
     </div>
 </template>
 
 <script>
 import logofirme2 from '../../assets/logofirme2.png';
 import { destinationUrl, apiFetch } from '../../services/authFetch';
+import { getUserInfo } from '../../services/contextManagement';
 
 export default {
     data() {
         return{
             Logo: logofirme2,
-            savedComm:''
+            data:{
+                nameProduct:'',
+                content: '',
+                korisnikid:''
+            }
+
         }
     },
     methods: {
-        potvrdiUnos: async function(){
-         await apiFetch('POST', destinationUrl + "/comment/add", this.savedComm)
-            .then(response => {
-                if(response.Success)
-                    this.$message('Dodali ste prizvod!');
-                else{
-                    this.$message('doslo je do greske!');
-            }
+        potvrdiUnos(){
+            this.data.korisnikid = getUserInfo().userID;       
+            console.log(this.data);
 
-                 }).catch(err => console.log(err))
-        },
-        ponisti: function () {
-            this.$emit('zavrsenUnos', 'cancel')
-        } 
+            apiFetch('POST', destinationUrl + "/comment/add", this.data)
+                .then(response => {
+                    console.log(response);
+                    if(response.Success)
+                        this.$message('Dodali ste utisak!');
+                    else{
+                        this.$message('Doslo je do greske!');
+                }
+
+                    }).catch(err => console.log(err));
+            },
+        // ponisti: function () {
+        //     this.$emit("zavrsenaPromena",'cancel');
+        // }
     }
 }
 </script>
 
 <style scoped>
     .utisak-o-proizvodu{
-        display: flex;
+        /* display: flex; */
         width: 100%;
         height: 100%;
     }
@@ -57,7 +73,7 @@ export default {
     }
     .dugme{
         display: flex;
-        justify-savedComm: space-between;
+        justify-content: space-between;
         margin-top: 5%;
     }
 </style>

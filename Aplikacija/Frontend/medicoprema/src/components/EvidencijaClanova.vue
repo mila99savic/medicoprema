@@ -24,9 +24,8 @@
                         </el-input>
                     </template>
                     <template slot-scope="scope">
-                        <el-button  size="mini" type="danger" @click="deleteUser(scope.row._id)">
+                        <el-button  size="mini" type="danger" @click="deleteUser(scope.row._id)" v-if="scope.row.usertype == userTypes[employedUserType]">
                             Obriši
-                            <!-- v-if="scope.row.usertype == userTypes[employedUserType]" -->
                         </el-button>
                     </template>
                 </el-table-column>
@@ -77,6 +76,7 @@ export default {
             this.loadDataTable();
         },
         loadDataTable(){
+            this.user=event;
             apiFetch('GET',destinationUrl+"/user/users")
                 .then(result=>{
                     this.tableData=result.Data;

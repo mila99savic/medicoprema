@@ -13,6 +13,17 @@ const registerValidation = (data) => {
     return schema.validate(data);
 };
 
+const registerEmployedValidation = (data) => {
+    const schema = Joi.object({
+        name: Joi.string().min(3).required(),
+        lastname: Joi.string().min(3).required(),
+        email: Joi.string().min(6).required().email(),
+        username: Joi.string().min(3).required(),
+        password: Joi.string().min(6).required()
+    });
+    return schema.validate(data);
+};
+
 const loginValidation = (data) => {
     const schema = Joi.object({
         email: Joi.string().min(6).required().email(),
@@ -31,7 +42,8 @@ const updateUserValidation = (data) => {
 const commentValidation = (data) => {
     const schema = Joi.object({
         content: Joi.string().min(2).required(),
-        productid: Joi.string().required(),
+        nameProduct: Joi.string().required(),
+        productid: Joi.string(),
         korisnikid: Joi.string().required()
     });
     return schema.validate(data);
@@ -88,6 +100,7 @@ const orderValidation = (data) => {
     return schema.validate(data);
 }
 module.exports.registerValidation = registerValidation;
+module.exports.registerEmployedValidation = registerEmployedValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.updateUserValidation = updateUserValidation;
 module.exports.commentValidation = commentValidation;

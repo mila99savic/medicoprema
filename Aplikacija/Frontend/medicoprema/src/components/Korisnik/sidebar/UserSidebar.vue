@@ -5,6 +5,8 @@
                 <user-profile-info-page v-if="this.showComp == 'profil'" />
                 <user-requests v-if="this.showComp == 'zakazivanja'" />
                 <narudzbine-korisnik v-if="this.showComp == 'narudzbine'"/>
+                <utisak-o-proizvodu v-if="showComp == 'utisci'"></utisak-o-proizvodu>
+
              </div>
         </div>
 </template>
@@ -13,6 +15,8 @@
 import FooterBar from "../../appBar/FooterBar.vue";
 import SideBarProfil from "../../appBar/SideBar.vue";
 import PromenaLozinke from "../../forme/FormPromeniLozinku.vue";
+import UtisakOProizvodu from "../../UtisakOProizvodu.vue"
+
 // import {getUserInfo} from "../../../services/contextManagement.js";
 // import {destinationUrl} from "../../../services/authFetch.js";
 import UserProfileInfoPage from "./containers/UserProfileInfo/UserProfileInfoPages.vue";
@@ -21,7 +25,7 @@ import NarudzbineKorisnik from "./containers/NarudzbineKorisnik.vue";
 export default {
     components: {
         // eslint-disable-next-line vue/no-unused-components
-        FooterBar, SideBarProfil, UserRequests, PromenaLozinke, UserProfileInfoPage, NarudzbineKorisnik
+        FooterBar, UtisakOProizvodu, SideBarProfil, UserRequests, PromenaLozinke, UserProfileInfoPage, NarudzbineKorisnik
     },
     data() {
         return{
@@ -41,15 +45,20 @@ export default {
                     slika: 'narudzbine.png'
                 },
                 {
-                    key: 3,
+                    key:3,
+                    label:'Utisci o proizvodima',
+                    index:'utisci',
+                    slika:'utisak.png'
+                },
+                {
+                    key: 4,
                     label: 'Profil',
                     index: 'profil',
                     slika: 'evidencijaclanova.png'
-                    // dodaj sliku!
                 }
             ],
-            user: {FirstName: '', LastName: '', Email: '', Password: '',
-                JMBG: '', Adress: '', PhoneNumber: '' }
+            user: {name: '', lastname: '', username:'', email: '', password: '',
+                address: '', number: '' }
         }
     },
     methods: {

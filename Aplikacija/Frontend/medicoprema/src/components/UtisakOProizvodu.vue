@@ -5,14 +5,14 @@
             <el-table :data="this.listaUtisaka" style="height:300px; width:1000px; background: linear-gradient(0deg, #bccecfc7, #fcfcfcab);">
                 <el-table-column prop="content" label="Komentar" class="table-column"></el-table-column>
                 <el-table-column prop="date" label="Datum" class="table-column"></el-table-column>
-                <el-table-column prop="nameKorisnika" label="Ime proizvoda" class="table-column"></el-table-column>
-                <!-- <el-table-column prop="addressKorisnika" label="Adresa korisnika" class="table-column"></el-table-column> -->
-                <el-table-column align="center">
+                <el-table-column prop="nameProduct" label="Ime proizvoda" class="table-column" sortable></el-table-column>
+                <!-- <el-table-column prop="korisnikid" label="Ime korisnika" class="table-column"></el-table-column> -->
+                <!-- <el-table-column align="center">
                     <template slot-scope="scope">
                         <el-button type="danger" icon="el-icon-delete" circle size="mini" 
-                            @click="deleteProductItem(scope.row._id)"></el-button>
+                            @click="deleteProductItem(scope.row._id)"   v-if="scope.row.usertype == userTypes[regularUserType]"></el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
             <div class="dodaj-dugme">
             <el-button @click="formaDodavanje = true" style="color:white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" type="success" class="dugme-za-dodavanje" circle>
@@ -20,7 +20,7 @@
             </el-button>         
             </div>
             <el-dialog :before-close="handleFormClose" :visible.sync="formaDodavanje">
-                <form-dodaj-utisak-o-korisniku @zavrsenUnos="prihvatiUnos($event)"></form-dodaj-utisak-o-korisniku>
+                <form-dodaj-utisak-o-proizvodu @zavrsenUnos="prihvatiUnos($event)"></form-dodaj-utisak-o-proizvodu>
             </el-dialog>
         </div>
         <!-- <form-dodaj-proizvod v-if="this.showComp == 'dodaj'" @zatvoriDodavanjeProizvoda="zavrsiDodavanje"></form-dodaj-proizvod> -->
@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import PrikazUtisakaOKorisniku from "./prikazi/PrikazUtisakaOKorisniku.vue";
-import FormDodajUtisakOKorisniku from "./forme/FormDodajUtisakOKorisniku.vue";
+import PrikazUtisakaOProizvodu from "./prikazi/PrikazUtisakaOProizvodu.vue";
+import FormDodajUtisakOProizvodu from "./forme/FormDodajUtisakOProizvodu.vue";
 import { apiFetch, destinationUrl } from '../services/authFetch'
-// import { setPageShown } from '../services/contextManagement'
+import { setPageShown } from '../services/contextManagement'
 export default {
         // eslint-disable-next-line vue/no-unused-components
-    components:{ PrikazUtisakaOKorisniku, FormDodajUtisakOKorisniku},
+    components:{ PrikazUtisakaOProizvodu, FormDodajUtisakOProizvodu},
     data(){
         return{
             listaUtisaka:[],
@@ -43,43 +43,39 @@ export default {
         }
     },
     methods:{
-        deleteProductItem(index){
-            //let productId = getProductInfo().productID;
-             //this.indeksIzabranogProizvoda = index;
-             console.log(index);
-            //console.log(id);
-            apiFetch('DELETE', destinationUrl + "/admin/deleteProduct/" + index)
-                .then(result =>{
-                    if(result.Success){
-                        this.$message("Proizvod je uspešno obrisan!");
-                        this.$emit("loadDataTable");
-                    }
-                }).catch(error=>{console.log(error);})
+        // deleteProductItem(index){
+        //     apiFetch('DELETE', destinationUrl + "/comment/delete/" + index)
+        //         .then(result =>{
+        //             if(result.Success){
+        //                 this.$message("Proizvod je uspešno obrisan!");
+        //                 this.$emit("loadDataTable");
+        //             }
+        //         }).catch(error=>{console.log(error);})
+        // },
+        handleFormClose: function () {
+            this.formaDodavanje = false;
         },
-        // handleFormClose: function () {
-        //     this.formaDodavanje = false;
-        // },
-        // prihvatiUnos: function(event){
-        //     this.formaDodavanje = false
-        //     if (event === 'cancel')
-        //         return
-        //     if (this.userId == '') {
-        //         this.$message({message: "Problem sa autentifikacijom. Molimo vas prijavite se ponovo.", type: 'error'})
-        //     }
-        //     event.id_zaposleni = this.userId;
-        //     // this.sacuvajUtisak(event)
-        //     this.loadDataTable()
-        // },
-        // dodajProizvod:function(){
-        //     this.showComp='dodaj';
-        //     setPageShown('dodaj');
-        // },
+        prihvatiUnos: function(event){
+            this.formaDodavanje = false
+            if (event === 'cancel')
+                return
+            if (this.userId == '') {
+                this.$message({message: "Problem sa autentifikacijom. Molimo vas prijavite se ponovo.", type: 'error'})
+            }
+            event.id_zaposleni = this.userId;
+            // this.sacuvajUtisak(event)
+            this.loadDataTable()
+        },
+        dodajProizvod:function(){
+            this.showComp='dodaj';
+            setPageShown('dodaj');
+        },
         zavrsiDodavanje(){
             this.showComp='';
             this.loadDataTable();
         },
         loadDataTable(){
-            apiFetch('GET', destinationUrl + "/impression/all")
+            apiFetch('GET', destinationUrl + "/comment/all")
                 .then(result=>{
                     this.listaUtisaka=result.Data;
                 });
@@ -98,6 +94,7 @@ export default {
     .utisci-korisnika-container{
         height: 100%;
         width: 100%;
+        display:flex;
     }
     .utisci-korisnika{
         height: 100%;
@@ -127,8 +124,8 @@ export default {
         /* display: flex; */
         /* justify-content: center; */
         margin-bottom: 15px;
-        margin-left: 20%;
-        margin-right: 20%;
+        /* margin-left: 20%; */
+        margin-right: 15%;
         width: 100%;
     }
     @media screen and (max-width: 700px) {
