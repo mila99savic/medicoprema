@@ -45,8 +45,8 @@
 
 <script>
 import logofirme2 from '../../assets/logofirme2.png';
-import {setUserInfo } from "../../services/contextManagement";
- import { apiFetch, destinationUrl, EMPLOYED_USER_TYPE } from "../../services/authFetch";
+// import {setUserInfo } from "../../services/contextManagement";
+ import { apiFetch, destinationUrl} from "../../services/authFetch";
 // import { ERRORS } from '../../data/errorsCode';
 export default {
     data() {
@@ -74,7 +74,8 @@ export default {
                         // console.log(result);
                                 if(result.Success) {
                                     // console.log(result);
-                                    setUserInfo(result.Data.id, EMPLOYED_USER_TYPE);
+                                    // setUserInfo(result.Data.id, EMPLOYED_USER_TYPE);
+                                    // window.location.href = "/" + UserTypes[ADMIN_USER_TYPE];
                                     this.$message('Uspesno dodat novi zaposleni!');
                                 }
                                 else{

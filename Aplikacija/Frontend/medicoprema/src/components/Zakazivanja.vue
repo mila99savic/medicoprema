@@ -1,6 +1,6 @@
 <template>
     <div class="zakazivanja-container">
-        <prikaz-liste-zahteva :notification="obavestenje" @poruka="otvoriPoruku" @datum="pribaviDatum($event)" @potvrdjeni="potvrdjeniDatum($event)"></prikaz-liste-zahteva>
+        <prikaz-liste-zahteva @datum="pribaviDatum($event)" @potvrdjeni="potvrdjeniDatum($event)"></prikaz-liste-zahteva>
         <!-- <obavesti-korisnika-zakazivanja v-if="this.showComp == 'obavestenje'" @zatvoriPoruku="zatvori" @proslediPoruku="prosledi($event)"></obavesti-korisnika-zakazivanja > -->
     </div>
 </template>
@@ -9,10 +9,11 @@
 import {Calendar} from 'element-ui'
 import FormZakazi from "./forme/FormZakazi.vue"
 import PrikazListeZahteva from "./prikazi/PrikazListeZahteva"
-import ObavestiKorisnika from "./ObavestiKorisnika.vue"
+// import { destinationUrl, apiFetch } from '../services/authFetch';
+// import ObavestiKorisnikaZakazivanja from "./ObavestiKorisnikaZakazivanja.vue"
 export default {
     // eslint-disable-next-line vue/no-unused-components
-    components:{Calendar, FormZakazi, PrikazListeZahteva, ObavestiKorisnika},
+    components:{Calendar, FormZakazi, PrikazListeZahteva},
     data(){
         return{
             value: new Date(),
@@ -28,20 +29,18 @@ export default {
     methods: {
         // zatvori(){
         //     this.showComp='';
-        //     this.selectedIndex='';
         // },
-        // dodajPoruku(index){
+        // otvoriPoruku(){
         //     this.showComp='obavestenje';
-        //     this.selectedIndex=index;  
         // },
         // prosledi(prosledjenoObavestenje){
         //     // console.log(this.listaNarudzbina[this.selectedIndex]);
-
-        //      let Data = {ordId: '', notification: ''};
-        //         Data.ordId = this.listaNarudzbina[this.selectedIndex]._id
+        //     console.log(prosledjenoObavestenje);
+        //      let Data = {reqId: '', notification: ''};
+        //         Data.reqId = prosledjenoObavestenje
         //         Data.notification = prosledjenoObavestenje
-        //         console.log(Data);
-        //     apiFetch('PUT', destinationUrl + "/shop/updateOrderNotification", Data)
+        //         // console.log(Data);
+        //     apiFetch('PUT', destinationUrl + "/request/updateRequestNotification", Data)
         //         .then(result =>{
         //             if(result.Success)
         //             {

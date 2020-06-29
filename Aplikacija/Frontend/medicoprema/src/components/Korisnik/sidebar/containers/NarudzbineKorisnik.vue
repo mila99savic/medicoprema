@@ -14,6 +14,7 @@
                 <el-table-column min-width="20%" prop="price" label="Ukupna cena (din)"></el-table-column>
                 <el-table-column min-width="20%" prop="number" label="Telefon"></el-table-column>
                 <el-table-column min-width="20%" prop="status" label="Status"></el-table-column>
+                <el-table-column min-width="20%" prop="notification" label="Notifikacija"></el-table-column>
                 <el-table-column width="50">
                     <template slot-scope="scope">
                         <el-button type="info" icon="el-icon-message" circle size="mini" @click="prikaziPoruku(scope.row)"></el-button>

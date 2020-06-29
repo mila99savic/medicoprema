@@ -10,4 +10,6 @@ router.post('/add', taskController.addTask);
 
 router.post('/assign', taskController.assignTask)
 
+router.delete('/delete/:taskId', taskController.deleteTask)
+
 module.exports = router;

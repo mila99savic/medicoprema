@@ -7,6 +7,7 @@ const { taskValidation } = require('../validation');
 exports.getTasks = async (req, res, next) => {
     try {
         const tasks = await Task.find()//find vraca proizvod a ne kursor
+        console.log(tasks);
         res.status(200)
             .json({ message: 'Prikupljene obaveze', tasks: tasks })
     }
@@ -19,6 +20,8 @@ exports.getTasks = async (req, res, next) => {
 exports.getTasksByUserId = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.zaposleniId)
+        // Data = {date: tasks.date, location: tasks.location, number: tasks.number, type: tasks.type, comment: tasks.comment}
+
         //const kor = await User.findById(user.listoftasks.korisnikid)
         // console.log(user.listoftasks.tasks)
         res.status(200)
@@ -90,3 +93,15 @@ exports.assignTask = async (req, res, next) => {
         console.log(err);
     }
 }
+
+
+exports.deleteTask = async (req, res, next) => {
+    const task = await Task.findByIdAndRemove(req.params.taskId)
+    try {
+      res.json({ Success: true, message: "Obrisano!" });
+    }
+    catch (err) {
+      res.json({ Success: false });
+      console.log(err);
+    }
+  }

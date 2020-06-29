@@ -12,16 +12,8 @@
         <el-table-column prop="time" label="Vreme" class="table-column"></el-table-column>
         <el-table-column prop="location" label="Lokacija" class="table-column"></el-table-column>
         <el-table-column prop="type" label="Tip" class="table-column"></el-table-column>
-        <el-table-column prop="status" align="center" label="Status">
-          <!-- <template slot-scope="scope" label="Status">
-                        <el-button v-if="scope.row.status == 1" type="success"
-                            icon="el-icon-check" circle @click="obavestenje(scope.row)"></el-button>
-                        <el-button v-if="scope.row.status == 2" type="danger"
-                            icon="el-icon-close" circle @click="obavestenje(scope.row)"></el-button>
-                        <el-button v-if="scope.row.status == 3" type="warning"
-                            icon="el-icon-quesstion" circle @click="obavestenje(scope.row)"></el-button>
-          </template> -->
-        </el-table-column>
+        <el-table-column prop="status" align="center" label="Status"></el-table-column>
+         <el-table-column prop="notification" align="center" label="Notifikacija"></el-table-column>
         <el-table-column align="right" label="Obriši">
           <template slot-scope="scope">
             <el-button
