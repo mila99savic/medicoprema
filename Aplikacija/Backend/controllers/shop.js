@@ -100,7 +100,6 @@ exports.postOrder = async (req, res, next) => {
         let total = 0;
         products1.forEach(p => {
           total += p.quantity * p.productPrice;
-          console.log(total)
         })
         const order = new Order({
           date: Date.now(),
@@ -112,12 +111,11 @@ exports.postOrder = async (req, res, next) => {
           userId: user._id,
           products: products
         });
-        console.log("radi");
         return order.save();
       })
       .then(order => {
         res.json({ Success: true });
-        return user.addOrder(order);
+        return user.addOrder(order._id);
       })
       .catch(err => console.log(err));
   }
@@ -184,14 +182,11 @@ exports.getUnOrders = async (req, res, next) => {
 
 exports.getOrdersByUserId = async (req, res, next) => {
   try {
-    const user = await User.findById(req.params.userId)
-    // const ord = user.listoforders;
-    // ord.forEach(o => {
-    //   console.log(o.orderId)
-    // });
-    res.status(200)
+    // const user = await User.findById(req.params.userId)
+    const orders = await Order.find({userId: req.params.userId})
 
-      .json({ Data: user.listoforders, Success: true })
+    res.status(200)
+      .json({ Data: orders, Success: true })
   }
   catch (err) {
     res.json({ Success: false });
@@ -200,18 +195,43 @@ exports.getOrdersByUserId = async (req, res, next) => {
 }
 
 exports.updateOrderState = async (req, res, next) => {
+  const o = await Order.findById(req.body.ordId)
   try {
-    const ord = await Order.findById(req.body.ordId)
-    const vrednost = req.body.vrednost
-    console.log(ord)
-    if (vrednost == 1) {
-      ord.status = "potvrdjen"
-    }
-    else if (vrednost == 2)
-      ord.status = "odbijen"
+    Order.findById(req.body.ordId)
+      .then(ord => {
+        const vrednost = req.body.vrednost
+        if (vrednost == 1) {
+          ord.status = "potvrdjen"
+        }
+        else if (vrednost == 2)
+          ord.status = "odbijen"
+        res.status(200)
+          .json({ Success: true })
+        return ord.save()
+      })
+    User.findById(o.userId)
+      .then(user => {
+        return user.save()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+}
+
+exports.updateOrderNotification = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.body.ordId);
+
+    const poruka = req.body.notification;
+    order.notification = poruka;
     res.status(200)
       .json({ Success: true })
-      return ord.save()
+    return order.save()
   }
   catch (err) {
     res.json({ Success: false });

@@ -48,12 +48,12 @@ export default {
     methods: {
         handleCurrentChange(val){
             this.currentRow = val;
-            console.log(this.currentRow.products.quantity)
+            console.log(this.currentRow.products)
             this.itemsinCart = this.currentRow.products;
         },
         prikaziPoruku(row){
             this.currentRow = row;
-            if(this.currentRow.status == "odobren")
+            if(this.currentRow.status == "potvrdjen")
                 this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.notification == null ? this.poruka1 : this.currentRow.Order.Notification, type:'success', position:'bottom-right'})
             else if(this.currentRow.status == "odbijen")
                 this.$notify({title: "OBAVEŠTENJE", message: this.currentRow.notification == null ? this.poruka2 : this.currentRow.Order.Notification, type:'error', position:'bottom-right'})
@@ -81,7 +81,7 @@ export default {
             apiFetch('GET', destinationUrl + '/shop/orderdByUserId/' + userId)
                 //.then(response => response.ok ? response.json() : new Error())
                 .then(result =>{
-                    this.listaNarudzbina = result.Data.orders;
+                    this.listaNarudzbina = result.Data;
                     // sortOrdersByDate(result.Data.orders, false);
                 })
     }

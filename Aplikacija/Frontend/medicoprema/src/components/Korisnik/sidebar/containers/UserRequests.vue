@@ -103,7 +103,7 @@ export default {
     )
       .then(result => {
         if (result.Success) {
-          this.listaZahteva = result.Data.requests;
+          this.listaZahteva = result.Data;
           console.log(this.listaZahteva);
         }
       })

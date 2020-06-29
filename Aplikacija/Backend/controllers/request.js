@@ -15,10 +15,9 @@ exports.getRequests = async (req, res, next) => {
 
 exports.getByUserId = async (req, res) => {
   try {
-    const user = await User.findById(req.params.userId)
-    //Request.findById(req.params.reqId)
-    //Data = {name: user.name, lastname: user.lastname, address: user.address, email: user.email, password: user.password, number: user.number}
-    res.json({ Data: user.listofrequests, Success: true })
+    const requests = await Request.find({korisnikid: req.params.userId})
+    // const user = await User.findById(req.params.userId)
+    res.json({ Data:requests, Success: true })
   }
   catch (err) {
     res.json({ Success: false });

@@ -67,45 +67,10 @@ const userSchema = new Schema({
             }
         ]
     },
-    listoforders: {
-        orders: [
-            {
-                orderId: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Order',
-                    required: true
-                },
-                date: {
-                    type: Date,
-                    required: true
-                },
-                address: {
-                    type: String,
-                    required: true
-                },
-                number: {
-                    type: Number,
-                    required: true
-                },
-                status:{
-                    type: String
-                },
-                name: {
-                    tpe:String
-                },
-                price: {
-                    type: String,
-                    //required: true
-                },
-                products: [
-                    {
-                      product: { type: Object, required: true },
-                      quantity: { type: Number, required: true }
-                    }
-                  ],
-            }
-        ]
-    },
+    listoforders:{
+        orders:[{
+            orderId: mongoose.Schema.Types.ObjectId
+    }]},
     listoftasks: {
         tasks: [
             {
@@ -137,29 +102,7 @@ const userSchema = new Schema({
     listofrequests: {
         requests: [
             {
-                location: {
-                    type: String
-                },
-                date: {
-                    type: String
-                },
-                comment: {
-                    //dodatni zahtev
-                    type: String
-                },
-                type: {
-                    type: String
-                },
-                time: {
-                    type: String
-                },
-                status: {
-                    type: String
-                },
-                requestId: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Request'
-                },
+                requestId: mongoose.Schema.Types.ObjectId
             }
         ]
     }
@@ -245,37 +188,22 @@ userSchema.methods.addTask = function (task) {
     this.listoftasks = updatedlist
     return this.save();
 }
-userSchema.methods.addReq = function (task) {
-    const updatedTasklist = [...this.listofrequests.requests];
-    updatedTasklist.push({
-        location: task.location,
-        date: task.date,
-        comment: task.comment,
-        type: task.type,
-        status: "neobradjen",
-        time: task.time,
-        requestId: task._id
+userSchema.methods.addReq = function (r) {
+    const updatedRlist = [...this.listofrequests.requests];
+    updatedRlist.push({
+        requestId: r._id
     });
-
     updatedlist = {
-        requests: updatedTasklist
+        requests: updatedRlist
     };
     this.listofrequests = updatedlist
     return this.save();
 }
 
-userSchema.methods.addOrder = function (order) {
+userSchema.methods.addOrder = function (orderId) {
     const updatedOrderList = [...this.listoforders.orders];
-    console.log(order._id)
     updatedOrderList.push({
-        orderId: order._id,
-        date: order.date,
-        address: order.address,
-        number: order.number,
-        status: order.status,
-        name: order.name,
-        price: order.price,
-        products: order.products
+        orderId: orderId
     });
 
     updatedlist = {

@@ -52,7 +52,7 @@ export default {
             currentRow:null,
             itemsinCart:[],
             showComp:'',
-            selectedIndex:''
+            selectedIndex:'',
         }
     },
     methods: {
@@ -74,13 +74,32 @@ export default {
         dodajPoruku(index){
             this.showComp='obavestenje';
             this.selectedIndex=index;
+            
         },
         zatvori(){
             this.showComp='';
             this.selectedIndex='';
         },
         prosledi(prosledjenoObavestenje){
-            this.listaNarudzbina[this.selectedIndex].Order.Notification = prosledjenoObavestenje;
+            // console.log(this.listaNarudzbina[this.selectedIndex]);
+
+             let Data = {ordId: '', notification: ''};
+                Data.ordId = this.listaNarudzbina[this.selectedIndex]._id
+                Data.notification = prosledjenoObavestenje
+                console.log(Data);
+            apiFetch('PUT', destinationUrl + "/shop/updateOrderNotification", Data)
+                .then(result =>{
+                    if(result.Success)
+                    {
+                        console.log(result);
+                        // console.log(this.listaNarudzbina[this.selectedIndex])
+                        // this.listaNarudzbina[this.selectedIndex].notification = prosledjenoObavestenje;
+                        // this.$emit("proslediPoruku", this.notification);
+                        this.$message({message: "Uspešno ste dodali notifikaciju.", type: 'success'});
+                    }
+                    else
+                         this.$message({message: "Notifikacija nije dodata.", type: 'error'});
+                }).catch(error=>console.log(error));
             this.showComp='';
             this.selectedIndex='';
         },

@@ -30,4 +30,6 @@ router.get('/orderdByUserId/:userId', shopController.getOrdersByUserId);
 
 router.put('/updateOrderState', shopController.updateOrderState);
 
+router.put('/updateOrderNotification', shopController.updateOrderNotification);
+
 module.exports = router;
