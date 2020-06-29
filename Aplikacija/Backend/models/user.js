@@ -13,12 +13,12 @@ const userSchema = new Schema({
         required: true
     },
     address: {
-        type: String,
-        required: true
+        type:String,
+        // required: true
     },
     number: {
-        type: String,
-        required: true
+        type:String,
+        // required: true
     },
     email: {
         type: String,

@@ -46,8 +46,8 @@
 <script>
 import logofirme2 from '../../assets/logofirme2.png';
 import {setUserInfo } from "../../services/contextManagement";
-import { apiFetch, destinationUrl, EMPLOYED_USER_TYPE, UserTypes } from "../../services/authFetch";
-//import { ERRORS } from '../../data/errorsCode';
+ import { apiFetch, destinationUrl, EMPLOYED_USER_TYPE } from "../../services/authFetch";
+// import { ERRORS } from '../../data/errorsCode';
 export default {
     data() {
         return {
@@ -55,37 +55,32 @@ export default {
             zaposleni: {
                 name: '',
                 lastname: '',
-                //address: '',
-                //number: '',
                 email: '',
                 username: '',
-                password: '',
-                UserType: EMPLOYED_USER_TYPE
+                password: ''
             }
         }
     },
-    methods: 
-    {
-    
-        prihvatiUnosForme : async function(){
-            // if(!this.isDataValid())
-            //     this.$message({message: "Morate popuniti sva polja", type: "warning"});
-            if (this.zaposleni.name==="" || this.zaposleni.lastname==="" || this.zaposleni.email==="" || this.zaposleni.username==="" || this.zaposleni.password===""){
+    methods: {
+        prihvatiUnosForme:async function(){
+            if (this.zaposleni.name==="" || this.zaposleni.lastname==="" || 
+                this.zaposleni.email==="" || this.zaposleni.username==="" || this.zaposleni.password===""){
                     this.$message({message: "Morate popuniti sva polja", type: "warning"});
                 }
             else{
                 console.log(this.zaposleni);
-                 apiFetch('POST', destinationUrl + "/auth/register", this.zaposleni)
-                        .then(result => {
-                            if(result.Success) {
-                                console.log(result);
-                                setUserInfo(result.Data.id, EMPLOYED_USER_TYPE);
-                                window.location.href = "/" + UserTypes[EMPLOYED_USER_TYPE];
-                            }
-                            else{
-                                this.$message('doslo je do greske!');
-                            }
-                        });
+                apiFetch('POST', destinationUrl + "/auth/registerEmployed", this.zaposleni)
+                    .then(result => {
+                        // console.log(result);
+                                if(result.Success) {
+                                    // console.log(result);
+                                    setUserInfo(result.Data.id, EMPLOYED_USER_TYPE);
+                                    this.$message('Uspesno dodat novi zaposleni!');
+                                }
+                                else{
+                                    this.$message('doslo je do greske!');
+                                }
+                            });
             }
         }
     }

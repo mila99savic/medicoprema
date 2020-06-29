@@ -30,7 +30,7 @@
                 <el-time-select  v-model="podaciZakazi.time" :picker-options="{ start: '08:00', step: '2:00', end: '18:00' }" placeholder="Select time"></el-time-select>
             </div>
             <div class="dugme">
-                <el-button id="dugmeZakazi" round @click="proslediZahtev" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
+                <el-button id="dugmeZakazi" round @click="proslediZahtev()" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
             </div>
         </el-form>
     </div>
@@ -39,7 +39,7 @@
 <script>
 import { getUserInfo } from '../../services/contextManagement';
 import { apiFetch, destinationUrl } from '../../services/authFetch';
-import { ERRORS } from '../../data/errorsCode';
+// import { ERRORS } from '../../data/errorsCode';
 export default {
     data(){
         return{
@@ -51,7 +51,7 @@ export default {
                 time: '',
                 korisnikid: ''
             },
-            user: {FirstName:'', LastName:''},
+            // user: {name:'', lastname:''},
             options: [{
                 tip:'Obuka',
                 label:'Obuka'
@@ -61,7 +61,18 @@ export default {
                 },{
                 tip:'Preventivni godišnji pregled',
                 label:'Preventivni godišnji pregled'
-            }],
+            }]
+            // optionstime: [{
+            //     time:'08h',
+            //     label:'08h'
+            //     },{
+            //     time:'10h',
+            //     label:'10h'
+            //     },{
+            //     time:'12h',
+            //     label:'12h'
+            //     }
+            // ],
         }
     },
     props: {date:String},
@@ -95,13 +106,14 @@ export default {
                     this.$emit("zakazano",this.podaciZakazi);
                     this.clearForm();
                 }
-                else if(result.Errors != null) {
-                    result.Errors.forEach(error => {
-                        this.$message({message: ERRORS[error.Code], type: "warning"});
-                    })
+                else {
+                     this.$message({message: "Doslo je do greske!", type: 'error'});
+                    // result.Errors.forEach(error => {
+                    //     this.$message({message: ERRORS[error.Code], type: "warning"});
+                    // })
                 }
-            }).catch(error => {
-                console.log(error);
+            }).catch(err => {
+                console.log(err);
             });
 
 
@@ -110,10 +122,10 @@ export default {
             let korisnikid = getUserInfo().userID;
             fetch(destinationUrl + '/user/findById/' + korisnikid, {method: "GET"})
                 .then(response => response.ok ? response.json() : new Error())
-                .then(result => {
-                    this.user.FirstName = result.Data.FirstName;
-                    this.user.LastName = result.Data.LastName;
-                })
+                // .then(response => {
+                    // this.user.name = result.Data.name;
+                    // this.user.lastname = result.Data.lastname;
+                // }).catch(error => console.log(error));
         },
         clearForm() {
             this.podaciZakazi.date = "";

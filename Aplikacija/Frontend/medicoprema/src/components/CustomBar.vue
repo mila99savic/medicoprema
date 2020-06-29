@@ -37,7 +37,7 @@
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 import {Button,Menu, MenuItem,Icon} from 'element-ui'
 import { deleteCredentials } from '../services/authFetch';
-import { clearUserInfo, clearFormMode, clearPageShown } from '../services/contextManagement';
+import {clearUserInfo, clearFormMode, clearPageShown} from "../services/contextManagement";
 export default {
     // eslint-disable-next-line vue/no-unused-components
     components: {Icon,Button,Menu,MenuItem},

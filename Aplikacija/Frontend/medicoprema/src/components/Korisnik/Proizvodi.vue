@@ -4,7 +4,7 @@
             :loading-options="{text: 'text', background: 'rgb(0, 0, 0, 0.6)'}" 
             v-if="this.Images == ''" > 
             <div v-for="(item, index) in proizvodi" :key="item.value" :list="proizvodi">
-            <template>
+            <template :list="this.menuItems">
                 <div class="prikaz-proizvoda-container">
                     <div class="part1">
                         <img class="slika" v-bind:src="item.imageUrl" />
@@ -18,6 +18,34 @@
                         <div class="part3">
                             <h6 id="cena">Cena: {{item.price}}din</h6>
                             <el-button id="dugmeDodaj" type="success" round size="medium" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" @click="onClickDodajUKorpu(index)">Dodaj u korpu</el-button>
+                            <el-button type="text" @click="formaDodavanje = true" style="color:rgba(24, 102, 89, 0.925);" class="dugme-za-dodavanje">Komentari
+                            </el-button> 
+                            <el-button type="text" @click="formaDodaj = true" style="color:rgba(24, 102, 89, 0.925);" class="dugme-za-dodavanje">Dodaj komentar</el-button>                           
+                            <el-dialog :before-close="handleFormClose" :visible.sync="formaDodaj">
+                <form-dodaj-utisak-o-proizvodu @zavrsenUnos="prihvatiUnos($event)"></form-dodaj-utisak-o-proizvodu>
+            </el-dialog>
+                            <!-- <el-dialog :before-close="handleFormClose" :visible.sync="formaDodavanje" style="width:1500px; height:1000px">
+                                    <el-table :data="listaUtisaka">
+                                        <el-table-column prop="content" label="Komentar" class="table-column"></el-table-column>
+                                        <el-table-column prop="date" label="Datum" class="table-column"></el-table-column>
+                                        <el-table-column prop="productid" label="Ime proizvoda" class="table-column"></el-table-column>
+                                        <el-table-column prop="korisnikid" label="Ime korisnika" class="table-column"></el-table-column>
+                                        <el-table-column align="center">
+                                            <template slot-scope="scope">
+                                                <el-button type="danger" icon="el-icon-delete" circle size="mini" 
+                                                    @click="deleteProductItem(scope.row._id)"></el-button>
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                    <div class="dodaj-dugme">
+                                    <el-button @click="innerVisible = true" style="color:white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" type="success" class="dugme-za-dodavanje" circle>
+                                        <el-icon class="el-icon-edit"></el-icon>    
+                                    </el-button>         
+                                    </div>
+                                    <el-dialog width="30%" title="Inner Dialog" :visible.sync="innerVisible" append-to-body>
+                                    <form-dodaj-utisak-o-proizvodu @zavrsenUnos="prihvatiUnos($event)"></form-dodaj-utisak-o-proizvodu>
+                                    </el-dialog>
+                            </el-dialog> -->
                         </div>
                     </div>
                 </div>
@@ -30,13 +58,22 @@
 <script>
 import { apiFetch, destinationUrl, REGULAR_USER_TYPE } from '../../services/authFetch';
 import { getUserInfo } from '../../services/contextManagement';
+// import UtisakOProizvodu from "../../components/UtisakOProizvodu.vue";
+import FormDodajUtisakOProizvodu from "../forme/FormDodajUtisakOProizvodu.vue";
 export default {
+        // eslint-disable-next-line vue/no-unused-components
+    components:{ FormDodajUtisakOProizvodu },
     data(){
         return{
+            formaDodavanje:false,
+            formaDodaj:false,
+            innerVisible: false,
+            listaUtisaka: [],
             proizvodi: [],
             isSpinnerActive: false,
             indeksIzabranogProizvoda: null,
             Images: [],
+            // showComp:'utisci'
         }
     },
     methods: {
