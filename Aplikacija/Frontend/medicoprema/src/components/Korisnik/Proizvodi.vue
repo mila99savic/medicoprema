@@ -7,29 +7,29 @@
             <template>
                 <div class="prikaz-proizvoda-container">
                     <div class="part1">
-                        <img class="slika" v-bind:src="item.ImageUrl" />
+                        <img class="slika" v-bind:src="item.imageUrl" />
                     </div>
                     <div class="part2part3">
                         <div class="part2" >
-                            <h4>{{item.Title}}</h4>
-                            <p id="opis">{{item.Description}}</p>
+                            <h4>{{item.title}}</h4>
+                            <p id="opis">{{item.description}}</p>
                              <!-- <input type="file" :disabled="omoguciDugme" accept="image/*" @change="uploadImage($event)" id="file-input" >  -->
                         </div>
                         <div class="part3">
-                            <h6 id="cena">Cena: {{item.Price}}din</h6>
+                            <h6 id="cena">Cena: {{item.price}}din</h6>
                             <el-button id="dugmeDodaj" type="success" round size="medium" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" @click="onClickDodajUKorpu(index)">Dodaj u korpu</el-button>
                         </div>
                     </div>
                 </div>
             </template>
             </div>
-        </div> 
+        </div>
     </div>
 </template>
 
 <script>
-// import { apiFetch, destinationUrl, REGULAR_USER_TYPE } from '../../services/authFetch';
-// import { getUserInfo } from '../../services/contextManagement';
+import { apiFetch, destinationUrl, REGULAR_USER_TYPE } from '../../services/authFetch';
+import { getUserInfo } from '../../services/contextManagement';
 export default {
     data(){
         return{
@@ -39,59 +39,71 @@ export default {
             Images: [],
         }
     },
-    // methods: {
-    //     loadDataTable() {
-    //         apiFetch('GET', destinationUrl + "/Product/GetAllProducts")
-    //             .then(result => {
-    //                 this.proizvodi = result.Data;
-    //             });
-    //     },
-    //     onClickDodajUKorpu(index) {
-    //         if(getUserInfo().userType == REGULAR_USER_TYPE){
-    //             this.indeksIzabranogProizvoda = index;
-    //             this.dodajUKorpu(); 
-    //         }
-    //         else{
-    //             this.$message("Da biste naručili proizvod morate se prijaviti ili registrovati.");
-    //             this.$emit("gotoLogin");
-    //         }
-    //     },
-    //     dodajUKorpu(){
-    //         if(!this.isSpinnerActive) {    
-    //             const formData = new FormData();
-    //             formData.append("UserId", getUserInfo().userID);
-    //             formData.append("CartItems[" + 0 + "].ProductType", this.proizvodi[this.indeksIzabranogProizvoda].ProductType);
-    //             formData.append("CartItems[" + 0 + "].Quantity", 1);
-    //             formData.append("CartItems[" + 0 + "].Title", this.proizvodi[this.indeksIzabranogProizvoda].Title);
-    //             formData.append("CartItems[" + 0 + "].Price", this.proizvodi[this.indeksIzabranogProizvoda].Price);
+    methods: {
+        loadDataTable() {
+            apiFetch('GET', destinationUrl + "/shop/products")
+                .then(result => {
+                    this.proizvodi = result.Data;
+                });
+        },
+        async onClickDodajUKorpu(index) {
+            if(getUserInfo().userType == REGULAR_USER_TYPE){
+                this.indeksIzabranogProizvoda = index;
+                await this.dodajUKorpu(); 
+            }
+            else{
+                this.$message("Da biste naručili proizvod morate se prijaviti ili registrovati.");
+                this.$emit("gotoLogin");
+            }
+        },
+        async dodajUKorpu(){
+            if(!this.isSpinnerActive) {    
+                const formData = new FormData();
+                console.log(getUserInfo().userID);
+                console.log(this.proizvodi[this.indeksIzabranogProizvoda]._id);
+                formData.append("userId", getUserInfo().userID);
+                formData.append("productId", this.proizvodi[this.indeksIzabranogProizvoda]._id);
 
-    //             fetch(destinationUrl + "/Cart/AddToCart", {method: 'POST', body: formData})
-    //                 .then(response => response.ok ? response.json() : new Error())
-    //                 // eslint-disable-next-line no-unused-vars
-    //                 .then(result => { 
-    //                     this.$message({message: "Uspešno ste dodali proizvod u online korpu.", type: "success"});
-    //                     this.resetSpinner();
-    //                 })
-    //                 // eslint-disable-next-line no-unused-vars
-    //                 .catch(error => { 
-    //                     this.$message({message: "Greška pri dodavanju proizvoda u online korpu.", type: "error"})
-    //                     this.resetSpinner();
-    //                 });
-    //         }
-    //         else {
-    //             this.isSpinnerActive = true;
-    //         }
-    //     },
-    //     resetSpinner() {
-    //         this.isSpinnerActive = false;
-    //     },
-    // },
-    // mounted: function() {
-    //     this.$emit('loadDataTable');
-    // },
-    // created() {
-    //     this.$on('loadDataTable', this.loadDataTable);
-    // }
+                var data = {
+                    userId: getUserInfo().userID,
+                    productId:  this.proizvodi[this.indeksIzabranogProizvoda]._id
+                }
+
+                await apiFetch('POST', destinationUrl + "/shop/postToCart", data)
+                    .then(response => {
+                        if(response.Success)
+                            this.$message({message: "Uspešno ste dodali proizvod u online korpu.", type: "success"});
+                })
+                .catch(err => {
+                    console.log('nije dobra ruta' + err);
+                })
+                    // .then(response => response.ok ? response.json() : new Error())
+                    // // eslint-disable-next-line no-unused-vars
+                    // .then(result => { 
+                    //     console.log('miljance');
+                    //     this.$message({message: "Uspešno ste dodali proizvod u online korpu.", type: "success"});
+                    //     this.resetSpinner();
+                    // })
+                    // // eslint-disable-next-line no-unused-vars
+                    // .catch(error => { 
+                    //     this.$message({message: "Greška pri dodavanju proizvoda u online korpu.", type: "error"})
+                    //     this.resetSpinner();
+                    // });
+            }
+            else {
+                this.isSpinnerActive = true;
+            }
+        },
+        resetSpinner() {
+            this.isSpinnerActive = false;
+        },
+    },
+    mounted: function() {
+        this.$emit('loadDataTable');
+    },
+    created() {
+        this.$on('loadDataTable', this.loadDataTable);
+    }
 }
 </script>
 

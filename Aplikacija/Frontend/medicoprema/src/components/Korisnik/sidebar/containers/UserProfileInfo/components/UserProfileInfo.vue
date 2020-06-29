@@ -5,27 +5,27 @@
         </div>
         <div class="profile-info">
             <label>Ime:</label>
-            <label>{{user.FirstName}}</label>
+            <label>{{user.name}}</label>
         </div>
-        <div class="profile-info">
+        <!-- <div class="profile-info">
             <label>Prezime:</label>
-            <label>{{user.LastName}}</label>
-        </div>
+            <label>{{user.lastname}}</label>
+        </div> -->
         <div class="profile-info">
             <label>E-mail:</label>
-            <label>{{user.Email}}</label>
+            <label>{{user.email}}</label>
         </div>
         <div class="profile-info">
             <label>Lozinka:</label>
-            <label>{{user.Password}}</label>
+            <label>{{user.password}}</label>
         </div>
         <div class="profile-info">
             <label>Adresa:</label>
-            <label>{{user.Address}}</label>
+            <label>{{user.address}}</label>
         </div>
         <div class="profile-info">
             <label>Broj telefona:</label>
-            <label>{{user.PhoneNumber}}</label>
+            <label>{{user.number}}</label>
         </div>
         <div class="dugme">
             <el-button class="dugme-lozinka" round @click="() => $emit('openChangePasswordForm')" style="color:white; margin-right:5px; background-color: rgba(24, 102, 89, 0.925); border-color:rgba(24, 102, 89, 0.925);">Promeni lozinku</el-button>
@@ -42,27 +42,28 @@ export default {
         return{
             profileUrl: picture,
             user: {
-                FirstName: '',
-                LastName: '',
-                Email: '',
-                Password: '',
-                Address: '',
-                PhoneNumber: ''
+                name: '',
+                lastname: '',
+                email: '',
+                password: '',
+                address: '',
+                number: ''
             }
         }
     },
     methods: {
         getUser() {
             let userId = getUserInfo().userID;
-            fetch(destinationUrl + 'User/GetUserById/?id=' + userId, {method: "GET"})
-                .then(response => response.ok ? response.json() : new Error())
+            
+            fetch(destinationUrl + '/user/findById/' + userId, {method: "GET"})
+                .then(response => response.ok ? response.json() : new Error())                
                 .then(result => {
-                    this.user.FirstName = result.Data.FirstName;
-                    this.user.LastName = result.Data.LastName;
-                    this.user.Email = result.Data.Email;
-                    this.user.Password = "*****";
-                    this.user.Address = result.Data.Address;
-                    this.user.PhoneNumber = result.Data.PhoneNumber;
+                    this.user.name = result.Data.name;
+                    // this.user.lastname = result.Data.lastname;
+                    this.user.email = result.Data.email;
+                    this.user.password = "*****";
+                    this.user.address = result.Data.address;
+                    this.user.number = result.Data.number;
                 }).catch(error => console.log(error));
         }
     },

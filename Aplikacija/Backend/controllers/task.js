@@ -1,5 +1,6 @@
 const Task = require('../models/task');
 const User = require('../models/user');
+const Request = require('../models/request')
 
 const { taskValidation } = require('../validation');
 
@@ -18,14 +19,16 @@ exports.getTasks = async (req, res, next) => {
 exports.getTasksByUserId = async (req, res, next) => {
     try {
         const user = await User.findById(req.params.zaposleniId)
+        //const kor = await User.findById(user.listoftasks.korisnikid)
+        // console.log(user.listoftasks.tasks)
         res.status(200)
-            .json({
-                message: 'Prikupljene obaveze za korisnika',
-                tasks: user.listoftasks
+            .json({ 
+                Data: user.listoftasks,
+                Success: true
             })
     }
     catch (err) {
-        res.json({ success: false });
+        res.json({ Success: false });
         console.log(err);
     }
 }
@@ -40,7 +43,8 @@ exports.addTask = async (req, res, next) => {
         date: req.body.date,
         comment: req.body.comm,
         type: req.body.type,
-        korisnikid: req.body.korisnikid
+        korisnikid: req.body.korisnikid,
+        numberKorisnika: req.body.num
     });
     try {
         const savedTask = await task.save();
@@ -53,22 +57,33 @@ exports.addTask = async (req, res, next) => {
 }
 
 exports.assignTask = async (req, res, next) => {
+    const kor = await User.findById(req.body.korisnikid);
     const task = new Task({
         location: req.body.location,
         date: req.body.date,
         comment: req.body.comment,
         type: req.body.type,
+        time: req.body.time,
         korisnikid: req.body.korisnikid,
-        zaposleniId: req.params.zaposleniId
+        numberKorisnika: kor.number,
+        zaposleniId: req.body.zaposleniId,
+        requestId: req.body.requestId
     });
     try {
-        res.status(201).json({
-            message: 'Dodeljena je obaveza(zakazivanje) i dodeljena zaposlenom',
-            task: task
-        });
-        User.findById(req.params.zaposleniId).then(zaposlen => {
+        Request.findById(req.body.requestId)
+        .then(requ => {
+            requ.status = "potvrdjen";
+            console.log(requ)
+            return requ.save()
+        })
+        User.findById(req.body.zaposleniId)
+        .then(zaposlen => {
             return zaposlen.addTask(task)
         })
+        
+        res.status(201).json({
+            Success: true
+        });
     }
     catch (err) {
         res.json({ success: false });

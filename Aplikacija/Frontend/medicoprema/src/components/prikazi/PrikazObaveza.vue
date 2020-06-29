@@ -46,6 +46,12 @@ export default {
         width: 100%;
         justify-content: center;
         align-items: center;
+        background-size: cover;
+        background-position: bottom;
+        background-image: linear-gradient(
+            rgba(26, 111, 168, 0.171),
+            rgba(57, 63, 61, 0.205)
+        ),url("../../assets/task.jpg"); 
     }
     .obaveza-container-inner{
         flex-direction: column;
@@ -53,7 +59,7 @@ export default {
         align-items: center;
         height: 80%;
         width: 90%;
-        background-color:  rgba(206, 231, 230, 0.986);
+        /* background-color:  rgba(206, 231, 230, 0.986); */
         opacity: 1;
         padding: 1em;
     }

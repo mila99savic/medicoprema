@@ -50,8 +50,10 @@
 <script>
 import popover from 'element-ui';
 import logofirme from '../../assets/logofirme.png';
-import { apiFetch, destinationUrl, ANONYMOUS_USER_TYPE, REGULAR_USER_TYPE } from '../../services/authFetch';
-import { clearSessionStorage, clearLocalStorage, getPageToShow, setUserInfo, getUserInfo } from '../../services/contextManagement';
+import { deleteCredentials, ANONYMOUS_USER_TYPE, REGULAR_USER_TYPE } from '../../services/authFetch';
+// import { clearSessionStorage, clearLocalStorage, getPageToShow, setUserInfo, getUserInfo } from '../../services/contextManagement';\
+import {clearUserInfo, clearFormMode, clearPageShown, getUserInfo, getPageToShow} from "../../services/contextManagement";
+    // import {deleteCredentials} from "../services/authFetch";
 import FormLogin from "../forme/FormLogin.vue";
 import FormSignup from "../forme/FormSignup.vue";
 import menu from '../../assets/menu.png'
@@ -77,16 +79,21 @@ export default {
         showHomePage() {
             this.$emit('showHomePage', "pocetna");
         },
-        signOut() {
-            apiFetch('POST', destinationUrl + "/User/SignOut")
-                .then(result => {
-                    if(result.Success) {
-                        clearLocalStorage();
-                        clearSessionStorage();
-                        setUserInfo(null, ANONYMOUS_USER_TYPE);
-                        window.location.href = "/";
-                    }
-                });
+        signOut: function() {
+            deleteCredentials()
+            clearUserInfo()
+            clearFormMode()
+            clearPageShown()
+            window.location.href = '/login'
+            // apiFetch('POST', destinationUrl + "/User/SignOut")
+            //     .then(result => {
+            //         if(result.Success) {
+            //             clearLocalStorage();
+            //             clearSessionStorage();
+            //             setUserInfo(null, ANONYMOUS_USER_TYPE);
+            //             window.location.href = "/";
+            //         }
+            //     });
         },
         signupEnd: function(){
             this.showComp = getPageToShow().page;

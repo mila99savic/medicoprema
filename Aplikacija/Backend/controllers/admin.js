@@ -5,7 +5,7 @@ const { productValidation } = require('../validation');
 exports.getProducts = async (req, res, next) => {
   try{
   const products = await Product.find();//find vraca proizvod a ne kursor
-  res.json(products);
+  res.json({ Data: products});
   }
   catch(err){
     res.json({success: false});
@@ -30,7 +30,7 @@ exports.postAddProduct = async (req, res, next) => {
     res.json({Success: true,  savedProduct});
   }
   catch(err){
-    res.json({success: false});
+    res.json({Success: false, message: err});
   }
 };
 
@@ -56,12 +56,12 @@ exports.editProduct = async (req, res, next) => {
 };
 
 exports.deleteProduct = async (req, res, next) => {
-  const prod = await Product.findByIdAndRemove(req.body.productId)//fja mongoosa
+  const prod = await Product.findByIdAndRemove(req.params.prodId)//fja mongoosa
   try{
     res.json({Success: true,  message:"Obrisano!"});
   } 
   catch(err){
-    res.json({success: false});
+    res.json({Success: false});
   } 
 };
 

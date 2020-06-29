@@ -9,16 +9,21 @@ const requestSchema = new Schema ({
         required:true
     },
     date: {
-        type: Date
+        type: String
         //default: Date.now
     },
     comment: {
         //dodatni zahtev
-        type: String
+        type: String,
+        required:true
     },
     type: {
         type:String,
         required: true
+    },
+    time:{
+        type:String,
+         //required:true
     },
     status: {
         type: String
@@ -26,6 +31,12 @@ const requestSchema = new Schema ({
     korisnikid: {
         type: String, 
         required: true
+    },
+    korIme:{
+        type:String
+    },
+    notification:{
+        type:String
     }
 });
 

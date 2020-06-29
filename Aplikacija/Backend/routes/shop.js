@@ -18,8 +18,18 @@ router.delete('/cart-delete-item', shopController.cartDeleteProduct);
 
 router.post('/create-order', shopController.postOrder);
 
-router.get('/sum/:userId', shopController.sum)
+// router.get('/sum/:userId', shopController.sum)
 
 router.get('/orders', shopController.getOrders);
+
+// router.get('/getOrdersItems/:userId', shopController.getOrdersItems);
+
+router.get('/getUnresolvedOrders', shopController.getUnOrders);
+
+router.get('/orderdByUserId/:userId', shopController.getOrdersByUserId);
+
+router.put('/updateOrderState', shopController.updateOrderState);
+
+router.put('/updateOrderNotification', shopController.updateOrderNotification);
 
 module.exports = router;

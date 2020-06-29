@@ -8,22 +8,33 @@ const taskSchema = new Schema ({
         required:true
     },
     date: {
-        type: Date
+        type: String
         //default: Date.now
     },
     comment: {
         //dodatni zahtev
         type: String
     },
+    requestId: {
+        type: Schema.Types.ObjectId,
+        ref: 'Request',
+        required: true
+    },
     type: {
         type:String,
         required: true
+    },
+    time:{
+        type:String,
     },
     korisnikid: {
         type: String, 
         required: true
     },
     zaposleniId: {
+        type: String
+    },
+    numberKorisnika:{
         type: String
     }
 });

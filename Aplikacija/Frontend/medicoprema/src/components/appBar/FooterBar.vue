@@ -20,10 +20,10 @@ export default {
 <style scoped>
     .footer-container{
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
+        /* align-items: flex-end; */
         width: 100%;
-         background-color:  rgba(24, 102, 89, 0.925);
-         
+        background-color:  rgba(24, 102, 89, 0.925);
     }
     .pad-group{
         padding: 15px 30px 15px;

@@ -3,7 +3,7 @@
         <el-form class="zakazi-forma">
             <div class="stavka">
                 <label>Lokacija:</label>
-                <el-input type="text" v-model="podaciZakazi.Location">
+                <el-input type="text" v-model="podaciZakazi.location">
                     <i class="el-icon-edit el-input__icon" slot="suffix"></i>
                 </el-input>
             </div>
@@ -16,18 +16,18 @@
             <div class="stavka">
                 <label>Dodatni zahtevi:</label>
                 <el-input type="textarea"
-                    :autosize="{minRows: 4, maxRows: 4}" v-model="podaciZakazi.Description">
+                    :autosize="{minRows: 4, maxRows: 4}" v-model="podaciZakazi.comment">
                 </el-input>
             </div>
             <div class="stavka">
                 <label>Tip:</label>
-                <el-select  v-model="podaciZakazi.EventType" placeholder="Izaberite tip usluge">
+                <el-select  v-model="podaciZakazi.type" placeholder="Izaberite tip usluge">
                     <el-option v-for="item in options" :key="item.tip" :label="item.label" :value="item.tip"></el-option>
                 </el-select>
             </div>
             <div class="stavka">
                 <label>Vreme:</label>
-                <el-time-select  v-model="podaciZakazi.Time" :picker-options="{ start: '08:00', step: '2:00', end: '18:00' }" placeholder="Select time"></el-time-select>
+                <el-time-select  v-model="podaciZakazi.time" :picker-options="{ start: '08:00', step: '2:00', end: '18:00' }" placeholder="Select time"></el-time-select>
             </div>
             <div class="dugme">
                 <el-button id="dugmeZakazi" round @click="proslediZahtev" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);">Zakaži</el-button>
@@ -44,12 +44,12 @@ export default {
     data(){
         return{
             podaciZakazi: {
-                Location: '',
-                Date: '',
-                Description: '',
-                EventType: '',
-                Time: '',
-                UserId: ''
+                location: '',
+                date: '',
+                comment: '',
+                type: '',
+                time: '',
+                korisnikid: ''
             },
             user: {FirstName:'', LastName:''},
             options: [{
@@ -67,12 +67,12 @@ export default {
     props: {date:String},
     watch: {
         date: function(pom){
-            this.podaciZakazi.Date=pom;
+            this.podaciZakazi.date=pom;
         }
     },
     methods: {
         validacija() {
-            if(this.podaciZakazi.Location == '' || this.podaciZakazi.Date == '' || this.podaciZakazi.EventType == '' || this.podaciZakazi.Time == ''){
+            if(this.podaciZakazi.location == '' || this.podaciZakazi.date == '' || this.podaciZakazi.type == '' || this.podaciZakazi.time == ''){
                 this.$message({message: "Morate popuniti sva polja!", type: 'warning'})
                 return false
             }
@@ -82,11 +82,13 @@ export default {
              if(!this.validacija())
                  return
 
-            this.podaciZakazi.Date = this.date;
-            this.podaciZakazi.FirstName = this.user.FirstName;
-            this.podaciZakazi.LastName = this.user.LastName;
-            this.podaciZakazi.UserId = getUserInfo().userID;
-            apiFetch('POST', destinationUrl + "/Request/CreateRequest", this.podaciZakazi)
+            this.podaciZakazi.date = this.date;
+            this.podaciZakazi.name = this.user.name;
+            this.podaciZakazi.lastname = this.user.lastname;
+            this.podaciZakazi.korisnikid = getUserInfo().userID;
+                console.log(this.podaciZakazi)
+
+            apiFetch('POST', destinationUrl + "/request/add/", this.podaciZakazi)
             .then(result => {
                 if(result.Success){
                     this.$message({message: "Uspesno ste zakazali termin.", type: 'success'});
@@ -105,8 +107,8 @@ export default {
 
         },
         pribaviKorisnika(){
-            let userId = getUserInfo().userID;
-            fetch(destinationUrl + '/User/GetUserById/?id=' + userId, {method: "GET"})
+            let korisnikid = getUserInfo().userID;
+            fetch(destinationUrl + '/user/findById/' + korisnikid, {method: "GET"})
                 .then(response => response.ok ? response.json() : new Error())
                 .then(result => {
                     this.user.FirstName = result.Data.FirstName;
@@ -114,11 +116,11 @@ export default {
                 })
         },
         clearForm() {
-            this.podaciZakazi.Date = "";
+            this.podaciZakazi.date = "";
             this.podaciZakazi.AdditionalRequests = "";
-            this.podaciZakazi.EventType = "";
-            this.podaciZakazi.Time = "";
-            this.podaciZakazi.Location = "";
+            this.podaciZakazi.type = "";
+            this.podaciZakazi.time = "";
+            this.podaciZakazi.location = "";
         }
     },
     beforeMount(){

@@ -2,12 +2,13 @@ const Product = require('../models/product');
 const User = require('../models/user');
 const Order = require('../models/order');
 const { orderValidation } = require('../validation');
+const { date } = require('@hapi/joi');
 
 exports.getProducts = async (req, res, next) => {
   try {
     const prod = await Product.find()//find vraca proizvod a ne kursor
     res.status(200)
-      .json({ message: 'Prikupljeni proizvodi', prod: prod })
+      .json({ message: 'Prikupljeni proizvodi', Data: prod })
   }
   catch (err) {
     res.json({ success: false });
@@ -29,10 +30,10 @@ exports.getCart = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.userId)
     res.status(200)
-      .json({ message: 'Korpa korisnika', cart: user.cart })
+      .json({ message: 'Korpa korisnika', Data: user.cart, Success: true })
   }
   catch (err) {
-    res.json({ success: false });
+    res.json({ Success: false });
     console.log(err);
   }
   // req.user
@@ -50,12 +51,13 @@ exports.getCart = async (req, res, next) => {
   //   .catch(err => console.log(err));
 };
 
+//dodaj u korpu
 exports.postCart = async (req, res, next) => {
   try {
     const user = await User.findById(req.body.userId);
     Product.findById(req.body.productId)
       .then(product => {
-        res.send('pokusavam da dodam u korpu')
+        res.json({ Success: true })
         return user.addToCart(product);
       })
       .catch(err => console.log(err))
@@ -65,16 +67,15 @@ exports.postCart = async (req, res, next) => {
     console.log(err);
   }
 };
-
+//brisanje iz korpe
 exports.cartDeleteProduct = async (req, res, next) => {
   try {
     const user = await User.findById(req.body.userId)
-    user
-      .removeFromCart(req.body.productId);
-    res.send('pokusavam da obrisem proizvod iz korpe');
+    user.removeFromCart(req.body.productId);
+    res.status(200).json({ Success: true });
   }
   catch (err) {
-    res.json({ success: false });
+    res.json({ Success: false });
     console.log(err);
   }
 };
@@ -95,46 +96,52 @@ exports.postOrder = async (req, res, next) => {
           return { quantity: i.quantity, product: { ...i.productId._doc } };
           //_doc- samo podaci iz dokumenta(objecta)
         });
+        const products1 = user.cart.items;
+        let total = 0;
+        products1.forEach(p => {
+          total += p.quantity * p.productPrice;
+        })
         const order = new Order({
-          user: {
-            name: user.name,//req.user je ceo user object
-            userId: userId //mongoose sam odavde uzima Id 
-          },
+          date: Date.now(),
+          address: user.address,
+          price: total,
+          number: user.number,
+          status: "neobradjen",
+          name: user.name,
+          userId: user._id,
           products: products
         });
         return order.save();
       })
-      .then(result => {
-        return user.clearCart();
-      })
-      .then(() => {
-        res.send('dodajem narudzbinu')
+      .then(order => {
+        res.json({ Success: true });
+        return user.addOrder(order._id);
       })
       .catch(err => console.log(err));
   }
   catch (err) {
-    res.json({ success: false });
+    res.json({ Success: false });
     console.log(err);
   }
 };
 
-exports.sum = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.userId)
-    const products = user.cart.items;
-    let total = 0;
+// exports.sum = async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.params.userId)
+//     const products = user.cart.items;
+//     let total = 0;
 
-    products.forEach(p => {
-      total += p.quantity * p.productPrice;
-      console.log(total)
-    });
-    res.json({ message: 'pribavljena suma', total: total })
-  }
-  catch (err) {
-    res.json({ success: false });
-    console.log(err);
-  }
-};
+//     products.forEach(p => {
+//       total += p.quantity * p.productPrice;
+//       console.log(total)
+//     });
+//     res.json({ message: 'pribavljena suma', total: total })
+//   }
+//   catch (err) {
+//     res.json({ success: false });
+//     console.log(err);
+//   }
+// };
 
 exports.getOrders = async (req, res, next) => {
   try {
@@ -147,5 +154,87 @@ exports.getOrders = async (req, res, next) => {
     console.log(err);
   }
 };
+// exports.getOrdersItems= async (req, res, next) => {
+//   try {
+//     const user = await User.findById(req.params.userId)
+//     console.log(user.listoforders.orders.orderId)
+//     const items = await Order.find({"_id": user.listoforders.orders.orderId})
+//     res.status(200)
+//       .json({ message: 'Prikupljene narudzbine', Data: items })
+//   }
+//   catch (err) {
+//     res.json({ success: false });
+//     console.log(err);
+//   }
+// };
+exports.getUnOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find()//find vraca proizvod a ne kursor
+    const unresOrders = await Order.find({ "status": "neobradjen" })
+    res.status(200)
+      .json({ Data: unresOrders })
+  }
+  catch (err) {
+    res.json({ success: false });
+    console.log(err);
+  }
+};
 
+exports.getOrdersByUserId = async (req, res, next) => {
+  try {
+    // const user = await User.findById(req.params.userId)
+    const orders = await Order.find({userId: req.params.userId})
 
+    res.status(200)
+      .json({ Data: orders, Success: true })
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+}
+
+exports.updateOrderState = async (req, res, next) => {
+  const o = await Order.findById(req.body.ordId)
+  try {
+    Order.findById(req.body.ordId)
+      .then(ord => {
+        const vrednost = req.body.vrednost
+        if (vrednost == 1) {
+          ord.status = "potvrdjen"
+        }
+        else if (vrednost == 2)
+          ord.status = "odbijen"
+        res.status(200)
+          .json({ Success: true })
+        return ord.save()
+      })
+    User.findById(o.userId)
+      .then(user => {
+        return user.save()
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+}
+
+exports.updateOrderNotification = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.body.ordId);
+
+    const poruka = req.body.notification;
+    order.notification = poruka;
+    res.status(200)
+      .json({ Success: true })
+    return order.save()
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+}
