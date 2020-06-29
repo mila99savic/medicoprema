@@ -1,19 +1,7 @@
 <template>
     <div class="zakazivanja-container">
-        <el-calendar v-model="value" class="kalendar" style="background-color:rgba(173, 226, 222, 0.938);">
-            <template
-                slot="dateCell"
-                slot-scope="{asdsa, data}" @click="radi">
-                <p :class="data.isSelected ? 'is-active' : ''" v-if="zahtevi(data)"></p>
-                <p :class="data.isSelected ? 'is-active' : ''">{{data.day.split('-').slice(2).join('-')}}</p>
-                <div class="obavestenje">
-                   <img  v-if="data.isSelected && data.type == '0'" style="width:30px; height:30px;" src="../assets/bell.png"/>
-                   <img  v-if="data.isSelected && data.type == '1'" style="width:30px; height:30px;" src="../assets/check.png"/>
-                </div>
-            </template>
-        </el-calendar>
         <prikaz-liste-zahteva :notification="obavestenje" @poruka="otvoriPoruku" @datum="pribaviDatum($event)" @potvrdjeni="potvrdjeniDatum($event)"></prikaz-liste-zahteva>
-        <obavesti-korisnika v-if="this.showComp == 'obavestenje'" @zatvoriPoruku="zatvori" @proslediPoruku="prosledi($event)"></obavesti-korisnika>
+        <!-- <obavesti-korisnika-zakazivanja v-if="this.showComp == 'obavestenje'" @zatvoriPoruku="zatvori" @proslediPoruku="prosledi($event)"></obavesti-korisnika-zakazivanja > -->
     </div>
 </template>
 
@@ -32,31 +20,43 @@ export default {
             datum: [],
             potvrdjeni: [],
             showComp: '',
-            obavestenje: ''
+            // obavestenje: ''
+            // selectedIndex:''
+
         }
     },
     methods: {
-        zahtevi: function(data){
-                this.datum.forEach(element => {
-                    if(data.day == element){
-                        data.isSelected = true
-                        data.type = '0'
-                    }
-                });
+        // zatvori(){
+        //     this.showComp='';
+        //     this.selectedIndex='';
+        // },
+        // dodajPoruku(index){
+        //     this.showComp='obavestenje';
+        //     this.selectedIndex=index;  
+        // },
+        // prosledi(prosledjenoObavestenje){
+        //     // console.log(this.listaNarudzbina[this.selectedIndex]);
 
-                this.potvrdjeni.forEach(element => {
-                    if(data.day == element){
-                        data.isSelected = true
-                        data.type = '1'
-                    }                   
-                 });
-        },
-        zatvori(){
-            this.showComp = ''
-        },
-        otvoriPoruku(){
-            this.showComp = 'obavestenje'
-        },
+        //      let Data = {ordId: '', notification: ''};
+        //         Data.ordId = this.listaNarudzbina[this.selectedIndex]._id
+        //         Data.notification = prosledjenoObavestenje
+        //         console.log(Data);
+        //     apiFetch('PUT', destinationUrl + "/shop/updateOrderNotification", Data)
+        //         .then(result =>{
+        //             if(result.Success)
+        //             {
+        //                 console.log(result);
+        //                 // console.log(this.listaNarudzbina[this.selectedIndex])
+        //                 // this.listaNarudzbina[this.selectedIndex].notification = prosledjenoObavestenje;
+        //                 // this.$emit("proslediPoruku", this.notification);
+        //                 this.$message({message: "Uspešno ste dodali notifikaciju.", type: 'success'});
+        //             }
+        //             else
+        //                  this.$message({message: "Notifikacija nije dodata.", type: 'error'});
+        //         }).catch(error=>console.log(error));
+        //     this.showComp='';
+        //     this.selectedIndex='';
+        // },
         pribaviDatum(datumi){
             let i =0;
             let novidatumi = [];
@@ -74,10 +74,7 @@ export default {
            this.potvrdjeni = novidatumi;
            this.obavestenje = '';
         },
-        prosledi(prosledjenoObavestenje){
-            this.obavestenje = prosledjenoObavestenje;
-            this.showComp = '';
-        }
+        
     }
 }
 </script>

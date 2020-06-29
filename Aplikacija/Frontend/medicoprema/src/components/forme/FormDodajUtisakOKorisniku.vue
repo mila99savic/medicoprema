@@ -23,12 +23,6 @@
         round
         style="border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);"
       >Sačuvaj</el-button>
-      <el-button
-        @click="ponisti"
-        type="danger"
-        round
-        style="color:rgba(24, 102, 89, 0.925); background-color: white; border-color:white"
-      >Poništi</el-button>
     </div>
   </div>
 </template>

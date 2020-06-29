@@ -10,6 +10,8 @@ router.post('/add', requestController.addRequest);
 
 router.put('/rejectRequest', requestController.rejectRequest);
 
+router.put('/updateRequestNotification', requestController.updateRequestNotification);
+
 router.delete('/delete', requestController.deleteRequest);
 
 // router.delete('/delete', requestController.deleteResolvedRequests)

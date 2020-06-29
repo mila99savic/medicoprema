@@ -2,16 +2,12 @@
     <div class="utisci-korisnika-container">
         <div class="utisci-korisnika" >
             <h5 style="text-align:center; font-family: 'Times New Roman', Times, serif;">Lista utisaka o korisnicima</h5>
-            <el-table :data="this.listaUtisaka" style="height:300px; width:1000px; background: linear-gradient(0deg, #bccecfc7, #fcfcfcab);">
+            <el-table :data="this.listaUtisaka" height="250" style="height:300px; width:900px; background: linear-gradient(0deg, #bccecfc7, #fcfcfcab);">
                 <el-table-column prop="content" label="Komentar" class="table-column"></el-table-column>
                 <el-table-column prop="date" label="Datum" class="table-column"></el-table-column>
                 <el-table-column prop="nameKorisnika" label="Ime korisnika" class="table-column"></el-table-column>
                 <el-table-column prop="addressKorisnika" label="Adresa korisnika" class="table-column"></el-table-column>
                 <el-table-column align="center">
-                    <!-- <template slot-scope="scope">
-                        <el-button type="danger" icon="el-icon-delete" circle size="mini" 
-                            @click="deleteProductItem(scope.row._id)"></el-button>
-                    </template> -->
                 </el-table-column>
             </el-table>
             <div class="dodaj-dugme">
@@ -23,7 +19,6 @@
                 <form-dodaj-utisak-o-korisniku @zavrsenUnos="prihvatiUnos($event)"></form-dodaj-utisak-o-korisniku>
             </el-dialog>
         </div>
-        <!-- <form-dodaj-proizvod v-if="this.showComp == 'dodaj'" @zatvoriDodavanjeProizvoda="zavrsiDodavanje"></form-dodaj-proizvod> -->
     </div>
 </template>
 
@@ -31,7 +26,7 @@
 import PrikazUtisakaOKorisniku from "./prikazi/PrikazUtisakaOKorisniku.vue";
 import FormDodajUtisakOKorisniku from "./forme/FormDodajUtisakOKorisniku.vue";
 import { apiFetch, destinationUrl } from '../services/authFetch'
-// import { setPageShown } from '../services/contextManagement'
+import { setPageShown } from '../services/contextManagement'
 export default {
         // eslint-disable-next-line vue/no-unused-components
     components:{ PrikazUtisakaOKorisniku, FormDodajUtisakOKorisniku},
@@ -56,24 +51,24 @@ export default {
                     }
                 }).catch(error=>{console.log(error);})
         },
-        // handleFormClose: function () {
-        //     this.formaDodavanje = false;
-        // },
-        // prihvatiUnos: function(event){
-        //     this.formaDodavanje = false
-        //     if (event === 'cancel')
-        //         return
-        //     if (this.userId == '') {
-        //         this.$message({message: "Problem sa autentifikacijom. Molimo vas prijavite se ponovo.", type: 'error'})
-        //     }
-        //     event.id_zaposleni = this.userId;
-        //     // this.sacuvajUtisak(event)
-        //     this.loadDataTable()
-        // },
-        // dodajProizvod:function(){
-        //     this.showComp='dodaj';
-        //     setPageShown('dodaj');
-        // },
+        handleFormClose: function () {
+            this.formaDodavanje = false;
+        },
+        prihvatiUnos: function(event){
+            this.formaDodavanje = false
+            if (event === 'cancel')
+                return
+            if (this.userId == '') {
+                this.$message({message: "Problem sa autentifikacijom. Molimo vas prijavite se ponovo.", type: 'error'})
+            }
+            event.id_zaposleni = this.userId;
+            // this.sacuvajUtisak(event)
+            this.loadDataTable()
+        },
+        dodajProizvod:function(){
+            this.showComp='dodaj';
+            setPageShown('dodaj');
+        },
         zavrsiDodavanje(){
             this.showComp='';
             this.loadDataTable();
@@ -98,6 +93,7 @@ export default {
     .utisci-korisnika-container{
         height: 100%;
         width: 100%;
+        display: flex;
     }
     .utisci-korisnika{
         height: 100%;
@@ -124,8 +120,6 @@ export default {
     }
     
     .el-table {
-        /* display: flex; */
-        /* justify-content: center; */
         margin-bottom: 15px;
         margin-left: 20%;
         margin-right: 20%;
