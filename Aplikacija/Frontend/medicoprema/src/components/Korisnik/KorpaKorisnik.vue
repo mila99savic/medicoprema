@@ -9,9 +9,9 @@
                 <el-table-column prop="quantity" label="Količina"  min-width="100" class="table-column"></el-table-column>
                 <el-table-column prop="productPrice" label="Cena" min-width="100" class="table-column"></el-table-column>
                 <el-table-column align="center" prop="Image" min-width="100">
-                    <template slot-scope="cartItem">
+                    <template slot-scope="scope">
                         <el-button type="danger" icon="el-icon-delete" circle size="mini"
-                            @click="deleteCartItem(cartItem.row)">
+                            @click="deleteCartItem(scope.row)">
                         </el-button>
                     </template>
                 </el-table-column>
@@ -66,12 +66,6 @@ export default {
             },
             deleteCartItem(cartItem) {
                 this.items = this.items.filter(item => item.productId != cartItem.productId);
-                const formData = new FormData();
-                console.log(getUserInfo().userID);
-                console.log(cartItem.productId);
-                formData.append("productId", this.productId);
-                formData.append("userId", getUserInfo().userID);
-
                 var body = {
                         productId: cartItem.productId,
                         userId: getUserInfo().userID
@@ -81,7 +75,8 @@ export default {
                     if(result.Success)
                     {
                         this.$message({message: "Uspešno ste obrisali proizvod iz korpe", type: "success"});
-                        this.items = [];
+                        // this.items.splice(this.items.indexOf(cartItem), 1);
+                        //  = [];
                     }
                 })     
             

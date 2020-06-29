@@ -2,7 +2,7 @@
     <div class="utisci-korisnika-container">
         <div class="utisci-korisnika" >
             <h5 style="text-align:center; font-family: 'Times New Roman', Times, serif;">Lista utisaka o proizvodima</h5>
-            <el-table :data="this.listaUtisaka" style="height:300px; width:1000px; background: linear-gradient(0deg, #bccecfc7, #fcfcfcab);">
+            <el-table :data="this.listaUtisaka" height="250" style="height:300px; width:1000px; background: linear-gradient(0deg, #bccecfc7, #fcfcfcab);">
                 <el-table-column prop="content" label="Komentar" class="table-column"></el-table-column>
                 <el-table-column prop="date" label="Datum" class="table-column"></el-table-column>
                 <el-table-column prop="nameProduct" label="Ime proizvoda" class="table-column" sortable></el-table-column>
@@ -15,15 +15,15 @@
                 </el-table-column> -->
             </el-table>
             <div class="dodaj-dugme">
-            <el-button @click="formaDodavanje = true" style="color:white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" type="success" class="dugme-za-dodavanje" circle>
+            <el-button @click="AddCommentForm" style="color:white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" type="success" class="dugme-za-dodavanje" circle>
                 <el-icon class="el-icon-edit"></el-icon>    
             </el-button>         
             </div>
-            <el-dialog :before-close="handleFormClose" :visible.sync="formaDodavanje">
-                <form-dodaj-utisak-o-proizvodu @zavrsenUnos="prihvatiUnos($event)"></form-dodaj-utisak-o-proizvodu>
+            <el-dialog  :visible.sync="formaDodavanje" @close="closeForm">
+                <form-dodaj-utisak-o-proizvodu @zavrsenUnos="prihvatiUnos($event)" :openDialog="this.openDialog" @closeForm="closeForm"></form-dodaj-utisak-o-proizvodu>
             </el-dialog>
         </div>
-        <!-- <form-dodaj-proizvod v-if="this.showComp == 'dodaj'" @zatvoriDodavanjeProizvoda="zavrsiDodavanje"></form-dodaj-proizvod> -->
+        <form-dodaj-proizvod v-if="this.showComp == 'dodaj'" @zatvoriDodavanjeProizvoda="zavrsiDodavanje"></form-dodaj-proizvod>
     </div>
 </template>
 
@@ -39,7 +39,8 @@ export default {
         return{
             listaUtisaka:[],
             formaDodavanje: false,
-            showComp:''
+            showComp:'',
+            openDialog: false
         }
     },
     methods:{
@@ -52,17 +53,21 @@ export default {
         //             }
         //         }).catch(error=>{console.log(error);})
         // },
-        handleFormClose: function () {
-            this.formaDodavanje = false;
+        // handleFormClose: function () {
+        //     this.formaDodavanje = false;
+        // },
+        AddCommentForm: function(){
+            this.formaDodavanje = true;
+            this.openDialog = !this.openDialog;
         },
         prihvatiUnos: function(event){
             this.formaDodavanje = false
             if (event === 'cancel')
                 return
-            if (this.userId == '') {
-                this.$message({message: "Problem sa autentifikacijom. Molimo vas prijavite se ponovo.", type: 'error'})
-            }
-            event.id_zaposleni = this.userId;
+            // if (this.userId == '') {
+            //     this.$message({message: "Problem sa autentifikacijom. Molimo vas prijavite se ponovo.", type: 'error'})
+            // }
+            // event.id_zaposleni = this.userId;
             // this.sacuvajUtisak(event)
             this.loadDataTable()
         },
@@ -79,6 +84,9 @@ export default {
                 .then(result=>{
                     this.listaUtisaka=result.Data;
                 });
+        },
+        closeForm(){
+            this.formaDodavanje=false;
         }
     },
     mounted:function(){

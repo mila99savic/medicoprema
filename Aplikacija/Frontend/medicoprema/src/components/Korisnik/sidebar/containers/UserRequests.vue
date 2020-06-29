@@ -6,21 +6,21 @@
         :data="this.listaZahteva"
         :default-sort="{prop:'Date', order:'ascending'}"
         style="font-size:17px; width:100%;"
-        max-height="250"
-      >
+        height="250"
+      >  
         <el-table-column prop="date" label="Datum" class="table-column" sortable></el-table-column>
         <el-table-column prop="time" label="Vreme" class="table-column"></el-table-column>
         <el-table-column prop="location" label="Lokacija" class="table-column"></el-table-column>
         <el-table-column prop="type" label="Tip" class="table-column"></el-table-column>
         <el-table-column prop="status" align="center" label="Status">
           <!-- <template slot-scope="scope" label="Status">
-                        <el-button v-if="scope.row.RequestStatus == 1" type="success"
+                        <el-button v-if="scope.row.status == 1" type="success"
                             icon="el-icon-check" circle @click="obavestenje(scope.row)"></el-button>
-                        <el-button v-if="scope.row.RequestStatus == 2" type="danger"
+                        <el-button v-if="scope.row.status == 2" type="danger"
                             icon="el-icon-close" circle @click="obavestenje(scope.row)"></el-button>
-                        <el-button v-if="scope.row.RequestStatus == 3" type="warning"
+                        <el-button v-if="scope.row.status == 3" type="warning"
                             icon="el-icon-quesstion" circle @click="obavestenje(scope.row)"></el-button>
-          </template>-->
+          </template> -->
         </el-table-column>
         <el-table-column align="right" label="Obriši">
           <template slot-scope="scope">
@@ -121,6 +121,7 @@ export default {
 }
 .zakazivanja-table {
   width: 100%;
+  height: 70%;
   display: flex;
   flex-direction: column;
 }

@@ -1,6 +1,6 @@
 <template>
     <div class="utisak-o-proizvodu">
-        <!-- <el-dialog visible class="dialog" width="30%" center> -->
+        <el-dialog :visible="this.openDialog" class="dialog" width="50%" center>
         <!-- <el-form> -->
             <el-popover>
                 <img :src="Logo" style="height:50px; width: 150px; margin: 0 auto; display:flex; justify-self: center;" slot="reference"/> 
@@ -17,7 +17,7 @@
                 <!-- <el-button @click="ponisti" type="danger" round style="color:rgba(24, 102, 89, 0.925); background-color: white; border-color:white">Poništi</el-button> -->
             </div>
         <!-- </el-form> -->
-        <!-- </el-dialog> -->
+        </el-dialog>
     </div>
 </template>
 
@@ -39,6 +39,7 @@ export default {
 
         }
     },
+    props: ['openDialog'],
     methods: {
         potvrdiUnos(){
             this.data.korisnikid = getUserInfo().userID;       
@@ -50,11 +51,12 @@ export default {
                     if(response.Success)
                         this.$message('Dodali ste utisak!');
                     else{
-                        this.$message('Doslo je do greske!');
+                        this.$message('Doslo je do greske! Ili proizvod ne postoji!');
                 }
 
                     }).catch(err => console.log(err));
-            },
+                 this.openDialog = false;
+            }
         // ponisti: function () {
         //     this.$emit("zavrsenaPromena",'cancel');
         // }

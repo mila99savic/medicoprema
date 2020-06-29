@@ -26,11 +26,16 @@ exports.addComment = async (req, res, next) => {
     korisnikid: req.body.korisnikid
   });
   try{
-    const savedComm = await comment.save()
-    Product.findById(req.body.productid).then(product => {
+    if (product != undefined) 
+    {
+      const savedComm = await comment.save()
+      Product.findById(req.body.productid).then(product => {
       res.json({Success: true, savedComm});
       return product.addComment(comment)
     })
+    }
+    else
+      res.json({Data: "Proizvod ne postoji"})
   }
   catch(err){
     res.json({Success: false});

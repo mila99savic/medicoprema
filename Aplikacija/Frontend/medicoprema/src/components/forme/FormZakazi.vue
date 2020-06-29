@@ -94,13 +94,14 @@ export default {
                  return
 
             this.podaciZakazi.date = this.date;
-            this.podaciZakazi.name = this.user.name;
-            this.podaciZakazi.lastname = this.user.lastname;
+            // this.podaciZakazi.name = this.user.name;
+            // this.podaciZakazi.lastname = this.user.lastname;
             this.podaciZakazi.korisnikid = getUserInfo().userID;
                 console.log(this.podaciZakazi)
 
             apiFetch('POST', destinationUrl + "/request/add/", this.podaciZakazi)
             .then(result => {
+                console.log("mima")
                 if(result.Success){
                     this.$message({message: "Uspesno ste zakazali termin.", type: 'success'});
                     this.$emit("zakazano",this.podaciZakazi);
