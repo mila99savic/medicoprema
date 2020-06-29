@@ -50,7 +50,7 @@ export default {
                     if(response.Success)
                         this.$message('Dodali ste utisak!');
                     else{
-                        this.$message('Doslo je do greske!');
+                        this.$message('Doslo je do greske! Ili proizvod ne postoji!');
                 }
 
                     }).catch(err => console.log(err));

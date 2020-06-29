@@ -103,12 +103,12 @@ export default {
     .label{
         font-size: 15px;
         text-align: left;
-        flex-basis: 30%;
-        width: 30%;
+        flex-basis: 35%;
+        width: 35%;
     }
     .input{
-        flex-basis: 70%;
-        width: 70%;
+        flex-basis: 65%;
+        width: 65%;
     }
     .dugme{
         display: flex;

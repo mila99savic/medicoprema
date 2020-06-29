@@ -34,6 +34,7 @@
                 <el-table-column prop="status" label="Status" width="80px" class="table-column"></el-table-column>
              </el-table>
         </div>
+        <obavesti-korisnika-zakazivanja v-if="this.showComp == 'obavestenje'" @zatvoriPoruku="zatvori" @proslediPoruku="prosledi($event)"></obavesti-korisnika-zakazivanja >
     </div>
 </template>
 
@@ -50,13 +51,45 @@ export default {
             zaposleniId:'',
             listaZahteva:[],
             listaPotvrdjenihZahteva:[],
-            currentRow:null
+            currentRow:null,
+            selectedIndex:''
         }
     },
     methods:{
-        poruka(){
-            this.$emit('poruka');
+        zatvori(){
+            this.showComp='';
+            this.selectedIndex='';
         },
+        dodajPoruku(index){
+            this.showComp='obavestenje';
+            this.selectedIndex=index;  
+        },
+        prosledi(prosledjenoObavestenje){
+            // console.log(this.listaNarudzbina[this.selectedIndex]);
+
+             let Data = {reqId: '', notification: ''};
+                Data.reqId = this.listaZahteva[this.selectedIndex]._id
+                Data.notification = prosledjenoObavestenje
+                console.log(Data);
+            apiFetch('PUT', destinationUrl + "/request/updateRequestNotification", Data)
+                .then(result =>{
+                    if(result.Success)
+                    {
+                        console.log(result);
+                        // console.log(this.listaNarudzbina[this.selectedIndex])
+                        // this.listaNarudzbina[this.selectedIndex].notification = prosledjenoObavestenje;
+                        // this.$emit("proslediPoruku", this.notification);
+                        this.$message({message: "Uspešno ste dodali notifikaciju.", type: 'success'});
+                    }
+                    else
+                         this.$message({message: "Notifikacija nije dodata.", type: 'error'});
+                }).catch(error=>console.log(error));
+            this.showComp='';
+            this.selectedIndex='';
+        },
+        // poruka(){
+        //     this.$emit('poruka');
+        // },
         pribaviListuZahteva(){
             apiFetch('GET', destinationUrl + "/request/all")
                 .then(result=>{

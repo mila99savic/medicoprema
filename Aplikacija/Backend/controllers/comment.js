@@ -25,13 +25,18 @@ exports.addComment = async (req, res, next) => {
     // productid: req.body.productid,
     korisnikid: req.body.korisnikid
   });
-  try{
-    const savedComm = await comment.save()
-    Product.findById(req.body.productid).then(product => {
-      res.json({Success: true, savedComm});
-      return product.addComment(comment)
-    })
-  }
+  
+    try{
+      if(product != undefined){
+          const savedComm = await comment.save()
+          Product.findById(req.body.productid).then(product => {
+          res.json({Success: true, savedComm});
+          return product.addComment(comment)
+        })
+      }
+        else
+          res.json({Data:"Proizvod ne postoji"})
+    }
   catch(err){
     res.json({Success: false});
   }

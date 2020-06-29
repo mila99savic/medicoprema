@@ -68,6 +68,23 @@ exports.rejectRequest = async (req, res, next) => {
   }
 } 
 
+exports.updateRequestNotification = async (req, res, next) => {
+  try {
+    const request = await Request.findById(req.body.reqId);
+
+    const poruka = req.body.notification;
+    request.notification = poruka;
+    res.status(200)
+      .json({ Success: true })
+    return order.save()
+  }
+  catch (err) {
+    res.json({ Success: false });
+    console.log(err);
+  }
+}
+
+
 exports.deleteRequest = async (req, res, next) => {
   try {
     // const reqZaSlanje = await Request.findById(req.body.reqId)
