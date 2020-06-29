@@ -1,6 +1,6 @@
 <template>
     <div class="uprava-container">
-        <custom-bar :list="menuItems" @changeView="setComponent($event)">
+        <custom-bar :list="menuItems" @changeView="setComponent($event)" >
             <evidencija-clanova v-if="this.showComp == 'evidencijaclanova'"></evidencija-clanova>
             <narudzbina v-if="this.showComp == 'narudzbina'"></narudzbina>
             <pocetna-strana hidden></pocetna-strana>

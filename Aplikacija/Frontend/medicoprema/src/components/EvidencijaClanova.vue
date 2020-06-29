@@ -13,7 +13,7 @@
                     </el-select>
                 </div>
             </div>
-            <el-table style="width:100%" :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
+            <el-table style="width:100%" height="250" :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))">
                 <el-table-column prop="name" label="Ime" class="table-column"></el-table-column>
                 <el-table-column prop="lastname" label="Prezime" class="table-column"></el-table-column>
                 <el-table-column prop="usertype" label="Tip" class="table-column"></el-table-column>
@@ -34,7 +34,7 @@
                 <el-button round size="mini" style="height:50px; width:130px; color:white; margin-right:5px; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" @click="dodajClana"> Dodaj zaposlenog </el-button>
             </div>
         </div>
-        <form-dodaj-zaposlenog v-if="this.showComp == 'zaposleni'" @zatvoriDodavanjeClana="zavrsiDodavanje"></form-dodaj-zaposlenog>
+        <form-dodaj-zaposlenog v-if="this.showComp == 'zaposleni'" @zatvoriDodavanjeClana="zavrsiDodavanje()"></form-dodaj-zaposlenog>
     </div>
 </template>
 

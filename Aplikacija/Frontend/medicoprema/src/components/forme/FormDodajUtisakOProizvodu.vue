@@ -33,7 +33,8 @@ export default {
             data:{
                 nameProduct:'',
                 content: '',
-                korisnikid:''
+                korisnikid:'',
+                // productid:''
             }
 
         }

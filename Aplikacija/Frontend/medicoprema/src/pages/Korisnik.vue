@@ -2,7 +2,7 @@
     <div class="user-container">
         <header-bar 
             :list="this.menuItems" :type="this.userType"
-            @changeView="setComponent($event)">
+            @changeView="setComponent($event)" @showHomePage="setComponent($event)">
         </header-bar>
         <zakazivanja-korisnik v-if="this.showComp == 'zakazivanja'" ></zakazivanja-korisnik>
         <user-sidebar v-if="this.showComp == 'profil'" ></user-sidebar>

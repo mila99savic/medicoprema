@@ -11,17 +11,17 @@ const commentSchema = new Schema({
         type:String,
         required:true
     },
-    productid: {
-        type: Schema.Types.ObjectId,
-        ref: 'Product'
-        // ,
-        // required: true
-    },
+    // productid: {
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Product'
+    //     // ,
+    //     // required: true
+    // },
     korisnikid: {
         type: Schema.Types.ObjectId,
         ref: 'User'
-        // ,
-        // required: true
+        ,
+        required: true
     },
     date: {
         type: Date,

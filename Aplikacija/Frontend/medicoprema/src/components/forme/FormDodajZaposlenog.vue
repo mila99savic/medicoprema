@@ -76,7 +76,6 @@ export default {
                                     // console.log(result);
                                     setUserInfo(result.Data.id, EMPLOYED_USER_TYPE);
                                     this.$message('Uspesno dodat novi zaposleni!');
-                                    window.location.href = "/";
                                 }
                                 else{
                                     this.$message('doslo je do greske!');

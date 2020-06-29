@@ -70,10 +70,10 @@ export default {
             this.showComp='dodaj';
             setPageShown('dodaj');
         },
-        zavrsiDodavanje(){
-            this.showComp='';
-            this.loadDataTable();
-        },
+        // zavrsiDodavanje(){
+        //     this.showComp='';
+        //     this.loadDataTable();
+        // },
         loadDataTable(){
             apiFetch('GET', destinationUrl + "/comment/all")
                 .then(result=>{

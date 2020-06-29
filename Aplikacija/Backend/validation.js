@@ -43,7 +43,7 @@ const commentValidation = (data) => {
     const schema = Joi.object({
         content: Joi.string().min(2).required(),
         nameProduct: Joi.string().required(),
-        productid: Joi.string(),
+        // productid: Joi.string(),
         korisnikid: Joi.string().required()
     });
     return schema.validate(data);
