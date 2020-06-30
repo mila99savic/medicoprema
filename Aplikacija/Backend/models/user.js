@@ -74,28 +74,7 @@ const userSchema = new Schema({
     listoftasks: {
         tasks: [
             {
-                location: {
-                    type: String,
-                    required: true
-                },
-                date: {
-                    type: String
-                },
-                comment: {
-                    //dodatni zahtev
-                    type: String
-                },
-                type: {
-                    type: String,
-                    required: true
-                },
-                korisnikid: {
-                    type: String
-                },
-                numberKorisnika: {
-                    type: String,
-                    required: true
-                }
+                taskId: mongoose.Schema.Types.ObjectId
             }
         ]
     },
@@ -174,14 +153,9 @@ userSchema.methods.addImpression = function (impression) {
 userSchema.methods.addTask = function (task) {
     const updatedTasklist = [...this.listoftasks.tasks];
     updatedTasklist.push({
-        location: task.location,
-        date: task.date,
-        comment: task.comment,
-        type: task.type,
-        korisnikid: task.korisnikid,
-        numberKorisnika: task.numberKorisnika
+        taskId: task._id
     });
-
+    console.log("radi li")
     updatedlist = {
         tasks: updatedTasklist
     };

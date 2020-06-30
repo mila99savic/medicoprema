@@ -3,6 +3,7 @@ const User = require('../models/user');
 const Request = require('../models/request')
 
 const { taskValidation } = require('../validation');
+const task = require('../models/task');
 
 exports.getTasks = async (req, res, next) => {
     try {
@@ -19,14 +20,11 @@ exports.getTasks = async (req, res, next) => {
 
 exports.getTasksByUserId = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.zaposleniId)
-        // Data = {date: tasks.date, location: tasks.location, number: tasks.number, type: tasks.type, comment: tasks.comment}
+        const tasks = await Task.find({zaposleniId: req.params.zaposleniId})
 
-        //const kor = await User.findById(user.listoftasks.korisnikid)
-        // console.log(user.listoftasks.tasks)
         res.status(200)
             .json({ 
-                Data: user.listoftasks,
+                Data: tasks,
                 Success: true
             })
     }
@@ -60,23 +58,24 @@ exports.addTask = async (req, res, next) => {
 }
 
 exports.assignTask = async (req, res, next) => {
-    const kor = await User.findById(req.body.korisnikid);
+    // const kor = await User.findById(req.body.korisnikid);
     const task = new Task({
         location: req.body.location,
         date: req.body.date,
         comment: req.body.comment,
         type: req.body.type,
         time: req.body.time,
-        korisnikid: req.body.korisnikid,
-        numberKorisnika: kor.number,
+        // korisnikid: req.body.korisnikid,
+        numberKorisnika: req.body.numberKorisnika,
         zaposleniId: req.body.zaposleniId,
         requestId: req.body.requestId
     });
     try {
+        const savedTask = await task.save()
         Request.findById(req.body.requestId)
         .then(requ => {
             requ.status = "potvrdjen";
-            console.log(requ)
+            // console.log(requ)
             return requ.save()
         })
         User.findById(req.body.zaposleniId)

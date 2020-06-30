@@ -41,7 +41,8 @@ exports.addRequest = async (req, res, next) => {
     type: req.body.type,
     status: "neobradjen",
     korisnikid: req.body.korisnikid,
-    korIme: ime
+    korIme: ime,
+    numberKor: user.number
   });
   try {
     const savedReq = await request.save();

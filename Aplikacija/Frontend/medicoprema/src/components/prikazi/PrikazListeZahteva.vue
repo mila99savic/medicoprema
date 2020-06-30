@@ -125,8 +125,8 @@ export default {
                 Data.requestId = this.currentRow._id;
                 Data.type = this.currentRow.type;
                 // Data.notification = this.notification;
-                Data.korisnikid = this.currentRow.korisnikid;
-                console.log(Data)
+                Data.numberKorisnika = this.currentRow.numberKor;
+                console.log(this.currentRow)
                 apiFetch('POST', destinationUrl + "/task/assign", Data)
                     .then(result=>{
                         if(result.Success){

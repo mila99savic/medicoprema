@@ -18,7 +18,7 @@ const taskSchema = new Schema ({
     requestId: {
         type: Schema.Types.ObjectId,
         ref: 'Request',
-        required: true
+        // required: true
     },
     type: {
         type:String,
@@ -29,7 +29,7 @@ const taskSchema = new Schema ({
     },
     korisnikid: {
         type: String, 
-        required: true
+        // required: true
     },
     zaposleniId: {
         type: String

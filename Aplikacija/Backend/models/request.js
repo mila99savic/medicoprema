@@ -37,6 +37,9 @@ const requestSchema = new Schema ({
     },
     notification:{
         type:String
+    },
+    numberKor: {
+        type: String
     }
 });
 
