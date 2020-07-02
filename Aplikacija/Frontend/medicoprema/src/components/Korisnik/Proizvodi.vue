@@ -18,12 +18,12 @@
                         <div class="part3">
                             <h6 id="cena">Cena: {{item.price}}din</h6>
                             <el-button id="dugmeDodaj" type="success" round size="medium" style="color: white; border-color:rgba(24, 102, 89, 0.925); background-color:rgba(24, 102, 89, 0.925);" @click="onClickDodajUKorpu(index)">Dodaj u korpu</el-button>
-                            <el-button type="text" @click="formaDodavanje = true" style="color:rgba(24, 102, 89, 0.925);" class="dugme-za-dodavanje">Komentari
+                            <!-- <el-button type="text" @click="formaDodavanje = true" style="color:rgba(24, 102, 89, 0.925);" class="dugme-za-dodavanje">Komentari
                             </el-button> 
                             <el-button type="text" @click="formaDodaj = true" style="color:rgba(24, 102, 89, 0.925);" class="dugme-za-dodavanje">Dodaj komentar</el-button>                           
                             <el-dialog :before-close="handleFormClose" :visible.sync="formaDodaj">
                 <form-dodaj-utisak-o-proizvodu @zavrsenUnos="prihvatiUnos($event)"></form-dodaj-utisak-o-proizvodu>
-            </el-dialog>
+            </el-dialog> -->
                             <!-- <el-dialog :before-close="handleFormClose" :visible.sync="formaDodavanje" style="width:1500px; height:1000px">
                                     <el-table :data="listaUtisaka">
                                         <el-table-column prop="content" label="Komentar" class="table-column"></el-table-column>
@@ -152,11 +152,12 @@ export default {
 }
 .proizvodi-container{
         display: flex;
-        height: 90%;
-        width: 100%;
         flex-direction: column;
-        background-color: rgba(224, 224, 235, 0.445);
-        overflow: auto;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding:50px;
+        padding-top: 0px;
 }
 .prikaz-proizvoda-container{
     height: 290px;

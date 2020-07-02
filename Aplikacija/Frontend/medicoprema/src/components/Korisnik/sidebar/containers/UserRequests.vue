@@ -13,7 +13,7 @@
         <el-table-column prop="location" label="Lokacija" class="table-column"></el-table-column>
         <el-table-column prop="type" label="Tip" class="table-column"></el-table-column>
         <el-table-column prop="status" align="center" label="Status"></el-table-column>
-         <el-table-column prop="notification" align="center" label="Notifikacija"></el-table-column>
+         <!-- <el-table-column prop="notification" align="center" label="Notifikacija"></el-table-column> -->
         <el-table-column align="right" label="Obriši">
           <template slot-scope="scope">
             <el-button
