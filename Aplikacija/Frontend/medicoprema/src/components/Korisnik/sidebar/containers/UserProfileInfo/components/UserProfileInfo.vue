@@ -4,13 +4,13 @@
             <el-avatar :size="70" :src="profileUrl"></el-avatar>
         </div>
         <div class="profile-info">
-            <label>Ime:</label>
+            <label>Naziv ustanove:</label>
             <label>{{user.name}}</label>
         </div>
-        <!-- <div class="profile-info">
-            <label>Prezime:</label>
+        <div class="profile-info">
+            <label>Ovlašćeni:</label>
             <label>{{user.lastname}}</label>
-        </div> -->
+        </div>
         <div class="profile-info">
             <label>E-mail:</label>
             <label>{{user.email}}</label>
@@ -59,7 +59,7 @@ export default {
                 .then(response => response.ok ? response.json() : new Error())                
                 .then(result => {
                     this.user.name = result.Data.name;
-                    // this.user.lastname = result.Data.lastname;
+                    this.user.lastname = result.Data.lastname;
                     this.user.email = result.Data.email;
                     this.user.password = "*****";
                     this.user.address = result.Data.address;
